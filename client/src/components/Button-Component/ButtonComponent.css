@@ -1,0 +1,10 @@
+button{
+        background: #6EC207;
+        border: none;
+        border-radius: 20px;
+        padding: 10px;
+        width: auto;
+        font-family: 'Poppins';
+        color: #fff;
+        font-size: 18px;
+    }
