@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import ButtonComponent from "../Button-Component/ButtonComponent";
+import SearchComponent from "../Search-Component/SearchComponent";
 const HomePageComponent = () => {
-  const [data] = useState(["abishek", "vish", "sasi"]);
-  const [dummy, setdummy] = useState(data);
+ 
   return (
     <div className="home-page">
-      <ButtonComponent iconPath="user.png" btnName="Login"></ButtonComponent>
-      <ul>
-        {dummy.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
     </div>
   );
 };

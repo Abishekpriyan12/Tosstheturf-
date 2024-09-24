@@ -10,7 +10,9 @@ const SearchComponent =  ({searchValue}) =>{
 
     return(
         <div className="search-component">
-            <input type="text" value={searchData} onChange={setSearchData} />
+            <input type="text" value={searchData} onChange={handleInputChange} />
         </div>
     )
 }
+
+export default SearchComponent
