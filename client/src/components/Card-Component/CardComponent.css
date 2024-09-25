@@ -1,0 +1,28 @@
+.card {
+  padding: 16px;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .card {
+    max-width: 90%;
+    padding: 12px;
+  }
+}
+
+@media (min-width: 769px) {
+  .card {
+    max-width: 600px;
+    padding: 16px;
+  }
+}
