@@ -1,0 +1,27 @@
+.footer-component {
+  display: flex;
+  gap: 20%;
+  padding: 8px 5px 10px 5px;
+}
+.first-part-icons {
+  flex: 3;
+}
+.second-part-icons {
+  flex: 5;
+  display: flex;
+  gap:30%;
+}
+
+li{
+    padding: 10px;
+    font-size: 20px;
+    text-align: left;
+}
+
+.nav-link-second{
+    margin-right:20%;
+}
+
+.footer_Image2{
+    text-align:unset;
+}
