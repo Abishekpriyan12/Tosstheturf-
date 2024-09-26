@@ -1,0 +1,41 @@
+button {
+    background: #6EC207;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 16px;
+    width: auto;
+    font-family: 'Poppins';
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.button img {
+    margin-right: 8px; 
+    width: 1.2rem; 
+    height: 1.2rem; 
+}
+
+@media (max-width: 768px) {
+    button {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+
+    .button img {
+        width: 1rem; 
+        height: 1rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    button {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    .button img {
+        width: 0.9rem; 
+        height: 0.9rem; 
+    }
+}
