@@ -1,0 +1,112 @@
+.card-container {
+    background-color: #000;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 10px;
+    border-color: bisque;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-start; /* Align items at the start */
+    align-items: center;
+  }
+  
+  .Logo {
+    display: flex;
+    align-items: center;
+    margin-right: 25px; 
+  }
+  
+  #location-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .location-textbox {
+    padding: 7px 10px 7px 30px; 
+    padding-right: 10px;
+    border-radius: 5px;
+    width: 150px;
+    height: 30px;
+    background: #000;
+    border: 2px solid #6EC207;
+  }
+  
+  .location-icon {
+    position: absolute;
+    left: 180px;
+    top: 5%;
+    transform: translateY(-50%);
+    width: 16px;
+    color: white;
+    height: 16px;
+    pointer-events: none;
+  }
+  
+  .nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: auto; /* Push the nav links to the right */
+  }
+  
+  .nav-links ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links ul li {
+    padding: 10px;
+    margin: 5px 5px;
+    color: #fff;
+    font-size: 20px; 
+  }
+  
+  #button-comp {
+    margin: 7px;
+  }
+  
+  @media (max-width: 480px) {
+    .card-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .Header {
+      width: 90%;
+    }
+  
+    .nav-links ul {
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+    }
+  
+    .nav-links ul li {
+      font-size: 18px;
+      padding: 5px;
+    }
+  }
+  
+  @media (min-width: 481px) and (max-width: 768px) {
+    .card-container {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  
+    .Header {
+      width: 80%;
+    }
+  
+    .nav-links ul {
+      flex-direction: row;
+      justify-content: center;
+    }
+  
+    .nav-links ul li {
+      font-size: 19px;
+      padding: 8px;
+    }
+  }
+  
