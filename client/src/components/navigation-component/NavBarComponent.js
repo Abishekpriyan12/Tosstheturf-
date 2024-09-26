@@ -10,17 +10,28 @@ const NavBarComponent = ({ navBarData }) => {
           <img src="ttt_logo.png" alt="logo"></img>
         </div>
         <div id="location-input">
-  <img src="/assests/icons/user.png" alt="location" className="location-icon" />
-  <input type="text" placeholder="Enter location" className="location-textbox" />
-</div>
+          <img
+            src="/assests/icons/user.png"
+            alt="location"
+            className="location-icon"
+          />
+          <input
+            type="text"
+            placeholder="Enter location"
+            className="location-textbox"
+          />
+        </div>
 
         <div className="nav-links">
           <ul>
             {navBarData.map((res, index) => (
-              <li key={index}>{res}</li>
+              <li key={index} src={res.url}>{res.name}</li>
             ))}
             <div id="button-comp">
-              <ButtonComponent btnName="Login" iconPath="User.png"></ButtonComponent>
+              <ButtonComponent
+                btnName="Login"
+                iconPath="User.png"
+              ></ButtonComponent>
             </div>
           </ul>
         </div>

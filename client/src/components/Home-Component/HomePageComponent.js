@@ -5,7 +5,12 @@ import "./HomePageComponent.css";
 import CardComponent from "../Card-Component/CardComponent";
 import FooterComponent from "../footer-component/FooterComponent";
 const HomePageComponent = () => {
-  const navBarData = ["About us", "Venue", "Contact Us", "Deals"];
+  const navBarData = [
+    { name: "About us", url: "/about" },
+    { name: "Venue", url: "/venue" },
+    { name: "Contact Us", url: "/contact" },
+    { name: "Deals", url: "/deals" }
+  ];
   return (
     <div className="home-page">
       <NavBarComponent navBarData={navBarData}></NavBarComponent>
