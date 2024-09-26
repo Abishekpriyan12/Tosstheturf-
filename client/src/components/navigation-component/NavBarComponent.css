@@ -46,6 +46,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
     margin-left: auto; /* Push the nav links to the right */
   }
   
@@ -54,6 +55,7 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
+    text-decoration: none;
   }
   
   .nav-links ul li {
@@ -62,8 +64,12 @@
     color: #fff;
     font-size: 20px; 
     cursor: pointer;
+    text-decoration: none;
   }
-  
+  a{
+    text-decoration: none;
+    color: #fff;
+  }
   #button-comp {
     margin: 7px;
   }

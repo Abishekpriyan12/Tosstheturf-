@@ -1,7 +1,7 @@
 import React from "react";
 import "./NavBarComponent.css";
 import ButtonComponent from "../Button-Component/ButtonComponent";
-
+import { Link } from 'react-router-dom';
 const NavBarComponent = ({ navBarData }) => {
   return (
     <div className="Nav-bar">
@@ -25,7 +25,9 @@ const NavBarComponent = ({ navBarData }) => {
         <div className="nav-links">
           <ul>
             {navBarData.map((res, index) => (
-              <li key={index} src={res.url}>{res.name}</li>
+               <li key={index}>
+               <Link to={res.url}>{res.name}</Link>
+             </li>
             ))}
             <div id="button-comp">
               <ButtonComponent
