@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import "./ContactUsComponent.css";
@@ -6,12 +6,13 @@ import CardComponent from "../Card-Component/CardComponent";
 import FooterComponent from "../footer-component/FooterComponent";
 
 const ContactUsComponent = () => {
-    const navBarData = [
-        { name: "About us", url: "/about" },
-        { name: "Venue", url: "/venue" },
-        { name: "Contact Us", url: "/contact" },
-        { name: "Deals", url: "/deals" }
-      ];
+  const navBarData = [
+    { name: "About us", url: "/about" },
+    { name: "Venue", url: "/venue" },
+    { name: "Contact Us", url: "/contact" },
+    { name: "Deals", url: "/deals" },
+    { name: "FAQs", url: "/faq" },
+  ];
   return (
     <div className="contactuspage-page">
       <NavBarComponent navBarData={navBarData}></NavBarComponent>

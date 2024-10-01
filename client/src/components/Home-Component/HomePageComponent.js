@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import "./HomePageComponent.css";
@@ -9,7 +10,8 @@ const HomePageComponent = () => {
     { name: "About us", url: "/" },
     { name: "Venue", url: "/" },
     { name: "Contact Us", url: "/contact" },
-    { name: "Deals", url: "/" }
+    { name: "Deals", url: "/" },
+    { name: "FAQs", url: "/faq" },
   ];
   return (
     <div className="home-page">
@@ -92,14 +94,20 @@ const HomePageComponent = () => {
         </div>
         <div className="fifth_right-section">
           <div className="fifth-banner-text">
-           Unlock Premium subscription with toss turf subscription.
+            Unlock Premium subscription with toss turf subscription.
           </div>
           <div className="second-banner-text">
             Explore and book turfs near You.
           </div>
-          <div>Never miss your preferred time slot! With Toss Turf Subscription.</div>
-          <div>Never miss your preferred time slot! With Toss Turf Subscription.</div>
-          <div>Never miss your preferred time slot! With Toss Turf Subscription.</div>
+          <div>
+            Never miss your preferred time slot! With Toss Turf Subscription.
+          </div>
+          <div>
+            Never miss your preferred time slot! With Toss Turf Subscription.
+          </div>
+          <div>
+            Never miss your preferred time slot! With Toss Turf Subscription.
+          </div>
         </div>
       </div>
       <FooterComponent></FooterComponent>
