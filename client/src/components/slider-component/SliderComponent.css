@@ -1,0 +1,76 @@
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .slide {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+  
+  /* Responsive styles for tablets */
+  @media (max-width: 768px) {
+    .slide img {
+      height: 200px; /* Reduce height for tablets */
+      object-fit: cover;
+    }
+  
+    .prev-btn, .next-btn {
+      font-size: 1.2rem; /* Smaller button size */
+      padding: 8px; /* Less padding */
+    }
+  
+    .prev-btn {
+      left: 5px; /* Adjust position */
+    }
+  
+    .next-btn {
+      right: 5px; /* Adjust position */
+    }
+  }
+  
+  /* Responsive styles for mobile */
+  @media (max-width: 480px) {
+    .slide img {
+      height: 150px; /* Further reduce height for mobile */
+      object-fit: cover;
+    }
+  
+    .prev-btn, .next-btn {
+      font-size: 1rem; /* Smaller button size */
+      padding: 6px; /* Further reduce padding */
+    }
+  
+    .prev-btn {
+      left: 3px; /* Adjust position for mobile */
+    }
+  
+    .next-btn {
+      right: 3px; /* Adjust position for mobile */
+    }
+  }
+  
