@@ -8,7 +8,7 @@ import FooterComponent from "../footer-component/FooterComponent";
 import { Navigate,useNavigate  } from "react-router-dom";
 const HomePageComponent = () => {
   const navBarData = [
-    { name: "About us", url: "/" },
+    { name: "About us", url: "/about" },
     { name: "Venue", url: "/" },
     { name: "Contact Us", url: "/contact" },
     { name: "Deals", url: "/" },

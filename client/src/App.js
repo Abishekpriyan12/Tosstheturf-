@@ -6,7 +6,7 @@ import ContactUsComponent from "./components/ContactUs-Component/ContactUsCompon
 import FaqComponent from "./components/Faq-Component/FaqComponent";
 import AboutUsComponent from "./components/AboutUs-Component/AboutUsComponent";
 import PaymentComponent from "./components/Payment-Component/PaymentComponent";
-import TurfDetailComponent from "./components/TurfDetail-Component/TurfDetailComponent"
+import TurfDetailComponent from "./components/TurfDetail-Component/TurfDetailComponent";
 function App() {
   return (
     <Router>
@@ -23,7 +23,10 @@ function App() {
             path="/about"
             element={<AboutUsComponent></AboutUsComponent>}
           />
-           <Route path="/turfDetail" element={<TurfDetailComponent></TurfDetailComponent>} />
+          <Route
+            path="/turfDetail"
+            element={<TurfDetailComponent></TurfDetailComponent>}
+          />
         </Routes>
       </div>
     </Router>
