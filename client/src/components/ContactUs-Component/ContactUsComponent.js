@@ -15,6 +15,7 @@ const ContactUsComponent = () => {
   ];
   return (
     <div className="contactuspage-page">
+      
       <NavBarComponent navBarData={navBarData}></NavBarComponent>
 
       <div className="contact-us-container">

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import FooterComponent from "../footer-component/FooterComponent";
 import CardComponent from "../Card-Component/CardComponent";
+import ButtonComponent from "../Button-Component/ButtonComponent";
 import "./FaqComponent.css";
 
 const FaqComponent = () => {
@@ -73,6 +74,7 @@ const FaqComponent = () => {
     <>
       <NavBarComponent navBarData={navBarData} />
       <CardComponent width="60%" height="500px">
+      <ButtonComponent btnName={"Pay"}></ButtonComponent>
         <div className="faq-container">
           <h1>Frequently Asked Questions</h1>
           <div className="accordion">
