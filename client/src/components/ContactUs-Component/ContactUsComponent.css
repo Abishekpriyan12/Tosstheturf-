@@ -1,6 +1,7 @@
 
   .contact-us-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     padding: 2rem;
@@ -11,6 +12,8 @@
     padding: 2rem;
     flex: 1;
     margin-right: 2rem;
+    max-width: 800px;
+    margin-bottom: 2rem;
   }
      
   .fillup-form {
@@ -22,13 +25,14 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
-    
+    flex-wrap: wrap;
   }
   
   .input-container {
     flex: 1;
     margin-right: 1rem;
     padding: 0.8rem;
+    margin-bottom: 1rem;
   }
   
   .input-container:last-child {
@@ -69,4 +73,6 @@
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
   }
+  
+
   
