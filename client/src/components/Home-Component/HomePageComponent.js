@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-
+import React from "react";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import "./HomePageComponent.css";
 import CardComponent from "../Card-Component/CardComponent";
 import FooterComponent from "../footer-component/FooterComponent";
-import { Navigate,useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const HomePageComponent = () => {
   const navBarData = [
     { name: "About us", url: "/about" },
@@ -14,11 +14,13 @@ const HomePageComponent = () => {
     { name: "Deals", url: "/" },
     { name: "FAQs", url: "/faq" },
   ];
+
   const navigate = useNavigate();
+  
   const handleClick = () => {
-    console.log("click")
-    navigate('/turfDetail'); 
+    navigate('/turfDetail');
   };
+
   return (
     <div className="home-page">
       <NavBarComponent navBarData={navBarData}></NavBarComponent>
@@ -60,7 +62,7 @@ const HomePageComponent = () => {
           <div className="host-card">
             <div>Never Play the Short Hand Again</div>
             <div>
-              Never Play the Short Hand Again, Post you match and start playing
+              Never Play the Short Hand Again, Post your match and start playing
               with other teams
             </div>
             <div className="host-image">
@@ -69,7 +71,6 @@ const HomePageComponent = () => {
           </div>
         </CardComponent>
       </div>
-
       <div className="perfect-turf-card">
         <CardComponent width="100%" height="140px">
           <div className="perfect-card-data">
@@ -78,7 +79,7 @@ const HomePageComponent = () => {
                 Never Play the Short Hand Again
               </div>
               <div className="perfect-text2">
-                Never Play the Short Hand Again, Post you match and start
+                Never Play the Short Hand Again, Post your match and start
                 playing with other teams
               </div>
             </div>
@@ -100,7 +101,7 @@ const HomePageComponent = () => {
         </div>
         <div className="fifth_right-section">
           <div className="fifth-banner-text">
-            Unlock Premium subscription with toss turf subscription.
+            Unlock Premium subscription with Toss Turf Subscription.
           </div>
           <div className="second-banner-text">
             Explore and book turfs near You.
@@ -120,4 +121,5 @@ const HomePageComponent = () => {
     </div>
   );
 };
+
 export default HomePageComponent;

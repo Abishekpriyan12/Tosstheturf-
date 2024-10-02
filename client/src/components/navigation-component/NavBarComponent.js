@@ -2,6 +2,7 @@ import React from "react";
 import "./NavBarComponent.css";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import { Link } from 'react-router-dom';
+
 const NavBarComponent = ({ navBarData }) => {
   return (
     <div className="Nav-bar">
@@ -9,6 +10,7 @@ const NavBarComponent = ({ navBarData }) => {
         <div className="Logo">
           <img src="ttt_logo.png" alt="logo"></img>
         </div>
+
         <div id="location-input">
           <img
             src="/assests/icons/user.png"
@@ -26,14 +28,14 @@ const NavBarComponent = ({ navBarData }) => {
           <ul>
             {navBarData.map((res, index) => (
                <li key={index}>
-               <Link to={res.url}>{res.name}</Link>
-             </li>
+                 <Link to={res.url}>{res.name}</Link>
+               </li>
             ))}
             <div id="button-comp">
               <ButtonComponent
                 btnName="Login"
                 iconPath="User.png"
-              ></ButtonComponent>
+              />
             </div>
           </ul>
         </div>

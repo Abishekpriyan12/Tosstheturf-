@@ -23,55 +23,59 @@
   max-width: 100%;
   height: auto;
 }
+
 .host-the-match {
-    margin: 1% 25% 1% 25%;
-}
-.perfect-turf-card{
-    margin: 1% 10% 1% 10%;
-    padding: 10px;
-}
-.perfect-card-data{
-    display: flex;
-}
-.perfect-text1{
-    font-size: 38px;
-    padding: 5px;
-}
-.perfect-text2{
-    font-size: 20px;
-   
-    padding: 5px;
+  margin: 1% 25% 1% 25%;
 }
 
-.perfect-text-card{
-    flex: 3;
+.perfect-turf-card {
+  margin: 1% 10% 1% 10%;
+  padding: 10px;
 }
-.perfect-images{
-    flex: 4;
+
+.perfect-card-data {
+  display: flex;
 }
+
+.perfect-text1 {
+  font-size: 38px;
+  padding: 5px;
+}
+
+.perfect-text2 {
+  font-size: 20px;
+  padding: 5px;
+}
+
+.perfect-text-card {
+  flex: 3;
+}
+
 .perfect-images {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: -10px;
-  }
-  
-  .round-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .round-image img {
-    width: 120px; 
-    height: 120px; 
-    border-radius: 50%;
-    border: 2px solid #fff;
-    object-fit: cover; 
-  }
-  .fifth_right-section{
-    margin-top: 10%;
-  }
+  flex: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: -10px;
+}
+
+.round-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.round-image img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+}
+
+.fifth_right-section {
+  margin-top: 10%;
+}
 
 @media (max-width: 480px) {
   .home-first-section {
@@ -89,17 +93,17 @@
   }
 
   .round-image img {
-    width: 120px; 
-    height: 120px; 
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border: 2px solid #fff;
-    object-fit: cover; 
+    object-fit: cover;
   }
 
-  .perfect-text1{
+  .perfect-text1 {
     font-size: 38px;
     padding: 5px;
-}
+  }
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
@@ -116,6 +120,7 @@
   .second-banner-text {
     font-size: 18px;
   }
+
   .round-image img {
     width: 80px;
   }
