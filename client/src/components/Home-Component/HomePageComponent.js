@@ -5,6 +5,7 @@ import NavBarComponent from "../navigation-component/NavBarComponent";
 import "./HomePageComponent.css";
 import CardComponent from "../Card-Component/CardComponent";
 import FooterComponent from "../footer-component/FooterComponent";
+import { Navigate,useNavigate  } from "react-router-dom";
 const HomePageComponent = () => {
   const navBarData = [
     { name: "About us", url: "/" },
@@ -13,6 +14,11 @@ const HomePageComponent = () => {
     { name: "Deals", url: "/" },
     { name: "FAQs", url: "/faq" },
   ];
+  const navigate = useNavigate();
+  const handleClick = () => {
+    console.log("click")
+    navigate('/turfDetail'); 
+  };
   return (
     <div className="home-page">
       <NavBarComponent navBarData={navBarData}></NavBarComponent>
@@ -45,7 +51,7 @@ const HomePageComponent = () => {
           <div className="second-banner-text">
             Explore and book turfs near You
           </div>
-          <ButtonComponent btnName={"Book Your turf"}></ButtonComponent>
+          <ButtonComponent btnName={"Book Your turf"} onClick={handleClick}></ButtonComponent>
         </div>
       </div>
       <div className="host-the-match">
