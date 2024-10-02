@@ -57,7 +57,7 @@ const HomePageComponent = () => {
         </div>
       </div>
       <div className="host-the-match">
-        <CardComponent width="100%" height="360px">
+        <CardComponent>
           <h2>Host The Match</h2>
           <div className="host-card">
             <div>Never Play the Short Hand Again</div>
@@ -72,7 +72,7 @@ const HomePageComponent = () => {
         </CardComponent>
       </div>
       <div className="perfect-turf-card">
-        <CardComponent width="100%" height="140px">
+        <CardComponent>
           <div className="perfect-card-data">
             <div className="perfect-text-card">
               <div className="perfect-text1">
