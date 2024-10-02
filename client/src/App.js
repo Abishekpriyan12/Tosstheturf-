@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePageComponent from './components/Home-Component/HomePageComponent';
 import ContactUsComponent from './components/ContactUs-Component/ContactUsComponent'
+import TurfDetailComponent from './components/TurfDetail-Component/TurfDetailComponent';
 
 
 
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePageComponent />} />
           <Route path="/contact" element={<ContactUsComponent></ContactUsComponent>} />
+          <Route path="/turfDetail" element={<TurfDetailComponent></TurfDetailComponent>} />
         </Routes>
       </div>
     </Router>
