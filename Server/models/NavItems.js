@@ -1,4 +1,4 @@
-// models/NavItem.js
+
 const mongoose = require('mongoose');
 
 const NavItemSchema = new mongoose.Schema({

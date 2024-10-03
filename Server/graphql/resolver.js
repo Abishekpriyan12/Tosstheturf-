@@ -1,4 +1,4 @@
-// graphql/resolvers.js
+
 const NavItem = require("../models/NavItems");
 
 const resolvers = {
