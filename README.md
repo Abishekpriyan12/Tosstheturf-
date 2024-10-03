@@ -26,7 +26,7 @@ Npm start - Front end
 
 Npm start - Back end 
 
-You can now access the application at:
+**You can now access the application at:**
 
 Frontend: http://localhost:3000
 Backend: http://localhost:5000
