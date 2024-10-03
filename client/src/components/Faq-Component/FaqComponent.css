@@ -1,35 +1,93 @@
-.faq-container {
-  height: 100vh;
-}
-
-.accordion {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.accordion-item {
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.faq-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }
 
 .accordion-button {
-  background-color: #4caf50;
-  color: #ffffff;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
   width: 100%;
+  background-color: #222;
+  border: none;
+  outline: none;
+  padding: 20px;
   text-align: left;
+  font-size: 22px;
+  color: #6EC207;
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
 }
 
+.accordion-button:hover,
 .accordion-button.active {
-  background-color: #3e8e41;
+  background-color: #383838;
+}
+
+.accordion-icon {
+  width: 25px;
+  height: 25px;
+  transition: transform 0.3s ease;
+}
+
+.accordion-button.active .accordion-icon {
+  transform: rotate(180deg);
 }
 
 .accordion-content {
-  padding: 10px;
-  border-top: 1px solid #ddd;
+  background-color: #2d2d2d;
+  padding: 15px;
+  font-size: 18px;
+  color: #ffff;
+  border-radius: 0 0 10px 10px;
+  margin-top: 5px;
+  text-align: left;
 }
+
+.accordion-content {
+  animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+h1 {
+  color: #ffff;
+  text-align: center;
+  margin-bottom: 40px;
+  font-family: "Arial", sans-serif;
+  font-size: 28px;
+}
+
+.helpful-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  color: #ffffff;
+  margin-bottom: 50px;
+}
+
+.helpful-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+}
+
+.helpful-buttons {
+  display: flex;
+  gap: 15px;
+}
+

@@ -18,9 +18,9 @@ const FaqComponent = () => {
       question: "How do I book a turf?",
       answer: (
         <p>
-          "To book a turf, simply select your preferred sport, <br />
-          choose a venue, pick a time slot, and complete the booking through our
-          secure payment system.",
+          To book a turf, simply select your preferred sport,
+          choose a venue, pick a time slot, and complete the booking
+          through our secure payment system.
         </p>
       ),
     },
@@ -28,11 +28,8 @@ const FaqComponent = () => {
       question: "Can I cancel or reschedule my booking?",
       answer: (
         <p>
-          {" "}
-          "Yes, you can cancel or reschedule your booking up to 24 hours before
-          your scheduled time.
-          <br /> Visit your account page and select the booking you want to
-          modify.",
+          Yes, you can cancel or reschedule your booking up to 24 hours before
+          your scheduled time. Visit your account page and select the booking you want to modify.
         </p>
       ),
     },
@@ -40,9 +37,8 @@ const FaqComponent = () => {
       question: "Do I need to bring my own equipment?",
       answer: (
         <p>
-          "Most venues provide basic equipment like nets and goals.
-          <br /> However, players are encouraged to bring personal equipment
-          like rackets,balls,or shoes.",
+          Most venues provide basic equipment like nets and goals.
+          However, players are encouraged to bring personal equipment like rackets, balls, or shoes.
         </p>
       ),
     },
@@ -50,33 +46,33 @@ const FaqComponent = () => {
       question: "Are group bookings allowed?",
       answer: (
         <p>
-          "Yes! You can book the turf for individual or group sessions. <br />
-          For larger groups or special events, contact us for custom booking
-          options.",
+          Yes! You can book the turf for individual or group sessions.
+          For larger groups or special events, contact us for custom booking options.
         </p>
       ),
     },
     {
-      question:
-        "What happens if the turf is unavailable during my booked time?",
+      question: "What happens if the turf is unavailable during my booked time?",
       answer: (
         <p>
-          "In the rare event of turf unavailability,
-          <br /> we will notify you immediately and provide options to
-          reschedule or receive a full refund.",
+          In the rare event of turf unavailability, we will notify you immediately
+          and provide options to reschedule or receive a full refund.
         </p>
       ),
     },
   ];
+
   const [activeIndex, setActiveIndex] = useState(null);
 
   return (
     <>
       <NavBarComponent navBarData={navBarData} />
-      <CardComponent width="60%" height="500px">
-      <ButtonComponent btnName={"Pay"}></ButtonComponent>
+      <h1>Frequently Asked Questions</h1>
+      <div className="faq-wrapper">
+      <CardComponent width="60%">
+      
         <div className="faq-container">
-          <h1>Frequently Asked Questions</h1>
+      
           <div className="accordion">
             {faqData.map((faq, index) => (
               <div key={index} className="accordion-item">
@@ -89,17 +85,30 @@ const FaqComponent = () => {
                   }
                 >
                   {faq.question}
+                  <img
+                    src={`arrows.png`}
+                    alt="arrow icon"
+                    className="accordion-icon"
+                  />
                 </button>
                 {activeIndex === index && (
-                  <div className="accordion-content">
-                    <p>{faq.answer}</p>
-                  </div>
+                  <div className="accordion-content">{faq.answer}</div>
                 )}
               </div>
             ))}
           </div>
         </div>
+      
       </CardComponent>
+      
+      </div>
+      <div className="helpful-container">
+      <h2>Was this Helpful?</h2>
+      <div className="helpful-buttons">
+        <ButtonComponent btnName={"Yes"}></ButtonComponent>
+        <ButtonComponent btnName={"No"}></ButtonComponent>
+      </div>
+    </div>
       <FooterComponent />
     </>
   );
