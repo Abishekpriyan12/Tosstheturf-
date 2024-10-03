@@ -26,31 +26,31 @@ const PaymentComponent = () => {
   ];
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const validatePaymentDetails = () => {
+    const { name, cardNumber, cvv, expiryYear, month, postalCode } = formData;
+
+    if (!name || !cardNumber || !cvv || !expiryYear || !month || !postalCode) {
+      return "Please fill in all fields.";
+    }
+    if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+      return "Invalid card number.";
+    }
+    if (cvv.length !== 3 || isNaN(cvv)) {
+      return "Invalid CVV.";
+    }
+    return null;
   };
 
   const handlePayment = (e) => {
     e.preventDefault();
+    const error = validatePaymentDetails();
 
-    const { name, cardNumber, cvv, expiryYear, month, postalCode } = formData;
-
-    if (!name || !cardNumber || !cvv || !expiryYear || !month || !postalCode) {
-      setPaymentError("Please fill in all fields.");
-      setPaymentSuccess(null);
-      return;
-    }
-
-    if (cardNumber.length !== 16 || isNaN(cardNumber)) {
-      setPaymentError("Invalid card number.");
-      setPaymentSuccess(null);
-      return;
-    }
-
-    if (cvv.length !== 3 || isNaN(cvv)) {
-      setPaymentError("Invalid CVV.");
+    if (error) {
+      setPaymentError(error);
       setPaymentSuccess(null);
       return;
     }
@@ -61,7 +61,6 @@ const PaymentComponent = () => {
 
   return (
     <div>
-      {/* Navigation Bar */}
       <NavBarComponent navBarData={navBarData} />
 
       <div className="payment-body">
@@ -69,7 +68,7 @@ const PaymentComponent = () => {
         <div className="payment-icons">
           <img src="/assests/icons/visa.png" alt="Visa" />
           <img src="/assests/icons/mastercard.png" alt="MasterCard" />
-          <img src="/assests/icons/discover.png" alt="DiscoverCard" />
+          <img src="/assests/icons/discover.png" alt="Discover" />
           <img src="/assests/icons/amex.png" alt="American Express" />
         </div>
 
@@ -77,7 +76,7 @@ const PaymentComponent = () => {
           <div className="payment-card">
             <CardComponent>
               <h2>Payment Details</h2>
-              <div className="fillup-form">
+              <form className="fillup-form" onSubmit={handlePayment}>
                 <div className="input-row">
                   <div className="input-container">
                     <label>Name on the Card</label>
@@ -155,21 +154,17 @@ const PaymentComponent = () => {
                 </div>
 
                 <ButtonComponent btnName="Pay" />
-
-                {/* Error and Success Messages */}
                 {paymentError && (
                   <div className="error-message">{paymentError}</div>
                 )}
                 {paymentSuccess && (
                   <div className="success-message">{paymentSuccess}</div>
                 )}
-              </div>
+              </form>
             </CardComponent>
           </div>
         </div>
       </div>
-
-      {/* Footer */}
       <FooterComponent />
     </div>
   );

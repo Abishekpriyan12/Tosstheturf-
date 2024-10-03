@@ -38,7 +38,7 @@ h2 {
 .form-group-row {
   display: flex;
   justify-content: space-between;
-  gap: 10px; /* Add spacing between the inputs */
+  gap: 10px;
 }
 
 .form-control {
@@ -80,7 +80,6 @@ h2 {
 
   .form-group-row {
     flex-direction: column;
-    justify-content: flex-start;
     gap: 0;
   }
 
