@@ -7,14 +7,14 @@ Prerequisites
 Node.js (v14 or above) and npm (v6 or above)
 MongoDB (local or remote instance)
 
-1. **Clone the Repository**
+1. Clone the Repository
 
 2. **Install The Dependencies
 **
-**Front-end **
+Front-end 
 Npm install - In the Client Directory
 
-**Backend**
+Backend
 
 Npm install - In the Server Directory 
 
