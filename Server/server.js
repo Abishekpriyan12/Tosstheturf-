@@ -39,21 +39,21 @@ const startServer = async () => {
       resolvers,
     });
 
-    // Connect to MongoDB
-    const mongoUri = process.env.MONGO_CONNECTION_STRING; // Make sure this is pointing to your TurfManagementSystem database
+    
+    const mongoUri = process.env.MONGO_CONNECTION_STRING; 
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log("Connected to MongoDB");
 
-    // Start Apollo Server
+ 
     await server.start();
 
-    // Apply Apollo Server middleware
+ 
     server.applyMiddleware({ app });
 
-    // Start Express server
+   
     const port = process.env.PORT || 3001;
     app.listen(port, () =>
       console.log(
