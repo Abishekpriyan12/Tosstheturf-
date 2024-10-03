@@ -1,0 +1,245 @@
+.signup-container {
+    display: flex;
+    height: 100vh;
+    background-color: #000;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+.signup-form {
+    flex: 0 0 45%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    max-width: 600px;
+    background-color: #000;
+    border-radius: 10px;
+}
+
+.logo-image {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #6EC207;
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+p {
+    color: #AEA7A7;
+    font-size: 14px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.two-column {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.two-column .input-wrapper {
+    flex: 0 0 48%;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 2px solid #6EC207;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #fff;
+}
+
+input::placeholder {
+    color: #AEA7A7;
+}
+
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #6EC207;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.signup-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #AEA7A7;
+}
+
+.signup-text a {
+    color: #6EC207;
+    text-decoration: none;
+}
+
+.signup-background {
+    flex: 0 0 55%;
+    background-size: cover;
+    background-position: center;
+}
+
+/* MEDIA QUERY FOR TABLETS (WIDTH < 1024px) */
+@media (max-width: 1024px) {
+    .signup-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .signup-form {
+        width: 100%;
+        max-width: 600px;
+        padding: 20px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .two-column {
+        flex-direction: column;
+    }
+
+    .input-wrapper {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .signup-background {
+        display: none;
+    }
+
+    h2 {
+        font-size: 20px;
+        text-align: left;
+    }
+
+    input {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .signup-button {
+        font-size: 16px;
+        height: 45px;
+    }
+
+    .signup-text {
+        font-size: 12px;
+    }
+}
+
+/* MEDIA QUERY FOR PHONES (WIDTH < 768px) */
+@media (max-width: 768px) {
+    .signup-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .signup-form {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        padding: 30px 15px;
+        align-items: center;
+    }
+
+    .two-column {
+        flex-direction: column;
+    }
+
+    .input-wrapper {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .logo-image {
+        width: 100px;
+    }
+
+    h2 {
+        font-size: 18px;
+        text-align: left;
+    }
+
+    p {
+        font-size: 13px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    input {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .signup-button {
+        font-size: 14px;
+        height: 45px;
+    }
+
+    .signup-text {
+        font-size: 12px;
+    }
+}
+
+/* MEDIA QUERY FOR SMALL PHONES (WIDTH < 480px) */
+@media (max-width: 480px) {
+    .signup-container {
+        flex-direction: column;
+        height: auto;
+        padding: 0;
+    }
+
+    .signup-form {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .logo-image {
+        width: 80px;
+    }
+
+    h2 {
+        font-size: 16px;
+        text-align: left;
+    }
+
+    p {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    input {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .signup-button {
+        font-size: 12px;
+        height: 40px;
+    }
+
+    .signup-text {
+        font-size: 11px;
+    }
+}

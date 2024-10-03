@@ -2,6 +2,7 @@ import React from "react";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import SliderComponent from "../slider-component/SliderComponent";
 import ScrollerComponent from "../Scroller-Component/ScrollerComponent";
+import FooterComponent from "../footer-component/FooterComponent";
 
 const TurfDetailComponent = () => {
   const navBarData = [
@@ -64,6 +65,7 @@ const TurfDetailComponent = () => {
       <NavBarComponent navBarData={navBarData}></NavBarComponent>
       <SliderComponent slides={sliderData}></SliderComponent>
       <ScrollerComponent items={items}></ScrollerComponent>
+      <FooterComponent></FooterComponent>
     </div>
   );
 };

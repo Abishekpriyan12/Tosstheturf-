@@ -1,14 +1,16 @@
 import React from "react";
 import "./NavBarComponent.css";
 import ButtonComponent from "../Button-Component/ButtonComponent";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
 const NavBarComponent = ({ navBarData }) => {
   return (
     <div className="Nav-bar">
       <div className="card-container">
         <div className="Logo">
-          <img src="ttt_logo.png" alt="logo"></img>
+          <img src="ttt_logo.png" alt="logo" />
         </div>
+
         <div id="location-input">
           <img
             src="/assests/icons/user.png"
@@ -24,16 +26,15 @@ const NavBarComponent = ({ navBarData }) => {
 
         <div className="nav-links">
           <ul>
-            {navBarData.map((res, index) => (
-               <li key={index}>
-               <Link to={res.url}>{res.name}</Link>
-             </li>
-            ))}
+            {
+              navBarData.map((item) => (
+                <li key={item.id}>
+                  <Link to={item.url}>{item.name}</Link>
+                </li>
+              ))
+            }
             <div id="button-comp">
-              <ButtonComponent
-                btnName="Login"
-                iconPath="User.png"
-              ></ButtonComponent>
+              <ButtonComponent btnName="Login" iconPath="User.png" />
             </div>
           </ul>
         </div>
