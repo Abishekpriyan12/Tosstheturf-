@@ -1,27 +1,42 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import "./HomePageComponent.css";
 import CardComponent from "../Card-Component/CardComponent";
 import FooterComponent from "../footer-component/FooterComponent";
-import { Navigate,useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { graphQLCommand } from "../../util";
+
 const HomePageComponent = () => {
-  const navBarData = [
-    { name: "About us", url: "/" },
-    { name: "Venue", url: "/" },
-    { name: "Contact Us", url: "/contact" },
-    { name: "Deals", url: "/" },
-    { name: "FAQs", url: "/faq" },
-  ];
+  const [navBarData, setNavBarData] = useState([]);
   const navigate = useNavigate();
-  const handleClick = () => {
-    console.log("click")
-    navigate('/turfDetail'); 
+
+  const fetchNavBarData = async () => {
+    const query = `
+      query {
+        getNavItems {
+          id
+          name
+          url
+        }
+      }
+    `;
+      const data = await graphQLCommand(query);
+      setNavBarData(data.getNavItems || []);
   };
+
+  useEffect(() => {
+    fetchNavBarData();
+  }, []);
+
+  const handleClick = () => {
+    navigate("/turfDetail");
+  };
+
   return (
     <div className="home-page">
-      <NavBarComponent navBarData={navBarData}></NavBarComponent>
+      <NavBarComponent navBarData={navBarData} />{" "}
+      {/* Pass navBarData directly */}
       <div className="home-first-section">
         <div className="text-section">
           <div className="first-banner-text">
@@ -30,18 +45,18 @@ const HomePageComponent = () => {
           <div className="second-banner-text">
             Explore and book turfs near You
           </div>
-          <ButtonComponent btnName={"Find Your turf"}></ButtonComponent>
+          <ButtonComponent btnName={"Find Your turf"} />
         </div>
         <div className="image-section">
           <div className="home-first-banner">
-            <img src="home_image.png" alt="homeimage"></img>
+            <img src="home_image.png" alt="homeimage" />
           </div>
         </div>
       </div>
       <div className="home-first-section">
         <div className="text-section">
           <div className="home-first-banner">
-            <img src="home_image2.png" alt="homeimage"></img>
+            <img src="home_image2.png" alt="homeimage" />
           </div>
         </div>
         <div className="image-section">
@@ -51,42 +66,41 @@ const HomePageComponent = () => {
           <div className="second-banner-text">
             Explore and book turfs near You
           </div>
-          <ButtonComponent btnName={"Book Your turf"} onClick={handleClick}></ButtonComponent>
+          <ButtonComponent btnName={"Book Your turf"} onClick={handleClick} />
         </div>
       </div>
       <div className="host-the-match">
-        <CardComponent width="100%" height="360px">
+        <CardComponent>
           <h2>Host The Match</h2>
           <div className="host-card">
             <div>Never Play the Short Hand Again</div>
             <div>
-              Never Play the Short Hand Again, Post you match and start playing
+              Never Play the Short Hand Again, Post your match and start playing
               with other teams
             </div>
             <div className="host-image">
-              <img src="host_image.png" alt="host_image"></img>
+              <img src="host_image.png" alt="host_image" />
             </div>
           </div>
         </CardComponent>
       </div>
-
       <div className="perfect-turf-card">
-        <CardComponent width="100%" height="140px">
+        <CardComponent>
           <div className="perfect-card-data">
             <div className="perfect-text-card">
               <div className="perfect-text1">
                 Never Play the Short Hand Again
               </div>
               <div className="perfect-text2">
-                Never Play the Short Hand Again, Post you match and start
+                Never Play the Short Hand Again, Post your match and start
                 playing with other teams
               </div>
             </div>
             <div className="perfect-images">
               <div className="round-image">
-                <img src="host_image.png" alt="host_image"></img>
-                <img src="home_image.png" alt="host_image"></img>
-                <img src="ttt_logo.png" alt="host_image"></img>
+                <img src="host_image.png" alt="host_image" />
+                <img src="home_image.png" alt="home_image" />
+                <img src="ttt_logo.png" alt="ttt_logo" />
               </div>
             </div>
           </div>
@@ -95,12 +109,12 @@ const HomePageComponent = () => {
       <div className="home-first-section">
         <div className="text-section">
           <div className="home-first-banner">
-            <img src="section5_image.png" alt="homeimage"></img>
+            <img src="section5_image.png" alt="homeimage" />
           </div>
         </div>
         <div className="fifth_right-section">
           <div className="fifth-banner-text">
-            Unlock Premium subscription with toss turf subscription.
+            Unlock Premium subscription with Toss Turf Subscription.
           </div>
           <div className="second-banner-text">
             Explore and book turfs near You.
@@ -116,8 +130,9 @@ const HomePageComponent = () => {
           </div>
         </div>
       </div>
-      <FooterComponent></FooterComponent>
+      <FooterComponent />
     </div>
   );
 };
+
 export default HomePageComponent;
