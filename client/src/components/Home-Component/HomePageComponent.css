@@ -1,109 +1,151 @@
-.home-first-section {
+.home-page {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
 }
 
-.home-first-banner {
-  margin-top: 10%;
+/* First Section */
+.home-first-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.text-section,
+.image-section {
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+.first-banner-text,
+.second-banner-text {
+  font-size: 4vw;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .first-banner-text {
-  margin-top: 20%;
-  padding: 10px 0px;
-  font-size: 40px;
+  font-size: 5vw;
 }
 
 .second-banner-text {
-  font-size: 20px;
-  color: grey;
-  padding: 10px 0px;
+  font-size: 3.5vw;
 }
 
-.image-section img {
+img {
   max-width: 100%;
   height: auto;
 }
-.host-the-match {
-    margin: 1% 25% 1% 25%;
-}
-.perfect-turf-card{
-    margin: 1% 10% 1% 10%;
-    padding: 10px;
-}
-.perfect-card-data{
-    display: flex;
-}
-.perfect-text1{
-    font-size: 38px;
-    padding: 5px;
-}
-.perfect-text2{
-    font-size: 20px;
-   
-    padding: 5px;
+
+/* Centering Buttons */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
-.perfect-text-card{
-    flex: 3;
+/* Host the Match Card */
+.host-the-match,
+.perfect-turf-card {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
-.perfect-images{
-    flex: 4;
-}
-.perfect-images {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: -10px;
-  }
-  
-  .round-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .round-image img {
-    width: 120px; 
-    height: 120px; 
-    border-radius: 50%;
-    border: 2px solid #fff;
-    object-fit: cover; 
-  }
-  .fifth_right-section{
-    margin-top: 10%;
-  }
 
-@media (max-width: 480px) {
+.host-card,
+.perfect-card-data {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.host-image,
+.perfect-images .round-image {
+  display: flex;
+  justify-content: center;
+}
+
+.host-image img,
+.perfect-images .round-image img {
+  border-radius: 50%;
+  max-width: 100px;
+  height: 100px;
+}
+
+/* Fifth Section */
+.fifth_right-section {
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+.fifth-banner-text {
+  font-size: 4vw;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.second-banner-text {
+  font-size: 3vw;
+  margin-bottom: 15px;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
   .home-first-section {
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .text-section,
+  .image-section {
+    flex: 1 1 45%;
+    text-align: left;
   }
 
   .first-banner-text {
-    font-size: 28px;
-    margin-top: 15%;
+    font-size: 3vw;
   }
 
   .second-banner-text {
-    font-size: 16px;
+    font-size: 2.5vw;
+  }
+
+  .fifth_right-section {
+    text-align: left;
+  }
+
+  .fifth-banner-text {
+    font-size: 2.8vw;
+  }
+
+  .second-banner-text {
+    font-size: 2vw;
+  }
+
+  .button-container {
+    margin-top: 15px;
+    justify-content: center;
   }
 }
 
-@media (min-width: 481px) and (max-width: 768px) {
-  .home-first-section {
-    flex-direction: row;
-    align-items: center;
-  }
-
+@media (min-width: 1200px) {
   .first-banner-text {
-    font-size: 32px;
-    margin-top: 15%;
+    font-size: 2.5vw;
   }
 
   .second-banner-text {
-    font-size: 18px;
+    font-size: 2vw;
   }
-  .round-image img {
-    width: 80px;
+
+  .fifth-banner-text {
+    font-size: 2.2vw;
+  }
+
+  .second-banner-text {
+    font-size: 1.8vw;
   }
 }

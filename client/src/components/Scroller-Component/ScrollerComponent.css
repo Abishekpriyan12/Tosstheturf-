@@ -1,0 +1,93 @@
+.scroller-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%;
+}
+
+.scroller-container {
+  overflow: hidden;
+  width: 85%;
+}
+
+.scroller {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card {
+  flex: 0 0 calc(32.33% - 20px); /* 3 cards on larger screens */
+  margin: 0 10px; 
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+.card-image {
+  width: 80%;
+  height: 300px; 
+  object-fit: cover; 
+  border-radius: 8px;
+}
+
+.card-content {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-content h3,
+.card-content p {
+  margin: 5px 0;
+}
+
+.discount {
+  color: #66ff66;
+  font-weight: bold;
+}
+
+/* Scroll Buttons */
+.scroll-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  transition: color 0.3s ease;
+}
+
+.scroll-button.left {
+  margin-right: 15px; 
+}
+
+.scroll-button.right {
+  margin-left: 15px; 
+}
+
+/* Tablet View: 2 cards per row */
+@media (max-width: 768px) {
+  .card {
+    flex: 0 0 calc(48.33% - 20px); 
+    margin: 0 10px;
+  }
+
+  .card-image {
+    height: 250px; 
+  }
+}
+
+/* Mobile View: 1 card per row */
+@media (max-width: 480px) {
+  .card {
+    flex: 0 0 calc(98.33% - 10px); 
+    margin: 0 5px;
+  }
+
+  .card-image {
+    height: 200px; 
+  }
+}

@@ -1,0 +1,122 @@
+.payment-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px;
+}
+
+h2 {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.payment-icons img {
+  width: 50px;
+  margin: 0 10px;
+}
+
+.payment-form {
+  background-color: #222;
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Add spacing between the inputs */
+}
+
+.form-control {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 100%;
+}
+
+.form-group-row .form-group {
+  width: 70%;
+  height: 80px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .payment-form {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .form-group-row {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .form-group-row .form-group {
+    width: 100%;
+  }
+
+  .payment-icons img {
+    width: 40px;
+    margin: 0 5px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-body {
+    margin: 20px;
+  }
+
+  .payment-form {
+    padding: 10px;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .payment-icons img {
+    width: 30px;
+  }
+
+  .form-control {
+    font-size: 14px;
+  }
+}

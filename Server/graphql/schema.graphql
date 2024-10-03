@@ -1,0 +1,9 @@
+type NavItem {
+  id: ID!
+  name: String!
+  url: String!
+}
+
+type Query {
+  getNavItems: [NavItem!]!
+}
