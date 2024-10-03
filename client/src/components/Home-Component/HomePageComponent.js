@@ -36,7 +36,7 @@ const HomePageComponent = () => {
   return (
     <div className="home-page">
       <NavBarComponent navBarData={navBarData} />{" "}
-      {/* Pass navBarData directly */}
+      
       <div className="home-first-section">
         <div className="text-section">
           <div className="first-banner-text">

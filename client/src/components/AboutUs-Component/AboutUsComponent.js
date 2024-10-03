@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AboutUsComponent.css";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import FooterComponent from "../footer-component/FooterComponent";
 import CardComponent from "../Card-Component/CardComponent";
+import { graphQLCommand } from "../../util";
 
 const HeroSection = () => {
     return (
         <section className="hero-section">
             <video autoPlay muted loop className="hero-video">
-                <source src="aboutus_video.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
+                <source src="aboutus_video.mp4" type="video/mp4"/>
+                
             </video>
             <div className="hero-text">
                 <h1>Join Teams, Reserve Turf, and Elevate Your Game</h1>
@@ -69,26 +70,35 @@ const TeamSection = () => {
       </section>
     );
   };
-  
-  
-
-
 const AboutUsComponent = () => {
-    const navBarData = [
-        { name: "About us", url: "/about" },
-        { name: "Venue", url: "/venue" },
-        { name: "Contact Us", url: "/contact" },
-        { name: "Deals", url: "/deals" }
-    ];
+  const [navBarData, setNavBarData] = useState([]);
+  const fetchNavBarData = async () => {
+    const query = `
+      query {
+        getNavItems {
+          id
+          name
+          url
+        }
+      }
+    `;
+      const data = await graphQLCommand(query);
+      setNavBarData(data.getNavItems || []);
+  };
+
+  useEffect(() => {
+    fetchNavBarData();
+  }, []);
+
 
     return (
         <div className="aboutuspage-page">
-            <NavBarComponent navBarData={navBarData}></NavBarComponent>
-            <HeroSection />
-            <MissionSection />
-            <TeamSection />
+           <NavBarComponent navBarData={navBarData} />{" "}
+            <HeroSection></HeroSection>
+            <MissionSection></MissionSection>
+            <TeamSection></TeamSection>
             <FooterComponent></FooterComponent>
-        </div>
+         </div>
     );
 };
 
