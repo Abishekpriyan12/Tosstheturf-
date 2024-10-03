@@ -7,6 +7,9 @@ import FaqComponent from "./components/Faq-Component/FaqComponent";
 import AboutUsComponent from "./components/AboutUs-Component/AboutUsComponent";
 import PaymentComponent from "./components/Payment-Component/PaymentComponent";
 import TurfDetailComponent from "./components/TurfDetail-Component/TurfDetailComponent";
+import LoginPage from "./components/LoginPage/LoginpageComponent";
+import SignupPage from "./components/SignupPage/SignupPageComponent";
+
 
 
 
@@ -20,6 +23,10 @@ function App() {
         <Route path="/payment" element={<PaymentComponent />} />
         <Route path="/about" element={<AboutUsComponent />} />
         <Route path="/turfDetail" element={<TurfDetailComponent />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+
+
       </Routes>
     </div>
   );
