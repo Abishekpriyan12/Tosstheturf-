@@ -1,4 +1,4 @@
-**Toss the Turf Project**
+#Toss the Turf Project
 
 **Getting Started**
 This project is a full-stack web application for booking turfs. It consists of a frontend (React) and a backend (Node.js/Express with MongoDB).
@@ -11,10 +11,10 @@ MongoDB (local or remote instance)
 
 2.**Install The Dependencies**
 
-Front-end 
+**Front-end **
 Npm install - In the Client Directory
 
-Backend
+**Backend**
 
 Npm install - In the Server Directory 
 
