@@ -49,7 +49,7 @@ const SignupPage = () => {
               </div>
             </div>
   
-            <ButtonComponent className='signup-button' btnName={"Sign Up"} />
+            <ButtonComponent  btnName={"Sign Up"} />
           </form>
   
           <p className="signup-text">

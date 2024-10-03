@@ -17,7 +17,7 @@
 }
 
 .card {
-  flex: 0 0 calc(32.33% - 20px); /* 3 cards on larger screens */
+  flex: 0 0 calc(32.33% - 20px); 
   margin: 0 10px; 
   color: #fff;
   text-align: center;
@@ -68,7 +68,7 @@
   margin-left: 15px; 
 }
 
-/* Tablet View: 2 cards per row */
+
 @media (max-width: 768px) {
   .card {
     flex: 0 0 calc(48.33% - 20px); 

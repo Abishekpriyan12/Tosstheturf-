@@ -71,7 +71,7 @@ h2 {
   margin-top: 10px;
 }
 
-/* Media Queries for Responsive Design */
+
 @media (max-width: 768px) {
   .payment-form {
     width: 100%;

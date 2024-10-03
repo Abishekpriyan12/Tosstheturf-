@@ -40,7 +40,7 @@ const LoginPage = () => {
           </div>
 
           {/* <button className="login-button" type="submit">Login</button> */}
-          <ButtonComponent className='login-button' btnName={"Login"}></ButtonComponent>
+          <ButtonComponent  btnName={"Login"}></ButtonComponent>
 
 
           <p className="signup-text">

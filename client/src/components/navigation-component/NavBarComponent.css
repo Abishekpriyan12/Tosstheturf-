@@ -1,4 +1,4 @@
-/* General Styles */
+
 .card-container {
   background-color: #000;
   padding: 5px;
@@ -7,7 +7,7 @@
   border-color: bisque;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-between; /* Align items with space between */
+  justify-content: space-between; 
   align-items: center;
 }
 
@@ -76,7 +76,7 @@ a {
   margin-left: 15px;
 }
 
-/* Mobile View (max-width: 480px) */
+
 @media (max-width: 480px) {
   .card-container {
     flex-direction: column;
@@ -85,12 +85,12 @@ a {
   }
 
   .Logo img {
-    width: 100px; /* Smaller logo for mobile */
+    width: 100px; 
   }
 
   #location-input {
     margin-top: 10px;
-    width: 100%; /* Full width on mobile */
+    width: 100%; 
   }
 
   .location-textbox {
@@ -119,7 +119,7 @@ a {
   }
 }
 
-/* Tablet View (max-width: 768px) */
+
 @media (min-width: 481px) and (max-width: 768px) {
   .card-container {
     flex-direction: row;
@@ -127,11 +127,11 @@ a {
   }
 
   .Logo img {
-    width: 120px; /* Slightly smaller logo for tablet */
+    width: 120px; 
   }
 
   #location-input {
-    width: 200px; /* Adjust the width for tablet */
+    width: 200px; 
   }
 
   .nav-links ul {
