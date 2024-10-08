@@ -9,6 +9,8 @@ import PaymentComponent from "./components/Payment-Component/PaymentComponent";
 import TurfDetailComponent from "./components/TurfDetail-Component/TurfDetailComponent";
 import LoginPage from "./components/LoginPage/LoginpageComponent";
 import SignupPage from "./components/SignupPage/SignupPageComponent";
+import EditTurfDetailComponent from "./components/EditTurfDetail-Component/EditTurfDetailComponent";
+
 
 
 
@@ -26,7 +28,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
-
+        <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
       </Routes>
     </div>
   );

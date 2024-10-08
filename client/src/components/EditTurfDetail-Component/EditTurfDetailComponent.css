@@ -1,0 +1,124 @@
+
+.editturf-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .edit-turf-form {
+    padding: 30px; 
+    border-radius: 10px;
+    max-width: 900px;
+    margin: 0 auto;
+
+  }
+  
+  .edit-turf-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+
+  .editturf-form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+ 
+  .editturf-column {
+    display: flex;
+    flex-direction: column;
+    width: 46%; 
+  }
+  
+
+  .editturf-form-input {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9; 
+    color: #333;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+ 
+  .file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .file-upload-label {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9; 
+    color: #333;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-upload-label:hover {
+    background-color: #47a63e; 
+  }
+  
+  .file-upload-label img {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  #turfImage {
+    display: none;
+  }
+ 
+  .submit-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .editturf-form-row {
+      flex-direction: column; 
+    }
+  
+    .editturf-column {
+      width: 100%; 
+    }
+  
+    .submit-button {
+      margin-top: 30px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .edit-turf-form {
+      padding: 20px; 
+    }
+  
+    .editturf-form-input {
+      font-size: 14px; 
+    }
+  
+    .file-upload-label {
+      font-size: 14px; 
+    }
+  
+    .submit-button {
+      margin-top: 25px;
+    }
+  }
+  
