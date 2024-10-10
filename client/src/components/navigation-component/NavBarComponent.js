@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./NavBarComponent.css";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
+import ButtonComponent from "../Button-Component/ButtonComponent";
 
 const NavBarComponent = ({ navBarData }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -10,9 +11,9 @@ const NavBarComponent = ({ navBarData }) => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleOptionClick = (role) => {
-    console.log(`Navigate to login as ${role}`);
-    navigate(`/login?role=${role}`); 
+  const handleOptionClick = () => {
+   
+    navigate("/login"); 
   };
 
   return (
@@ -30,16 +31,7 @@ const NavBarComponent = ({ navBarData }) => {
               </li>
             ))}
             <div id="button-comp" className="dropdown">
-              <button className="dropdown-button" onClick={toggleDropdown}>
-                Login
-              </button>
-              {dropdownOpen && (
-                <div className="dropdown-menu">
-                  <div className="dropdown-item" onClick={() => handleOptionClick("Admin")}>Admin</div>
-                  <div className="dropdown-item" onClick={() => handleOptionClick("User")}>User</div>
-                  <div className="dropdown-item" onClick={() => handleOptionClick("Owner")}>Owner</div>
-                </div>
-              )}
+              <ButtonComponent btnName={"Login"} iconPath={"user.png"} onClick={handleOptionClick}></ButtonComponent>
             </div>
           </ul>
         </div>
