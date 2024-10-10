@@ -10,6 +10,7 @@ import TurfDetailComponent from "./components/TurfDetail-Component/TurfDetailCom
 import LoginPage from "./components/LoginPage/LoginpageComponent";
 import SignupPage from "./components/SignupPage/SignupPageComponent";
 import EditTurfDetailComponent from "./components/EditTurfDetail-Component/EditTurfDetailComponent";
+import BookingHistoryComponent from "./components/BookingHistory-Component/BookingHistoryComponent";
 
 
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
 
         <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
+        <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
       </Routes>
     </div>
   );
