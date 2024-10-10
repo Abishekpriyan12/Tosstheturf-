@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./NavBarComponent.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 
 const NavBarComponent = ({ navBarData }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -11,6 +12,7 @@ const NavBarComponent = ({ navBarData }) => {
 
   const handleOptionClick = (role) => {
     console.log(`Navigate to login as ${role}`);
+    navigate(`/login?role=${role}`); 
   };
 
   return (
