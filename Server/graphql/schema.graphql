@@ -1,9 +1,24 @@
-type NavItem {
+type User {
   id: ID!
-  name: String!
-  url: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  role: String!  
+  token: String
 }
 
 type Query {
   getNavItems: [NavItem!]!
+}
+
+type Mutation {
+  signup(firstName: String!, lastName: String!, email: String!, password: String!, role: String!): User!  # Added role parameter
+  login(email: String!, password: String!, role: String!): User! 
+}
+
+type NavItem {
+  id: ID!
+  name: String!
+  url: String!
 }
