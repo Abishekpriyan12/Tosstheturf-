@@ -1,19 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import "./NavBarComponent.css";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
+import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 
 const NavBarComponent = ({ navBarData }) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
+  const navigate = useNavigate();
 
   const handleOptionClick = () => {
-   
-    navigate("/login"); 
+    navigate("/login");
   };
 
   return (
@@ -31,7 +25,11 @@ const NavBarComponent = ({ navBarData }) => {
               </li>
             ))}
             <div id="button-comp" className="dropdown">
-              <ButtonComponent btnName={"Login"} iconPath={"user.png"} onClick={handleOptionClick}></ButtonComponent>
+              <ButtonComponent
+                btnName={"Login"}
+                iconPath={"user.png"}
+                onClick={handleOptionClick}
+              ></ButtonComponent>
             </div>
           </ul>
         </div>

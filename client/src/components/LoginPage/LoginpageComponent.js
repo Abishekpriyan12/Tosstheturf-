@@ -4,7 +4,7 @@ import "./LoginPageComponent.css";
 import loginBackground from "./../../assests/images/loginbg.jpg";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import logo from "./../../assests/images/logov1.png";
-import { graphQLCommand } from "../../util"; // Ensure this path is correct
+import { graphQLCommand } from "../../util"; 
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Initialize the useNavigate hook

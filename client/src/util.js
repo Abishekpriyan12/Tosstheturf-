@@ -16,7 +16,6 @@ export const graphQLCommand = async (query, variables = {}) => {
 
     return json.data;
   } catch (error) {
-    console.error("GraphQL Error:", error);
     throw error;
   }
 };

@@ -28,7 +28,6 @@ function App() {
         <Route path="/turfDetail" element={<TurfDetailComponent />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-
         <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
       </Routes>
