@@ -20,7 +20,7 @@ const SliderComponent = ({ slides }) => {
       >
         {slides.map((slide, index) => (
           <div className="slide" key={index}>
-            <img src={slide.src} alt={slide.alt} />
+          <img src={slide} alt={`Slide ${index + 1}`} />
           </div>
         ))}
       </div>

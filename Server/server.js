@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 const resolvers = require("./graphql/resolver");
+const { bucket } = require('./firebase'); // Import Firebase bucket for file uploads
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-
+// GraphQL Type Definitions and Resolvers
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "./graphql/schema.graphql"),
   "utf-8"
@@ -37,28 +38,29 @@ const startServer = async () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      context: ({ req }) => {
+        return { bucket };
+      },
     });
 
-    
-    const mongoUri = process.env.MONGO_CONNECTION_STRING; 
+    // Connect to MongoDB
+    const mongoUri = process.env.MONGO_CONNECTION_STRING;
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log("Connected to MongoDB");
 
- 
+    // Start Apollo Server
     await server.start();
 
- 
+    // Apply Apollo Middleware to Express App
     server.applyMiddleware({ app });
 
-   
+    // Start Express Server
     const port = process.env.PORT || 3001;
     app.listen(port, () =>
-      console.log(
-        `Server ready at http://localhost:${port}${server.graphqlPath}`
-      )
+      console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
     );
   } catch (error) {
     console.error("Error starting server:", error.message);

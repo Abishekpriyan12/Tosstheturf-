@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const NavItem = require("../models/NavItems");
 const User = require("../models/User");
+const Turf = require('../models/Turf');
 
 const resolvers = {
   Query: {
@@ -8,10 +9,21 @@ const resolvers = {
       try {
         return await NavItem.find();
       } catch (error) {
+        console.error("Failed to fetch navigation items:", error);
         throw new Error("Failed to fetch navigation items.");
       }
     },
+    
+    getTurfs: async () => {
+      try {
+        return await Turf.find();
+      } catch (error) {
+        console.error("Failed to fetch turfs:", error);
+        throw new Error("Failed to fetch turfs.");
+      }
+    },
   },
+
   Mutation: {
     signup: async (_, { firstName, lastName, email, password, role }) => {
       try {
@@ -51,32 +63,53 @@ const resolvers = {
     },
 
     login: async (_, { email, password, role }) => {
-   
-      const user = await User.findOne({ email });
-    
-      if (!user) {
-        throw new Error(`No user found with email: ${email}`);
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          throw new Error(`No user found with email: ${email}`);
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          throw new Error("Incorrect password. Please try again.");
+        }
+
+        if (user.role !== role) {
+          throw new Error(`User role '${user.role}' does not match the requested role '${role}'.`);
+        }
+
+        return {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+        };
+      } catch (error) {
+        console.error("Error in login resolver:", error);
+        throw new Error("Login failed.");
       }
-    
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        throw new Error("Incorrect password. Please try again.");
-      }
-    
-      if (user.role !== role) {
-        throw new Error(`User role '${user.role}' does not match the requested role '${role}'.`);
-      }
-    
-      return {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-      };
     },
-    
-    
+
+    addTurf: async (_, { turfName, address, phone, amenities, timing, mainImage, sliderImages }) => {
+      try {
+        const newTurf = new Turf({
+          turfName,
+          address,
+          phone,
+          amenities,
+          timing,
+          mainImage,
+          sliderImages,
+        });
+
+        await newTurf.save();
+        return newTurf;
+      } catch (error) {
+        console.error("Error adding turf:", error);
+        throw new Error("Failed to add turf.");
+      }
+    },
   },
 };
 
