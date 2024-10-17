@@ -12,7 +12,7 @@
   margin: 0 auto;
 }
 
-/* Responsive styles */
+
 @media (max-width: 768px) {
   .card {
     max-width: 90%;

@@ -1,38 +1,34 @@
 import React from "react";
 import "./NavBarComponent.css";
+import { Link, useNavigate } from "react-router-dom";
 import ButtonComponent from "../Button-Component/ButtonComponent";
-import { Link } from 'react-router-dom';
+
 const NavBarComponent = ({ navBarData }) => {
+  const navigate = useNavigate();
+
+  const handleOptionClick = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="Nav-bar">
       <div className="card-container">
         <div className="Logo">
-          <img src="ttt_logo.png" alt="logo"></img>
+          <img src="ttt_logo.png" alt="logo" />
         </div>
-        <div id="location-input">
-          <img
-            src="/assests/icons/user.png"
-            alt="location"
-            className="location-icon"
-          />
-          <input
-            type="text"
-            placeholder="Enter location"
-            className="location-textbox"
-          />
-        </div>
-
+        <div id="location-input" />
         <div className="nav-links">
           <ul>
-            {navBarData.map((res, index) => (
-               <li key={index}>
-               <Link to={res.url}>{res.name}</Link>
-             </li>
+            {navBarData.map((item) => (
+              <li key={item.id}>
+                <Link to={item.url}>{item.name}</Link>
+              </li>
             ))}
-            <div id="button-comp">
+            <div id="button-comp" className="dropdown">
               <ButtonComponent
-                btnName="Login"
-                iconPath="User.png"
+                btnName={"Login"}
+                iconPath={"user.png"}
+                onClick={handleOptionClick}
               ></ButtonComponent>
             </div>
           </ul>

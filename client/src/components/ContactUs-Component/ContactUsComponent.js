@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ButtonComponent from "../Button-Component/ButtonComponent";
 import NavBarComponent from "../navigation-component/NavBarComponent";
 import "./ContactUsComponent.css";
 import CardComponent from "../Card-Component/CardComponent";
 import FooterComponent from "../footer-component/FooterComponent";
+import { graphQLCommand } from "../../util";
 
 const ContactUsComponent = () => {
-  const navBarData = ["About us", "Venue", "Contact Us", "Deals"];
+  const [navBarData, setNavBarData] = useState([]);
+  const fetchNavBarData = async () => {
+    const query = `
+      query {
+        getNavItems {
+          id
+          name
+          url
+        }
+      }
+    `;
+      const data = await graphQLCommand(query);
+      setNavBarData(data.getNavItems || []);
+  };
+
+  useEffect(() => {
+    fetchNavBarData();
+  }, []);
+
   return (
     <div className="contactuspage-page">
-      <NavBarComponent navBarData={navBarData}></NavBarComponent>
+      
+      <NavBarComponent navBarData={navBarData} />{" "}
 
       <div className="contact-us-container">
         <div className="contact-us-card">
@@ -17,23 +37,23 @@ const ContactUsComponent = () => {
             <h2>Contact Us</h2>
             <div className="fillup-form">
               <div className="input-row">
-                <div className="input-container">
+                <div className="contactus-input-container">
                   <label>First Name</label>
-                  <input type="text" placeholder="Enter First Name" />
+                  <input class="contact-input" type="text" placeholder="Enter First Name" />
                 </div>
-                <div className="input-container">
+                <div className="contactus-input-container">
                   <label>Last Name</label>
-                  <input type="text" placeholder="Enter Last Name" />
+                  <input  class="contact-input" type="text" placeholder="Enter Last Name" />
                 </div>
               </div>
               <div className="input-row">
-                <div className="input-container">
+                <div className="contactus-input-container">
                   <label>Email</label>
-                  <input type="email" placeholder="Enter Email" />
+                  <input class="contact-input" type="email" placeholder="Enter Email" />
                 </div>
               </div>
               <div className="input-row">
-                <div className="input-container">
+                <div className="contactus-input-container">
                   <label>Message</label>
                   <textarea placeholder="Enter your message"></textarea>
                 </div>

@@ -1,0 +1,51 @@
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  role: String!
+  token: String
+}
+
+type NavItem {
+  id: ID!
+  name: String!
+  url: String!
+}
+
+type Amenities {
+  parking: Boolean!
+  drinkingWater: Boolean!
+  spareKits: Boolean!
+  nonAC: Boolean!
+}
+
+type Turf {
+  id: ID!
+  turfName: String!
+  address: String!
+  phone: String!
+  amenities: Amenities!
+  timing: String!
+  mainImage: String!
+  sliderImages: [String!]!
+}
+
+type Query {
+  getNavItems: [NavItem!]!
+  getTurfs: [Turf!]!  # Add a query to get all turfs
+}
+
+type Mutation {
+  signup(firstName: String!, lastName: String!, email: String!, password: String!, role: String!): User!
+  login(email: String!, password: String!, role: String!): User!
+  addTurf(turfName: String!, address: String!, phone: String!, amenities: AmenitiesInput!, timing: String!, mainImage: String!, sliderImages: [String!]!): Turf!
+}
+
+input AmenitiesInput {
+  parking: Boolean!
+  drinkingWater: Boolean!
+  spareKits: Boolean!
+  nonAC: Boolean!
+}

@@ -1,0 +1,76 @@
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .slide {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+  
+
+  @media (max-width: 768px) {
+    .slide img {
+      height: 200px; 
+      object-fit: cover;
+    }
+  
+    .prev-btn, .next-btn {
+      font-size: 1.2rem; 
+      padding: 8px; 
+    }
+  
+    .prev-btn {
+      left: 5px; 
+    }
+  
+    .next-btn {
+      right: 5px;
+    }
+  }
+  
+ 
+  @media (max-width: 480px) {
+    .slide img {
+      height: 150px; 
+      object-fit: cover;
+    }
+  
+    .prev-btn, .next-btn {
+      font-size: 1rem; 
+      padding: 6px; 
+    }
+  
+    .prev-btn {
+      left: 3px; 
+    }
+  
+    .next-btn {
+      right: 3px; 
+    }
+  }
+  
