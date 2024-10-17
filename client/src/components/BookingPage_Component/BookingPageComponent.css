@@ -1,0 +1,83 @@
+.booking-section {
+    margin: 30px 30px ; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #000000;
+    color: white;
+    gap: 30px;
+}
+
+.Booking-card {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 10px;
+    width: 450px;
+}
+
+.booking-details-card {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+}
+
+.booking-card h2, .booking-details-card h3 {
+    color: #4CAF50;
+}
+
+.toss-points {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group select, .input-group input {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.proceed-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.proceed-button:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    .booking-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .booking-card, .booking-details-card {
+        width: 90%;
+    }
+}

@@ -1,0 +1,97 @@
+.turf-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    max-width: 2000px; /* Container width set to 2000px */
+    margin: 0 auto; /* Center the container */
+  }
+  
+  .turf-card {
+    background-color: #000;
+    color: #fff;
+    border-radius: 10px;
+    width: 500px; /* Adjusted to maintain three cards per row */
+    padding: 15px;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .turf-image img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .turf-sport-label {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .turf-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .turf-title-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .turf-info h3 {
+    font-size: 20px;
+    font-weight: 200;
+    margin: 0;
+    color: #fff;
+  }
+  
+  .turf-rating {
+    font-size: 18px;
+    color: #6EC207;
+  }
+  
+  .turf-price-tag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  .turf-price {
+    font-size: 22px;
+    color: #7E7E7E;
+  }
+  
+  .turf-tag {
+    background-color: #7E7E7E;
+    color: #fff;
+    border-radius: 15px;
+    padding: 5px 12px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .turf-discount {
+    margin-top: 10px;
+    color: #6EC207;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+  
+  .discountIcon {
+    width: 18px;
+    margin-right: 8px;
+  }
+  
+  .line{
+    border-top: 1px solid rgb(112, 112, 112);
+    margin-top: 10px;
+  }

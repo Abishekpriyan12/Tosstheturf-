@@ -13,6 +13,8 @@ import EditTurfDetailComponent from "./components/EditTurfDetail-Component/EditT
 import BookingHistoryComponent from "./components/BookingHistory-Component/BookingHistoryComponent";
 import AddTurfForm from "./components/Add-Turf/AddTurfForm";
 import TurfList from "./components/ListData/TurfList";
+import TurfSearchPageComponent from "./components/TurfSearchPage-Component/TurfSearchPageComponent";
+import BookingPageComponent from "./components/BookingPage_Component/BookingPageComponent";
 
 
 
@@ -34,6 +36,8 @@ function App() {
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
         <Route path="/addTurf" element={<AddTurfForm></AddTurfForm>}></Route>
         <Route path="/listturf" element={<TurfList></TurfList>}></Route>
+        <Route path="/turfSearch" element={<TurfSearchPageComponent/>} />
+        <Route path="/bookingPage" element={<BookingPageComponent/>} />
       </Routes>
     </div>
   );
