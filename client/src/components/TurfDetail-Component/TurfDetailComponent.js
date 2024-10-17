@@ -12,18 +12,10 @@ const TurfDetailComponent = () => {
     { name: "Deals", url: "/" },
   ];
 
-  const sliderData = [
-    {
-      src: "home_image2.png",
-    
-    },
-    {
-      src: "home_image.png",
-    },
-    {
-      src: "home_image2.png",
-    
-    },
+  const slides = [
+    "home_image2.png",
+    "home_image.png",
+    "home_image2.png"
   ];
   const items = [
     {
@@ -62,7 +54,7 @@ const TurfDetailComponent = () => {
   return (
     <div className="turf-detail">
       <NavBarComponent navBarData={navBarData}></NavBarComponent>
-      <SliderComponent slides={sliderData}></SliderComponent>
+      <SliderComponent slides={slides}></SliderComponent>
       <ScrollerComponent items={items}></ScrollerComponent>
       <FooterComponent></FooterComponent>
     </div>
