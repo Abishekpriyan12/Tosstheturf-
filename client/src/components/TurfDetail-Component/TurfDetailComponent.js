@@ -15,15 +15,14 @@ const TurfDetailComponent = () => {
   const sliderData = [
     {
       src: "home_image2.png",
-      alt: "home_image",
+    
     },
     {
       src: "home_image.png",
-      alt: "home_image",
     },
     {
       src: "home_image2.png",
-      alt: "home_image",
+    
     },
   ];
   const items = [
