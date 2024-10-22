@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './SliderComponent.css'
 const SliderComponent = ({ slides }) => {
-    console.log(slides)
+   
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToPrevious = () => {

@@ -1,3 +1,21 @@
+enum Timing {
+  "5 AM to 9 AM"
+  FIVE_AM_TO_NINE_AM
+  "9 AM to 1 PM"
+  NINE_AM_TO_ONE_PM
+  "1 PM to 5 PM"
+  ONE_PM_TO_FIVE_PM
+  "5 PM to 9 PM"
+  FIVE_PM_TO_NINE_PM
+}
+enum location {
+  "Cambridge"
+  Cambridge
+  "Waterloo"
+  Waterloo
+  "Kitchner"
+  Kitchner
+}
 type User {
   id: ID!
   firstName: String!
@@ -21,28 +39,56 @@ type Amenities {
   nonAC: Boolean!
 }
 
+type Query {
+  getNavItems: [NavItem!]!
+  getTurfs: [Turf!]!
+  turf(id: ID!): Turf
+}
+
+# Updated Turf type using Int and String as alternatives
 type Turf {
   id: ID!
   turfName: String!
+  location: String!
   address: String!
   phone: String!
   amenities: Amenities!
   timing: String!
   mainImage: String!
   sliderImages: [String!]!
+  sportType: String!
+  price: String!
+  rating: String
+  firstTimeDiscount: String
 }
 
-type Query {
-  getNavItems: [NavItem!]!
-  getTurfs: [Turf!]!  # Add a query to get all turfs
-}
-
+# Updated Mutation for addTurf using Int for price and discount
 type Mutation {
-  signup(firstName: String!, lastName: String!, email: String!, password: String!, role: String!): User!
+  signup(
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    role: String!
+  ): User!
   login(email: String!, password: String!, role: String!): User!
-  addTurf(turfName: String!, address: String!, phone: String!, amenities: AmenitiesInput!, timing: String!, mainImage: String!, sliderImages: [String!]!): Turf!
+  addTurf(
+    turfName: String!
+    location: String!
+    address: String!
+    phone: String!
+    amenities: AmenitiesInput!
+    timing: String!
+    mainImage: String!
+    sliderImages: [String!]!
+    sportType: String!
+    price: String!
+    rating: String
+    firstTimeDiscount: String
+  ): Turf!
 }
 
+# Ensure you have this type defined for amenities
 input AmenitiesInput {
   parking: Boolean!
   drinkingWater: Boolean!

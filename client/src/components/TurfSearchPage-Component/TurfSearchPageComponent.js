@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FooterComponent from "../footer-component/FooterComponent";
 import NavBarComponent from "../navigation-component/NavBarComponent";
-// import { graphQLCommand } from "../../util";
+import { graphQLCommand } from "../../util"; // Ensure this is properly implemented
 import "./TurfSearchPageComponent.css";
 import TurfCardComponent from "../TurfCard-Component/TurfCardComponent";
 
@@ -11,86 +11,73 @@ const TurfSearchPageComponent = () => {
   const [turfs, setTurfs] = useState([]);
   const [filteredTurfs, setFilteredTurfs] = useState([]);
 
-  // Hardcoded data for navigation items
-  const navItems = [
-    { id: 1, name: "Home", url: "/" },
-    { id: 2, name: "Contact Us", url: "/contact" },
-    { id: 3, name: "FAQs", url: "/faq" },
-    { id: 4, name: "About Us", url: "/about" },
-    // Add more as needed
-  ];
-
-  // Hardcoded data for turfs
-  const turfData = [
-    { id: 1, name: "Tiki pika", location: "Cambridge", price: 18, rating: 4.2, sport: "Football", imageUrl: `${process.env.PUBLIC_URL}/assests/images/turf1.jpg` },
-    { id: 2, name: "Kitchener Courts", location: "Kitchener", price: 20, rating: 4.5, sport: "Basketball", imageUrl: `${process.env.PUBLIC_URL}/assests/images/turf2.jpg` },
-    { id: 3, name: "Waterloo Athletic Zone", location: "Waterloo", price: 19, rating: 4.1, sport: "Soccer", imageUrl: `${process.env.PUBLIC_URL}/assests/images/turf1.jpg` },
-    { id: 4, name: "Tri-City Sports Dome", location: "Cambridge", price: 22, rating: 4.4, sport: "Football", imageUrl: `${process.env.PUBLIC_URL}/assests/images/turf2.jpg` },
-    { id: 5, name: "Preston Indoor Courts", location: "Kitchener", price: 17, rating: 4.3, sport: "Badminton", imageUrl: `${process.env.PUBLIC_URL}/assests/images/turf1.jpg` },
-    { id: 6, name: "Another Turf", location: "Waterloo", price: 18, rating: 4.0, sport: "Basketball", imageUrl: `${process.env.PUBLIC_URL}/assests/images/turf2.jpg` },
-  ];
-
-  // Commented out fetching functions
-  // const fetchNavBarData = async () => {
-  //   const query = `
-  //     query {
-  //       getNavItems {
-  //         id
-  //         name
-  //         url
-  //       }
-  //     }
-  //   `;
-  //   const data = await graphQLCommand(query);
-  //   setNavBarData(data.getNavItems || []);
-  // };
-
-  // const fetchTurfData = async () => {
-  //   const query = `
-  //     query {
-  //       getTurfs {
-  //         id
-  //         name
-  //         location
-  //         price
-  //         rating
-  //         sport
-  //         imageUrl
-  //       }
-  //     }
-  //   `;
-  //   const data = await graphQLCommand(query);
-  //   setTurfs(data.getTurfs || []);
-  //   setFilteredTurfs(data.getTurfs || []);
-  // };
+  const fetchTurfData = async () => {
+    const query = `
+      query {
+        getTurfs {
+          id
+          turfName
+          address
+          phone
+          amenities {
+            parking
+            drinkingWater
+            spareKits
+            nonAC
+          }
+          timing
+          mainImage
+          sliderImages
+          sportType
+          price
+          rating
+          firstTimeDiscount
+        }
+      }
+    `;
+    try {
+      const data = await graphQLCommand(query);
+      setTurfs(data.getTurfs || []);
+      setFilteredTurfs(data.getTurfs || []);
+    } catch (error) {
+      console.error("Error fetching turf data:", error);
+    }
+  };
 
   const handleFilterBySport = (sport) => {
-    setFilteredTurfs(turfs.filter((turf) => turf.sport === sport));
+    setFilteredTurfs(turfs.filter((turf) => turf.sportType === sport));
+  };
+  const fetchNavBarData = async () => {
+    const query = `
+      query {
+        getNavItems {
+          id
+          name
+          url
+        }
+      }
+    `;
+    const data = await graphQLCommand(query);
+    setNavBarData(data.getNavItems || []);
   };
 
   useEffect(() => {
-    // Temporary hardcoded data assignment
-    setNavBarData(navItems);
-    setTurfs(turfData);
-    setFilteredTurfs(turfData);
-
-    // Uncomment these when ready to fetch from the database
-    // fetchNavBarData();
-    // fetchTurfData();
+    fetchTurfData();
+    fetchNavBarData();
   }, []);
 
   return (
     <div>
-        <NavBarComponent navBarData={navBarData} className="nav-bar"/>
+      <NavBarComponent navBarData={navBarData} className="nav-bar" />
 
-      <div 
+      <div
         className="hero-section"
         style={{
           backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/hero-image.jpg)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '700px',
-          position: 'relative'
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "700px",
+          position: "relative",
         }}
       >
         <div className="hero-content">
@@ -116,24 +103,39 @@ const TurfSearchPageComponent = () => {
       </div>
 
       <div className="new-turf-section">
-        <div className="new-turf-card" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/football.jpg)` }}
-             onClick={() => handleFilterBySport("Football")}>
+        <div
+          className="new-turf-card"
+          style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/football.jpg)`,
+          }}
+          onClick={() => handleFilterBySport("Football")}
+        >
           <div className="tag">New Turf</div>
           <div className="turf-info">
             <h3>Football</h3>
             <p>Book turf and score like a pro!</p>
           </div>
         </div>
-        <div className="new-turf-card" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/badminton.jpg)` }}
-             onClick={() => handleFilterBySport("Badminton")}>
+        <div
+          className="new-turf-card"
+          style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/badminton.jpg)`,
+          }}
+          onClick={() => handleFilterBySport("Badminton")}
+        >
           <div className="tag">New Turf</div>
           <div className="turf-info">
             <h3>Badminton</h3>
             <p>Smash your way to victory!</p>
           </div>
         </div>
-        <div className="new-turf-card" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/basketball.jpg)` }}
-             onClick={() => handleFilterBySport("Basketball")}>
+        <div
+          className="new-turf-card"
+          style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/basketball.jpg)`,
+          }}
+          onClick={() => handleFilterBySport("Basketball")}
+        >
           <div className="tag">New Turf</div>
           <div className="turf-info">
             <h3>Basketball</h3>
@@ -145,18 +147,26 @@ const TurfSearchPageComponent = () => {
       <h1 className="turf-list-heading">Featured Turfs Nearby</h1>
 
       <div className="turf-list">
-        {filteredTurfs.map((turf) => (
-          <Link to={`/turf/${turf.id}`} key={turf.id} className="turf-card-link">
-            <TurfCardComponent
-              imageUrl={turf.imageUrl}
-              sport={turf.sport}
-              name={turf.name}
-              location={turf.location}
-              rating={turf.rating}
-              price={turf.price}
-            />
-          </Link>
-        ))}
+        {filteredTurfs.length > 0 ? (
+          filteredTurfs.map((turf) => (
+            <Link
+              to={`/turf/${turf.id}`}
+              key={turf.id}
+              className="turf-card-link"
+            >
+              <TurfCardComponent
+                imageUrl={turf.mainImage}
+                sport={turf.sportType}
+                name={turf.turfName}
+                location={turf.address}
+                rating={turf.rating}
+                price={turf.price}
+              />
+            </Link>
+          ))
+        ) : (
+          <p>No turfs available</p>
+        )}
       </div>
 
       <FooterComponent />

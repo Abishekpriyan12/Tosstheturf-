@@ -22,8 +22,20 @@ const resolvers = {
         throw new Error("Failed to fetch turfs.");
       }
     },
-  },
 
+    turf: async (_, { id }) => {
+      try {
+        const turf = await Turf.findById(id); // Use Turf directly
+        if (!turf) {
+          throw new Error("Turf not found");
+        }
+        return turf;
+      } catch (error) {
+        console.error("Error fetching turf details:", error);
+        throw new Error("Error fetching turf details");
+      }
+    },
+  },
   Mutation: {
     signup: async (_, { firstName, lastName, email, password, role }) => {
       try {
@@ -91,18 +103,23 @@ const resolvers = {
       }
     },
 
-    addTurf: async (_, { turfName, address, phone, amenities, timing, mainImage, sliderImages }) => {
+    addTurf :async (_, { turfName, address,location, phone, amenities, timing, mainImage, sliderImages, sportType, price, rating, firstTimeDiscount }) => {
       try {
         const newTurf = new Turf({
           turfName,
           address,
+          location,
           phone,
           amenities,
           timing,
           mainImage,
           sliderImages,
+          sportType,
+          price,               
+          rating,              
+          firstTimeDiscount     
         });
-
+    
         await newTurf.save();
         return newTurf;
       } catch (error) {
@@ -110,6 +127,7 @@ const resolvers = {
         throw new Error("Failed to add turf.");
       }
     },
+    
   },
 };
 

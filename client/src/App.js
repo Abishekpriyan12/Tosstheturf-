@@ -16,10 +16,6 @@ import TurfList from "./components/ListData/TurfList";
 import TurfSearchPageComponent from "./components/TurfSearchPage-Component/TurfSearchPageComponent";
 import BookingPageComponent from "./components/BookingPage_Component/BookingPageComponent";
 
-
-
-
-
 function App() {
   return (
     <div className="App">
@@ -29,15 +25,15 @@ function App() {
         <Route path="/faq" element={<FaqComponent />} />
         <Route path="/payment" element={<PaymentComponent />} />
         <Route path="/about" element={<AboutUsComponent />} />
-        <Route path="/turfDetail" element={<TurfDetailComponent />} />
+        <Route path="/turf/:id" element={<TurfDetailComponent />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
-        <Route path="/addTurf" element={<AddTurfForm></AddTurfForm>}></Route>
-        <Route path="/listturf" element={<TurfList></TurfList>}></Route>
-        <Route path="/turfSearch" element={<TurfSearchPageComponent/>} />
-        <Route path="/bookingPage" element={<BookingPageComponent/>} />
+        <Route path="/addTurf" element={<AddTurfForm />} />
+        <Route path="/listturf" element={<TurfList />} />
+        <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
+        <Route path="/bookingPage" element={<BookingPageComponent />} />
       </Routes>
     </div>
   );
