@@ -161,6 +161,7 @@ const TurfSearchPageComponent = () => {
                 location={turf.address}
                 rating={turf.rating}
                 price={turf.price}
+                firstTimeDiscount={turf.firstTimeDiscount}
               />
             </Link>
           ))

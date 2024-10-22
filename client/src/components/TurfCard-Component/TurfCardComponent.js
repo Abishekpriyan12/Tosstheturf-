@@ -1,16 +1,21 @@
 import React from 'react';
 import './TurfCardComponent.css';
+import offerIcon from '../../assests/icons/offericon.png';
 
-const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price }) => {
+const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price,firstTimeDiscount }) => {
   return (
     <div className="turf-card">
-      {/* Image Section */}
+      
       <div className="turf-image">
-        <img src={imageUrl} alt={name} className="turf-main-img" />
-        <div className="sport-tag">
-          {sport} ⚽
-        </div>
-      </div>
+  <img src={imageUrl} alt={name} className="turf-main-img" />
+  <div className="sport-tag">
+    {sport}{" "}
+    {sport === "Football" && "⚽"}
+    {sport === "Cricket" && "🏏"}
+    {sport === "Basketball" && "🏀"}
+    {sport === "Tennis" && "🎾"}
+  </div>
+</div>
       
       {/* Info Section */}
       <div className="turf-info">
@@ -21,11 +26,11 @@ const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price }) =
           </div>
         </div>
         <div className="turf-price-tag">
-          <div className="turf-price">
-            ${price} / Hr
-          </div>
           <div className="turf-tag">
             <span>7 VS 7</span>
+          </div>
+          <div className="turf-price">
+            ${price} / Hr
           </div>
         </div>
       </div>
@@ -35,8 +40,8 @@ const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price }) =
 
       {/* Discount Section */}
       <div className="turf-discount">
-        <img src="/assets/icons/coupon.png" alt="Discount Icon" className="discountIcon" />
-        10% OFF ON FIRST TIME
+        <img src={offerIcon} alt="Discount Icon" className="discountIcon" />
+        {firstTimeDiscount}% OFF ON FIRST TIME
       </div>
     </div>
   );
