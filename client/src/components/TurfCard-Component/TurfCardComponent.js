@@ -4,12 +4,18 @@ import './TurfCardComponent.css';
 const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price }) => {
   return (
     <div className="turf-card">
+      {/* Image Section */}
       <div className="turf-image">
-        <img src={imageUrl} alt={name} />
+        <img src={imageUrl} alt={name} className="turf-main-img" />
+        <div className="sport-tag">
+          {sport} ⚽
+        </div>
       </div>
+      
+      {/* Info Section */}
       <div className="turf-info">
         <div className="turf-title-rating">
-          <h3>{name}, <span>{location}</span></h3>
+          <h3>{name}, <span className="location">{location}</span></h3>
           <div className="turf-rating">
             <span>{rating}</span> ★
           </div>
@@ -23,11 +29,13 @@ const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price }) =
           </div>
         </div>
       </div>
-      <div className="line">
-       
-       </div>
+
+      {/* Divider Line */}
+      <div className="line"></div>
+
+      {/* Discount Section */}
       <div className="turf-discount">
-        <img src="/assests/icons/coupon.png" alt="Discount Icon" className="discountIcon" />
+        <img src="/assets/icons/coupon.png" alt="Discount Icon" className="discountIcon" />
         10% OFF ON FIRST TIME
       </div>
     </div>

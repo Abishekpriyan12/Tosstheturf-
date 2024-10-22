@@ -68,12 +68,12 @@
   }
   
   .turf-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    margin-top: 90px;
-  }
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
+  
+}
+
   .turf-list-heading{
     text-align: left;
     margin-left: 20px;
@@ -81,7 +81,6 @@
   }
   
 
-  /* Ensure nav bar stays at the top over the hero section */
 
   
   /* Hero section adjustments */
