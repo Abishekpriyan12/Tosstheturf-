@@ -1,20 +1,19 @@
 import React from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import HomePageComponent from "./components/Home-Component/HomePageComponent";
-import ContactUsComponent from "./components/ContactUs-Component/ContactUsComponent";
-import FaqComponent from "./components/Faq-Component/FaqComponent";
-import AboutUsComponent from "./components/AboutUs-Component/AboutUsComponent";
-import PaymentComponent from "./components/Payment-Component/PaymentComponent";
-import TurfDetailComponent from "./components/TurfDetail-Component/TurfDetailComponent";
-import LoginPage from "./components/LoginPage/LoginpageComponent";
-import SignupPage from "./components/SignupPage/SignupPageComponent";
-import EditTurfDetailComponent from "./components/EditTurfDetail-Component/EditTurfDetailComponent";
-import BookingHistoryComponent from "./components/BookingHistory-Component/BookingHistoryComponent";
-import AddTurfForm from "./components/Add-Turf/AddTurfForm";
-import TurfList from "./components/ListData/TurfList";
-import TurfSearchPageComponent from "./components/TurfSearchPage-Component/TurfSearchPageComponent";
-import BookingPageComponent from "./components/BookingPage_Component/BookingPageComponent";
+import HomePageComponent from "./components/Pages/Home-Component/HomePageComponent";
+import ContactUsComponent from "./components/Pages/ContactUs-Component/ContactUsComponent";
+import FaqComponent from "./components/Pages/Faq-Component/FaqComponent";
+import AboutUsComponent from "./components/Pages/AboutUs-Component/AboutUsComponent";
+import PaymentComponent from "./components/Pages/Payment-Component/PaymentComponent";
+import TurfDetailComponent from "./components/Pages/TurfDetail-Component/TurfDetailComponent";
+import LoginPage from "./components/Pages/LoginPage/LoginpageComponent";
+import SignupPage from "./components/Pages/SignupPage/SignupPageComponent";
+import EditTurfDetailComponent from "./components/Pages/EditTurfDetail-Component/EditTurfDetailComponent";
+import BookingHistoryComponent from "./components/Pages/BookingHistory-Component/BookingHistoryComponent";
+import AddTurfForm from "./components/Pages/Add-Turf/AddTurfForm";
+import TurfSearchPageComponent from "./components/Pages/TurfSearchPage-Component/TurfSearchPageComponent";
+import BookingPageComponent from "./components/Pages/BookingPage_Component/BookingPageComponent";
 
 function App() {
   return (
@@ -31,7 +30,6 @@ function App() {
         <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
         <Route path="/addTurf" element={<AddTurfForm />} />
-        <Route path="/listturf" element={<TurfList />} />
         <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
         <Route path="/bookingPage" element={<BookingPageComponent />} />
       </Routes>
