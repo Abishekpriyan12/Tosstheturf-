@@ -37,25 +37,38 @@ const ScrollerComponent = ({ items }) => {
         &#8249; 
       </button>
       <div className="scroller-container">
-        <CardComponent>
+        
           <div
             className="scroller"
             style={{ transform: `translateX(-${currentIndex * (100 / visibleCards)}%)` }}
           >
             {items.map((item, index) => (
+              
               <div key={index} className="card">
-                <img src={item.image} alt={item.title} className="card-image" />
-                <div className="card-content">
-                  <h3>{item.title}</h3>
-                  <p>{item.location}</p>
-                  <p>Rating: {item.rating} ⭐</p>
-                  <p>{item.price}</p>
-                  <p className="discount">{item.discount}</p>
+                <CardComponent>
+                <img src={item.mainImage} alt={item.title} className="card-image" />
+                <div className="sport-type">
+                <span>{item.sportType}</span>
+              </div>
+              <div className="card-content">
+                <h3>
+                  {item.turfName}, <span>{item.location}</span>
+                  <span className="rating">★ {item.rating}</span>
+                </h3>
+                <div className="rating-price">
+                  <span className="vs-button left-align">7 VS 7</span>
+                  <span className="price">${item.price} / Hr</span>
                 </div>
+                <div className="discount-line"></div>
+                <p className="discount">
+                  {item.firstTimeDiscount}% OFF ON FIRST TIME
+                </p>
+              </div>
+              </CardComponent>
               </div>
             ))}
           </div>
-        </CardComponent>
+     
       </div>
       <button className="scroll-button right" onClick={handleNext}>
         &#8250; 

@@ -22,6 +22,7 @@
   color: #fff;
   text-align: center;
   padding: 10px;
+  position: relative;
 }
 
 .card-image {
@@ -41,11 +42,49 @@
 .card-content h3,
 .card-content p {
   margin: 5px 0;
+  text-align: left;
 }
 
 .discount {
   color: #66ff66;
   font-weight: bold;
+}
+
+
+.vs-button {
+  display: inline-block;
+  background-color: #555; /* Button color */
+  color: white; /* Button text color */
+  padding: 4px 12px; /* Padding for button */
+  font-size: 12px; /* Font size for button */
+  border-radius: 15px; /* Rounded corners */
+  margin-right: 10px; /* Space between buttons */
+}
+
+.rating-price {
+  display: flex;
+  justify-content: space-between; /* Space between rating and price */
+  align-items: center; /* Center align items */
+}
+
+.discount-line {
+  height: 2px; /* Line height */
+  background-color: grey; /* Line color */
+  margin-top: 10px; /* Space above the line */
+}
+
+.discount {
+  color: #00ff00; /* Discount text color */
+  font-weight: bold; /* Bold text */
+  margin-top: 10px; /* Space above discount */
+  font-size: 14px; /* Font size */
+}
+
+.rating {
+  margin-left: 10px; /* Space between rating and text */
+  font-size: 14px; /* Font size */
+  color: #d4af37; /* Gold color for rating */
+  vertical-align: middle; /* Vertical alignment */
 }
 
 /* Scroll Buttons */
@@ -68,10 +107,18 @@
   margin-left: 15px; 
 }
 
+.sport-type{
+  position: absolute;
+  top: 20%;
+  left: 100px;
+  background: grey;
+  border-radius: 10px;
+  padding: 6px;
+}
 
 @media (max-width: 768px) {
   .card {
-    flex: 0 0 calc(48.33% - 20px); 
+    flex: 0 0 calc(43.33% - 20px); 
     margin: 0 10px;
   }
 
@@ -83,7 +130,7 @@
 /* Mobile View: 1 card per row */
 @media (max-width: 480px) {
   .card {
-    flex: 0 0 calc(98.33% - 10px); 
+    flex: 0 0 calc(93.33% - 10px); 
     margin: 0 5px;
   }
 
