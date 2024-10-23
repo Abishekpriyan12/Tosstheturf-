@@ -87,7 +87,7 @@ const DisplayTurfComponent = () => {
                   />
                   <div className="turf-info">
                     <p><strong>Name:</strong> {turf.turfName}</p>
-                    <p><strong>Cost:</strong> {turf.cost} per hour</p>
+                    <p><strong>Price:</strong> {turf.price} per hour</p>
                     <p><strong>Location:</strong> {turf.address}</p>
                     <div className="turf-buttons">
                       <button className="edit-button">Edit</button>

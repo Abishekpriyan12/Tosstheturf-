@@ -1,5 +1,4 @@
-.displayturfdata-page
-{
+.displayturfdata-page {
     padding: 15px;
 }
 
@@ -11,28 +10,30 @@
 
 .turf-cards-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two cards per row */
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
     justify-content: center;
 }
 
+
+
 .turf-card-content {
-    display: flex; /* Horizontal layout for image and info */
-    align-items: center; /* Vertically align image and content */
+    display: flex;
+    align-items: center;
 }
 
 .turf-image {
-    width: 150px; /* Fixed width for the image */
-    height: 150px; /* Fixed height for the image */
+    width: 150px;
+    height: 150px;
     border-radius: 10px;
-    margin-right: 20px; /* Space between image and text */
+    margin-right: 20px;
 }
 
 .turf-info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex-grow: 1; 
+    flex-grow: 1;
     background: none;
 }
 
@@ -41,14 +42,13 @@
     line-height: 1.8;
     color: white;
     text-align: left;
-    font-size: medium ;
+    font-size: medium;
 }
 
 .turf-buttons {
     display: flex;
     gap: 10px;
     margin-top: 10px;
-    
 }
 
 .edit-button {
@@ -67,4 +67,70 @@
     padding: 8px 20px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+
+@media screen and (max-width: 768px) {
+    .turf-cards-container {
+        grid-template-columns: 1fr;
+        gap: 15px; 
+    }
+
+    .turf-card-content {
+        flex-direction: column;
+        align-items: flex-start; 
+    }
+
+    .turf-image {
+        width: 100%; 
+        height: auto; 
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .turf-info {
+        align-items: flex-start;
+        background: none;
+    }
+
+    .turf-buttons {
+        flex-direction: column; 
+        width: 100%; 
+    }
+
+    .edit-button, .delete-button {
+        width: 100%; 
+    }
+}
+
+
+
+@media screen and (max-width: 480px) {
+    .turf-cards-container {
+        grid-template-columns: 1fr; 
+        gap: 10px;
+    }
+
+    .turf-card-content {
+        padding: 10px;
+    }
+
+    .turf-info p {
+        font-size: small; 
+    }
+
+    .edit-button, .delete-button {
+        padding: 10px;
+        font-size: small;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .turf-cards-container {
+        grid-template-columns: 1fr; 
+    }
+
+    .booking-button-container {
+        justify-content: center;
+    }
 }
