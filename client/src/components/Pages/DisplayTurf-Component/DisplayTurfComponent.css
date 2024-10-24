@@ -1,0 +1,140 @@
+.displayturfdata-page {
+    padding: 15px;
+}
+ 
+.booking-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+ 
+.turf-cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    justify-content: center;
+}
+ 
+ 
+ 
+.turf-card-content {
+    display: flex;
+    align-items: center;
+}
+ 
+.turf-image-display {
+    width: 40%;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+    box-shadow: 0 6px 10px rgba(255, 255, 255, 0.2);
+}
+ 
+.turf-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    background: none;
+    margin-left: 10%;
+}
+ 
+.turf-info p {
+    margin: 5px 0;
+    line-height: 1.8;
+    color: white;
+    text-align: left;
+    font-size: medium;
+}
+ 
+.turf-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+ 
+.edit-button {
+    background-color: #47a63e;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+ 
+.delete-button {
+    background-color: #9e9e9e;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+ 
+ 
+@media screen and (max-width: 768px) {
+    .turf-cards-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+ 
+    .turf-card-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+ 
+    .turf-image {
+        width: 100%;
+        height: auto;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+ 
+    .turf-info {
+        align-items: flex-start;
+        background: none;
+    }
+ 
+    .turf-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+ 
+    .edit-button, .delete-button {
+        width: 100%;
+    }
+}
+ 
+ 
+ 
+@media screen and (max-width: 480px) {
+    .turf-cards-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+ 
+    .turf-card-content {
+        padding: 10px;
+    }
+ 
+    .turf-info p {
+        font-size: small;
+    }
+ 
+    .edit-button, .delete-button {
+        padding: 10px;
+        font-size: small;
+    }
+}
+ 
+@media screen and (max-width: 1024px) {
+    .turf-cards-container {
+        grid-template-columns: 1fr;
+    }
+ 
+    .booking-button-container {
+        justify-content: center;
+    }
+}
+ 
+ 
