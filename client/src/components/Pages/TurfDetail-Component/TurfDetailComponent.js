@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { graphQLCommand } from  "../../../util";
-import SliderComponent from '../../Reusable-Components/slider-component/SliderComponent';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { graphQLCommand } from "../../../util";
+import SliderComponent from "../../Reusable-Components/slider-component/SliderComponent";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import ScrollerComponent from "../../Reusable-Components/Scroller-Component/ScrollerComponent";
-import './TurfDetailComponent.css';
+import offerIcon from '../../../assests/icons/offericon.png';
+import "./TurfDetailComponent.css";
 
 const TurfDetailComponent = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const TurfDetailComponent = () => {
   // Fetch single turf by ID
   const fetchTurfDetail = async () => {
     if (!id) {
-      setError('No turf ID provided. Please check the URL.');
+      setError("No turf ID provided. Please check the URL.");
       setLoading(false);
       return;
     }
@@ -51,13 +52,15 @@ const TurfDetailComponent = () => {
     try {
       const data = await graphQLCommand(query, variables);
       if (!data.turf) {
-        setError('Turf not found.');
+        setError("Turf not found.");
       } else {
         setTurfDetail(data.turf);
       }
     } catch (err) {
-      console.error('Error fetching turf details:', err);
-      setError(`Failed to fetch turf details: ${err.message || 'Unknown error'}`);
+      console.error("Error fetching turf details:", err);
+      setError(
+        `Failed to fetch turf details: ${err.message || "Unknown error"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -93,7 +96,9 @@ const TurfDetailComponent = () => {
       const data = await graphQLCommand(query);
       if (turfDetail && data.getTurfs) {
         const turfsByLocation = data.getTurfs.filter(
-          (turf) => turf.location.toLowerCase() === turfDetail.location.toLowerCase() && turf.id !== turfDetail.id
+          (turf) =>
+            turf.location.toLowerCase() === turfDetail.location.toLowerCase() &&
+            turf.id !== turfDetail.id
         );
         setFilteredTurfs(turfsByLocation);
       }
@@ -105,7 +110,7 @@ const TurfDetailComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       await fetchTurfDetail();
-      await fetchTurfData(); // Fetch all turfs when the component mounts
+      await fetchTurfData();
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,12 +122,18 @@ const TurfDetailComponent = () => {
 
   return (
     <div className="turf-detail">
-      <SliderComponent slides={turfDetail.sliderImages} />
-      
+      <div className="back-button">
+        {" "}
+        <ButtonComponent btnName={"Back"}></ButtonComponent>
+      </div>
+      <SliderComponent class="slider-comp" slides={turfDetail.sliderImages} />
+
       <div className="info-section">
         <div className="turf-header">
           <div className="turf-details">
-            <h1>{turfDetail.turfName}, <span>{turfDetail.location}</span></h1>
+            <h1>
+              {turfDetail.turfName}, <span>{turfDetail.location}</span>
+            </h1>
             <div className="sport-type-rating">
               <span className="badge">{turfDetail.sportType}</span>
               <span className="rating">★ {turfDetail.rating}</span>
@@ -135,8 +146,7 @@ const TurfDetailComponent = () => {
           <h3>Address</h3>
           <p>{turfDetail.address}</p>
           <div className="address-icons">
-            <i className="fas fa-directions"></i>
-            <i className="fas fa-phone-alt"></i>
+          <img src={offerIcon} alt="Discount Icon" className="discountIcon" />
             <p>{turfDetail.phone}</p>
           </div>
         </div>
@@ -144,10 +154,26 @@ const TurfDetailComponent = () => {
         <div className="amenities-section">
           <h3>Amenities</h3>
           <ul className="amenities-list">
-            {turfDetail.amenities.parking && <li><i className="fas fa-parking"></i> Parking</li>}
-            {turfDetail.amenities.drinkingWater && <li><i className="fas fa-water"></i> Drinking Water</li>}
-            {turfDetail.amenities.spareKits && <li><i className="fas fa-toolbox"></i> Spare Kits</li>}
-            {turfDetail.amenities.nonAC && <li><i className="fas fa-fan"></i> Non A/C</li>}
+            {turfDetail.amenities.parking && (
+              <li>
+                <i className="fas fa-parking"></i> Parking
+              </li>
+            )}
+            {turfDetail.amenities.drinkingWater && (
+              <li>
+                <i className="fas fa-water"></i> Drinking Water
+              </li>
+            )}
+            {turfDetail.amenities.spareKits && (
+              <li>
+                <i className="fas fa-toolbox"></i> Spare Kits
+              </li>
+            )}
+            {turfDetail.amenities.nonAC && (
+              <li>
+                <i className="fas fa-fan"></i> Non A/C
+              </li>
+            )}
           </ul>
         </div>
 
@@ -168,7 +194,6 @@ const TurfDetailComponent = () => {
           <p>No related turfs available in this location.</p>
         )}
       </div>
-
     </div>
   );
 };
