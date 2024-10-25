@@ -32,7 +32,7 @@ function App() {
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
         <Route path="/addTurf" element={<AddTurfForm />} />
         <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
-        <Route path="/bookingPage" element={<BookingPageComponent />} />
+        <Route path="/bookingPage/:id" element={<BookingPageComponent />} />
         <Route path="/displayturf" element={<DisplayTurfComponent />} />
       </Routes>
     </div>

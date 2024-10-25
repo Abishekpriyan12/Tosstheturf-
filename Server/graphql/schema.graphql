@@ -78,6 +78,15 @@ type Query {
   getBookings(userId: ID!): [Booking!]! # Fetch bookings for a user
 }
 
+type Query {
+  getNavItems: [NavItem!]!
+  getTurfs: [Turf!]!
+  turf(id: ID!): Turf
+  getBookings(userId: ID!): [Booking!]! # Existing query for fetching bookings by user
+  # New query to fetch bookings by turf and date
+  getBookingsByTurfAndDate(turfId: ID!, date: String!): [Booking!]!
+}
+
 # Mutation to create turf and handle bookings
 type Mutation {
   signup(

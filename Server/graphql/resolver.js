@@ -3,6 +3,8 @@ const NavItem = require("../models/NavItems");
 const User = require("../models/User");
 const Turf = require('../models/Turf');
 const Booking = require('../models/Booking'); // Import the Booking model
+const mongoose = require('mongoose');
+
 
 const resolvers = {
   Query: {
@@ -37,14 +39,26 @@ const resolvers = {
       }
     },
 
-    getBookings: async (_, { userId }) => {
+    getBookings: async (_, { turfId, date }) => {
       try {
-        return await Booking.find({ userId }).populate('turfId').populate('userId'); // Fetch bookings for a specific user
+        const bookings = await Booking.find({ turfId, date });
+        console.log("Fetched bookings:", bookings); // Add this log to see what is returned
+        return bookings;
       } catch (error) {
-        console.error("Failed to fetch bookings:", error);
+        console.error("Error fetching bookings:", error);
         throw new Error("Failed to fetch bookings.");
       }
     },
+    getBookingsByTurfAndDate: async (_, { turfId, date }) => {
+      try {
+        const bookings = await Booking.find({ turfId, date });
+        console.log("Fetched bookings:", bookings);
+        return bookings;
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        throw new Error("Failed to fetch bookings.");
+      }
+    }
   },
 
   Mutation: {
@@ -141,21 +155,25 @@ const resolvers = {
 
     createBooking: async (_, { userId, turfId, date, time, duration, price }) => {
       try {
+        // Convert userId and turfId to ObjectId if they are not already
+        const validUserId = mongoose.Types.ObjectId(userId);
+        const validTurfId = mongoose.Types.ObjectId(turfId);
+    
         // Check if the time slot is already booked for the given turf and date
-        const existingBooking = await Booking.findOne({ turfId, date, time });
+        const existingBooking = await Booking.findOne({ turfId: validTurfId, date, time });
         if (existingBooking) {
           throw new Error("This time slot is already booked.");
         }
-
+    
         const newBooking = new Booking({
-          userId,
-          turfId,
+          userId: validUserId,
+          turfId: validTurfId,
           date,
           time,
           duration,
           price,
         });
-
+    
         await newBooking.save();
         return newBooking;
       } catch (error) {

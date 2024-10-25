@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { graphQLCommand } from "../../../util";
-import SliderComponent from "../../Reusable-Components/slider-component/SliderComponent";
+import { useParams, useNavigate } from 'react-router-dom';
+import SliderComponent from '../../Reusable-Components/slider-component/SliderComponent';
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import ScrollerComponent from "../../Reusable-Components/Scroller-Component/ScrollerComponent";
 import offerIcon from '../../../assests/icons/offericon.png';
 import "./TurfDetailComponent.css";
 
 const TurfDetailComponent = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the turfId from the URL
+  const navigate = useNavigate(); // Hook to navigate programmatically
   const [turfDetail, setTurfDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filteredTurfs, setFilteredTurfs] = useState([]);
+
+  // Function to handle "Book Now" click, navigate to the booking page with turfId
+  const handleBookNow = () => {
+    navigate(`/bookingPage/${id}`); // Redirect to booking page with the turf ID
+  };
 
   // Fetch single turf by ID
   const fetchTurfDetail = async () => {
@@ -66,7 +72,7 @@ const TurfDetailComponent = () => {
     }
   };
 
-  // Fetch all turfs and filter by location
+  // Fetch all turfs and filter by location for related turfs
   const fetchTurfData = async () => {
     const query = `
       query {
@@ -103,7 +109,7 @@ const TurfDetailComponent = () => {
         setFilteredTurfs(turfsByLocation);
       }
     } catch (error) {
-      console.error("Error fetching turf data:", error);
+      console.error("Error fetching related turf data:", error);
     }
   };
 
@@ -113,7 +119,6 @@ const TurfDetailComponent = () => {
       await fetchTurfData();
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, turfDetail]);
 
   if (loading) return <div>Loading turf details...</div>;
@@ -127,6 +132,7 @@ const TurfDetailComponent = () => {
         <ButtonComponent btnName={"Back"}></ButtonComponent>
       </div>
       <SliderComponent class="slider-comp" slides={turfDetail.sliderImages} />
+      {/* Slider showing images */}     
 
       <div className="info-section">
         <div className="turf-header">
@@ -139,9 +145,11 @@ const TurfDetailComponent = () => {
               <span className="rating">★ {turfDetail.rating}</span>
             </div>
           </div>
-          <ButtonComponent btnName="Book Now" />
+          {/* Book Now button redirects to booking page */}
+          <ButtonComponent btnName="Book Now" onClick={handleBookNow} />
         </div>
 
+        {/* Address Section */}
         <div className="address-section">
           <h3>Address</h3>
           <p>{turfDetail.address}</p>
@@ -151,6 +159,7 @@ const TurfDetailComponent = () => {
           </div>
         </div>
 
+        {/* Amenities Section */}
         <div className="amenities-section">
           <h3>Amenities</h3>
           <ul className="amenities-list">
@@ -177,16 +186,20 @@ const TurfDetailComponent = () => {
           </ul>
         </div>
 
+        {/* Timing Section */}
         <div className="timing-section">
           <h3>Timings</h3>
           <p>{turfDetail.timing}</p>
         </div>
 
+        {/* Reviews Section */}
         <div className="reviews-section">
           <h3>Reviews</h3>
           <span className="review-rating">★ {turfDetail.rating}</span>
         </div>
       </div>
+
+      {/* Related Turfs Section */}
       <div className="related-turfs-section">
         {filteredTurfs.length > 0 ? (
           <ScrollerComponent items={filteredTurfs} />
