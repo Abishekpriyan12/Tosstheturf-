@@ -1,82 +1,93 @@
+.info-section {
+  margin: 3% 15%;
+}
 
-  .info-section{
-    margin: 3% 15%;
-  }
- 
-  
-  .turf-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-  }
-  
-  .turf-details h1 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .sport-type-rating {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .badge {
-    background-color: #444;
-    padding: 5px 10px;
-    border-radius: 15px;
-    color: #fff;
-    font-size: 14px;
-  }
-  
-  .rating {
-    color: #44ff44;
-    font-size: 18px;
-  }
-  
-  .address-section, .amenities-section, .timing-section, .reviews-section {
-    margin: 20px 0;
-    border-top: 1px solid #333;
-    padding-top: 15px;
-    text-align: left; /* Left-align all text */
-  }
-  
-  .address-section p, .timing-section p {
-    text-align: left; /* Ensure paragraphs are left-aligned */
-  }
-  
-  .address-icons {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .amenities-list {
-    list-style-type: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin-top: 10px;
-  }
-  
-  .amenities-list li {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-  }
-  
-  .timing-section p, .address-section p {
-    font-size: 16px;
-  }
-  
-  .review-rating {
-    font-size: 24px;
-    color: #44ff44;
-  }
-  
-  .button-container {
-    text-align: right;
-  }
-  
+.turf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.turf-details h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.sport-type-rating {
+  display: flex;
+  gap: 10px;
+}
+
+.slider-comp {
+  margin-top: 30%;
+}
+
+.badge {
+  background-color: #444;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.rating {
+  color: #44ff44;
+  font-size: 18px;
+}
+
+.address-section,
+.amenities-section,
+.timing-section,
+.reviews-section {
+  margin: 20px 0;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  text-align: left; 
+}
+
+.address-section p,
+.timing-section p {
+  text-align: left; 
+}
+
+.address-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.back-button {
+  float: right;
+  margin-bottom: 10px;
+}
+
+.amenities-list {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.amenities-list li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.timing-section p,
+.address-section p {
+  font-size: 16px;
+}
+
+.review-rating {
+  font-size: 24px;
+  color: #44ff44;
+}
+
+.button-container {
+  text-align: right;
+}
