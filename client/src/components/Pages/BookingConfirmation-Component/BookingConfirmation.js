@@ -1,18 +1,36 @@
-import React from "react";
-import NavBarComponent from "../navigation-component/NavBarComponent";
-import FooterComponent from "../footer-component/FooterComponent";
-import ButtonComponent from "../Button-Component/ButtonComponent";
-import CardComponent from "../Card-Component/CardComponent";
-import ScrollerComponent from "../Scroller-Component/ScrollerComponent";
+import React, { useEffect, useState } from "react";
+import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
+import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
+import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
+import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
+import ScrollerComponent from "../../Reusable-Components/Scroller-Component/ScrollerComponent";
 import "./BookingConfirmation.css";
+import { graphQLCommand } from "../../../util"; 
+import user from '../../../assests/icons/user.png';
 
 const BookingConfirmation = () => {
-  const navBarData = [
-    { name: "About us", url: "/" },
-    { name: "Venue", url: "/" },
-    { name: "Contact Us", url: "/contact" },
-    { name: "Deals", url: "/" },
-  ];
+
+  const [navBarData, setNavBarData] = useState([]);
+
+ 
+  useEffect(() => {
+    const fetchNavBarData = async () => {
+      const query = `
+        query {
+          getNavItems {
+            id
+            name
+            url
+          }
+        }
+      `;
+      const data = await graphQLCommand(query);
+      setNavBarData(data.getNavItems || []);
+    };
+
+    fetchNavBarData();
+  }, []);
+
 
   const bookingDetails = {
     userName: "Aksha Parvadiya",
@@ -22,6 +40,7 @@ const BookingConfirmation = () => {
     cost: "$50",
   };
 
+ 
   const items = [
     {
       title: "Tri-City Sports Dome",
@@ -57,46 +76,58 @@ const BookingConfirmation = () => {
     },
   ];
 
+ 
   return (
-    <div className="booking-confirmation-container">
+    <>
       <NavBarComponent navBarData={navBarData} />
-      <section className="booking-success-section">
-        <div className="booking-header-image">
-          <img src="./assests/images/golf.jpg" alt="Booking Success" />
-          <h1>Your booking has been done successfully!!</h1>
-        </div>
-      </section>
-      <section className="booking-details-section">
-        <CardComponent className="booking-details-card">
-          <h2>Booking Details</h2>
-          <div className="booking-info">
-            <div className="booking-form-group">
-              <img src="./assests/icons/user.png" alt="User Icon" />
-              <p className="booking-user-name">{bookingDetails.userName}</p>
-            </div>
-            <div className="booking-form-group">
-              <img src="./assests/icons/location.png" alt="Location Icon" />
-              <p className="booking-location-details">{bookingDetails.location}</p>
-            </div>
-            <div className="booking-form-group">
-              <img src="./assests/icons/soccer.png" alt="Turf Icon" />
-              <p className="booking-turf-details">{bookingDetails.turf}</p>
-            </div>
-            <div className="booking-form-group">
-              <img src="./assests/icons/calendar.png" alt="Calendar Icon" />
-              <p className="booking-date-time">{bookingDetails.dateTime}</p>
-            </div>
-            <div className="booking-form-group">
-              <img src="./assests/icons/money.png" alt="Cost Icon" />
-              <p className="booking-cost-details">{bookingDetails.cost}</p>
-            </div>
+      <div className="custom-booking-confirmation-container">
+        <section className="custom-booking-success-section">
+          <div className="custom-booking-header-image">
+            <img src="./assests/images/golf.jpg" alt="Booking Success" />
+            <h1>Your booking has been done successfully!!</h1>
           </div>
-          <ButtonComponent btnName="Book more Turfs" />
-        </CardComponent>
-      </section>
-      <ScrollerComponent items={items}></ScrollerComponent>
-      <FooterComponent />
-    </div>
+        </section>
+
+        
+        <section className="custom-booking-details-wrapper">
+          <CardComponent className="custom-booking-card">
+            <h3>Booking Details</h3>
+            <div className="custom-booking-info">
+        
+              <div className="custom-booking-item">
+                <img src="./assests/icons/user.png" alt="User Icon" />
+                <p className="custom-user-name">{bookingDetails.userName}</p>
+              </div>
+              <div className="custom-booking-item">
+                <img src="./assests/icons/location.png" alt="Location Icon" />
+                <p className="custom-location-details">{bookingDetails.location}</p>
+              </div>
+              <div className="custom-booking-item">
+                <img src="./assests/icons/soccer.png" alt="Turf Icon" />
+                <p className="custom-turf-details">{bookingDetails.turf}</p>
+              </div>
+              <div className="custom-booking-item">
+                <img src="./assests/icons/calendar.png" alt="Calendar Icon" />
+                <p className="custom-date-time">{bookingDetails.dateTime}</p>
+              </div>
+              <div className="custom-booking-item">
+                <img src="./assests/icons/money.png" alt="Cost Icon" />
+                <p className="custom-cost-details">{bookingDetails.cost}</p>
+              </div>
+            </div>
+            <div className="custom-button-container">
+              <ButtonComponent btnName="Book more Turfs" />
+            </div>
+          </CardComponent>
+        </section>
+
+        {/* Recommendations Scroller */}
+        <ScrollerComponent items={items} />
+
+        {/* Footer */}
+        <FooterComponent />
+      </div>
+    </>
   );
 };
 

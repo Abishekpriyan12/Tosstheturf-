@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import NavBarComponent from "../navigation-component/NavBarComponent";
-import FooterComponent from "../footer-component/FooterComponent";
-import ButtonComponent from "../Button-Component/ButtonComponent";
-import CardComponent from "../Card-Component/CardComponent";
+import React, { useEffect, useState } from "react";
+import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
+import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
+import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
+import { graphQLCommand } from "../../../util";
 import "./UserProfilePage.css";
 
 const UserProfilePage = () => {
@@ -13,20 +13,25 @@ const UserProfilePage = () => {
     userType: "user",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUser({
-      ...user,
-      [name]: value,
-    });
-  };
+  const [navBarData, setNavBarData] = useState([]);
 
-  const navBarData = [
-    { name: "About Us", url: "/" },
-    { name: "Venue", url: "/" },
-    { name: "Contact Us", url: "/contact" },
-    { name: "Deals", url: "/" },
-  ];
+  useEffect(() => {
+    const fetchNavBarData = async () => {
+      const query = `
+        query {
+          getNavItems {
+            id
+            name
+            url
+          }
+        }
+      `;
+      const data = await graphQLCommand(query);
+      setNavBarData(data.getNavItems || []);
+    };
+
+    fetchNavBarData();
+  }, []);
 
   return (
     <div className="user-profile-container">
@@ -39,58 +44,25 @@ const UserProfilePage = () => {
               alt="Profile"
               className="profile-picture"
             />
-            {/* <h2>{user.username}</h2> */}
+        </div>
+          <div className="profile-details-display">
+            <div className="data-container">
+              <label>Username:</label>
+              <p>{user.username}</p>
+            </div>
+            <div className="data-container">
+              <label>Email:</label>
+              <p>{user.email}</p>
+            </div>
+            <div className="data-container">
+              <label>Address:</label>
+              <p>{user.address}</p>
+            </div>
+            <div className="data-container">
+              <label>User Type:</label>
+              <p>{user.userType}</p>
+            </div>
           </div>
-          <form className="profile-details-form">
-            <div className="form-group">
-              <label htmlFor="username">Username:</label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value={user.username}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={user.email}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="address">Address:</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={user.address}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="userType">User Type:</label>
-              <select
-                id="userType"
-                name="userType"
-                value={user.userType}
-                onChange={handleInputChange}
-              >
-                <option value="admin">Admin</option>
-                <option value="client">Client</option>
-                <option value="user">User</option>
-              </select>
-            </div>
-
-            <ButtonComponent btnName="Save Profile" />
-          </form>
         </CardComponent>
       </section>
       <FooterComponent />
