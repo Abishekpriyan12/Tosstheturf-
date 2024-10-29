@@ -14,7 +14,9 @@ import BookingHistoryComponent from "./components/Pages/BookingHistory-Component
 import AddTurfForm from "./components/Pages/Add-Turf/AddTurfForm";
 import TurfSearchPageComponent from "./components/Pages/TurfSearchPage-Component/TurfSearchPageComponent";
 import BookingPageComponent from "./components/Pages/BookingPage_Component/BookingPageComponent";
-
+import DisplayTurfComponent from "./components/Pages/DisplayTurf-Component/DisplayTurfComponent";
+import BookingConfirmation from "./components/Pages/BookingConfirmation-Component/BookingConfirmation";
+import UserProfilePage from "./components/Pages/UserProfilePage-Component/UserProfilePage";
 function App() {
   return (
     <div className="App">
@@ -31,7 +33,10 @@ function App() {
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
         <Route path="/addTurf" element={<AddTurfForm />} />
         <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
-        <Route path="/bookingPage" element={<BookingPageComponent />} />
+        <Route path="/bookingPage/:id" element={<BookingPageComponent />} />
+        <Route path="/displayturf" element={<DisplayTurfComponent />} />
+        <Route path="/bookingConfirmation" element={<BookingConfirmation />} />
+        <Route path="/user" element={<UserProfilePage />} />
       </Routes>
     </div>
   );

@@ -1,82 +1,221 @@
+/* General Information Section */
+.info-section {
+  margin: 3% 15%;
+}
 
-  .info-section{
-    margin: 3% 15%;
+.turf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.turf-details h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.sport-type-rating {
+  display: flex;
+  gap: 10px;
+}
+
+.slider-comp {
+  margin-top: 30%;
+}
+
+.badge {
+  background-color: #444;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.rating {
+  color: #44ff44;
+  font-size: 18px;
+}
+
+.address-section,
+.amenities-section,
+.timing-section,
+.reviews-section {
+  margin: 20px 0;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  text-align: left; 
+}
+
+.address-section p,
+.timing-section p {
+  text-align: left; 
+}
+
+.address-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.back-button {
+  float: right;
+  margin-bottom: 10px;
+}
+
+.amenities-list {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.amenities-list li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.timing-section p,
+.address-section p {
+  font-size: 16px;
+}
+
+.review-rating {
+  font-size: 24px;
+  color: #44ff44;
+}
+
+.button-container {
+  text-align: right;
+}
+
+/* Responsive Adjustments */
+
+/* Tablet View (Up to 768px) */
+@media (max-width: 768px) {
+  .info-section {
+    margin: 3% 5%;
   }
- 
-  
+
   .turf-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
+
   .turf-details h1 {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px;
   }
-  
+
+  .rating {
+    font-size: 16px;
+  }
+
+  .review-rating {
+    font-size: 20px;
+  }
+
+  .amenities-list {
+    gap: 15px;
+  }
+
+  .amenities-list li {
+    font-size: 13px;
+  }
+}
+
+/* Mobile View (Up to 480px) */
+@media (max-width: 480px) {
+  .info-section {
+    margin: 3% 3%;
+  }
+
+  .turf-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .turf-details h1 {
+    font-size: 20px;
+    text-align: left;
+  }
+
+  /* Sport Type and Review Buttons in Same Line */
   .sport-type-rating {
     display: flex;
     gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
   }
-  
-  .badge {
+
+  .badge,
+  .review-rating {
+    display: inline-block;
     background-color: #444;
+    color: #fff;
     padding: 5px 10px;
     border-radius: 15px;
-    color: #fff;
-    font-size: 14px;
+    font-size: 0.8rem;
   }
-  
+
   .rating {
-    color: #44ff44;
-    font-size: 18px;
+    font-size: 16px;
+    margin-left: 0;
   }
-  
-  .address-section, .amenities-section, .timing-section, .reviews-section {
-    margin: 20px 0;
-    border-top: 1px solid #333;
-    padding-top: 15px;
-    text-align: left; /* Left-align all text */
-  }
-  
-  .address-section p, .timing-section p {
-    text-align: left; /* Ensure paragraphs are left-aligned */
-  }
-  
-  .address-icons {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .amenities-list {
-    list-style-type: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin-top: 10px;
-  }
-  
-  .amenities-list li {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+
+  .address-section p,
+  .timing-section p {
     font-size: 14px;
   }
-  
-  .timing-section p, .address-section p {
-    font-size: 16px;
+
+  .badge {
+    font-size: 12px;
+    padding: 4px 8px;
   }
-  
+
   .review-rating {
-    font-size: 24px;
-    color: #44ff44;
+    font-size: 14px;
+    padding: 5px 8px;
+    background-color: #444;
   }
-  
+
+  .back-button {
+    float: none;
+    margin-bottom: 20px;
+  }
+
+  .address-icons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .amenities-list {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .amenities-list li {
+    font-size: 12px;
+  }
+
   .button-container {
-    text-align: right;
+    text-align: left;
   }
-  
+
+  .related-turfs-section {
+    margin-top: 20px;
+  }
+
+  /* Adjust "Book Now" button to be full-width */
+  .button-container button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+}

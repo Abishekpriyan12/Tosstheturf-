@@ -6,18 +6,21 @@ import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonCo
 import logo from "../../../assests/images/logov1.png";
 import { graphQLCommand } from "../../../util" 
 
+
+
 const LoginPage = () => {
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const navigate = useNavigate(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(""); // State for role selection
+  const [role, setRole] = useState(""); 
   const [errorMessage, setErrorMessage] = useState("");
+
   const handleLogin = async (e) => {
     e.preventDefault(); 
     setErrorMessage(''); 
-  
+
     console.log("Attempting login with:", { email, password, role });
-  
+
     try {
       const response = await graphQLCommand(
         `
@@ -38,11 +41,7 @@ const LoginPage = () => {
         }
       );
   
-  
-      
       if (response && response.login) {
-       
-  
         const userRole = response.login.role;
         if (userRole === "User") {
           navigate("/turfDetail");
@@ -55,14 +54,9 @@ const LoginPage = () => {
         setErrorMessage("Login failed. Please check your credentials and role.");
       }
     } catch (error) {
-      
+      console.log(error);
     }
   };
-  
-  
-  
-  
-  
 
   return (
     <div className="login-container">
@@ -88,9 +82,9 @@ const LoginPage = () => {
                 placeholder="Enter Your Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required // Ensure the input is required
+                required 
               />
-              <span className="icon">📧</span>
+              <img src="../../../assests/icons/mail.png" alt="Email Icon" className="icon" />
             </div>
           </div>
           <div className="form-group">
@@ -104,27 +98,35 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required // Ensure the input is required
+                required 
               />
-              <span className="icon">👁️</span>
+              <img src="../../../assests/icons/hide.png" alt="Password Icon" className="icon" />
             </div>
           </div>
           <div className="form-group">
             <label htmlFor="role" className="labelLogin">
               Role
             </label>
-            <select value={role} onChange={(e) => setRole(e.target.value)} required>
-              <option value="">Select Role</option> {/* Add a default option */}
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
-              <option value="Owner">Owner</option>
-            </select>
+            <div className="select-wrapper">
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                required
+              >
+                <option value="">Select Role</option>
+                <option value="User">User</option>
+                <option value="Admin">Admin</option>
+                <option value="Owner">Owner</option>
+              </select>
+              <img src="../../../assests/icons/arrow-down.png" alt="Role Icon" className="icon" /> 
+            </div>
           </div>
+
           <div className="form-group remember-me">
             <input type="checkbox" id="remember" />
             <label htmlFor="remember">Remember me</label>
           </div>
-          {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>} 
           <ButtonComponent btnName={"Login"} />
           <p className="signup-text">
             Don’t Have an Account? <a href="/signup">Sign up</a>

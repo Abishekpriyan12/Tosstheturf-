@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 const NavItem = require("../models/NavItems");
 const User = require("../models/User");
 const Turf = require('../models/Turf');
+const Booking = require('../models/Booking'); // Import the Booking model
+const mongoose = require('mongoose');
+
 
 const resolvers = {
   Query: {
@@ -13,7 +16,7 @@ const resolvers = {
         throw new Error("Failed to fetch navigation items.");
       }
     },
-    
+
     getTurfs: async () => {
       try {
         return await Turf.find();
@@ -35,7 +38,29 @@ const resolvers = {
         throw new Error("Error fetching turf details");
       }
     },
+
+    getBookings: async (_, { turfId, date }) => {
+      try {
+        const bookings = await Booking.find({ turfId, date });
+        console.log("Fetched bookings:", bookings); // Add this log to see what is returned
+        return bookings;
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        throw new Error("Failed to fetch bookings.");
+      }
+    },
+    getBookingsByTurfAndDate: async (_, { turfId, date }) => {
+      try {
+        const bookings = await Booking.find({ turfId, date });
+        console.log("Fetched bookings:", bookings);
+        return bookings;
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        throw new Error("Failed to fetch bookings.");
+      }
+    }
   },
+
   Mutation: {
     signup: async (_, { firstName, lastName, email, password, role }) => {
       try {
@@ -103,7 +128,7 @@ const resolvers = {
       }
     },
 
-    addTurf :async (_, { turfName, address,location, phone, amenities, timing, mainImage, sliderImages, sportType, price, rating, firstTimeDiscount }) => {
+    addTurf: async (_, { turfName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, rating, firstTimeDiscount }) => {
       try {
         const newTurf = new Turf({
           turfName,
@@ -115,11 +140,11 @@ const resolvers = {
           mainImage,
           sliderImages,
           sportType,
-          price,               
-          rating,              
-          firstTimeDiscount     
+          price,
+          rating,
+          firstTimeDiscount,
         });
-    
+
         await newTurf.save();
         return newTurf;
       } catch (error) {
@@ -127,7 +152,48 @@ const resolvers = {
         throw new Error("Failed to add turf.");
       }
     },
+
+    createBooking: async (_, { userId, turfId, date, time, duration, price }) => {
+      try {
+        // Convert userId and turfId to ObjectId if they are not already
+        const validUserId = mongoose.Types.ObjectId(userId);
+        const validTurfId = mongoose.Types.ObjectId(turfId);
     
+        // Check if the time slot is already booked for the given turf and date
+        const existingBooking = await Booking.findOne({ turfId: validTurfId, date, time });
+        if (existingBooking) {
+          throw new Error("This time slot is already booked.");
+        }
+    
+        const newBooking = new Booking({
+          userId: validUserId,
+          turfId: validTurfId,
+          date,
+          time,
+          duration,
+          price,
+        });
+    
+        await newBooking.save();
+        return newBooking;
+      } catch (error) {
+        console.error("Error creating booking:", error);
+        throw new Error("Failed to create booking.");
+      }
+    },
+
+    cancelBooking: async (_, { bookingId }) => {
+      try {
+        const booking = await Booking.findByIdAndDelete(bookingId);
+        if (!booking) {
+          throw new Error("Booking not found.");
+        }
+        return "Booking canceled successfully.";
+      } catch (error) {
+        console.error("Error canceling booking:", error);
+        throw new Error("Failed to cancel booking.");
+      }
+    },
   },
 };
 
