@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
 import { graphQLCommand } from "../../../util";
-=======
-import React, { useState } from "react";
-import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
-import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
-import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
-import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
->>>>>>> master
 import "./UserProfilePage.css";
 
 const UserProfilePage = () => {
