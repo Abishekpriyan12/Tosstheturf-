@@ -1,140 +1,191 @@
+/* Wrapper for the entire scroller */
 .scroller-wrapper {
   position: relative;
   display: flex;
-  justify-content: space-between; 
+  justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 20px 0;
 }
 
+/* Container for the cards */
 .scroller-container {
   overflow: hidden;
   width: 85%;
 }
 
+/* Horizontal scrolling container */
 .scroller {
   display: flex;
   transition: transform 0.3s ease-in-out;
 }
 
+/* Individual card styling */
 .card {
-  flex: 0 0 calc(32.33% - 20px); 
-  margin: 0 10px; 
+  flex: 0 0 calc(32.33% - 20px);
+  margin: 0 10px;
   color: #fff;
   text-align: center;
   padding: 10px;
   position: relative;
+  background-color: #333;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
+/* Image styling within each card */
 .card-image {
-  width: 80%;
-  height: 300px; 
-  object-fit: cover; 
-  border-radius: 8px;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
 }
 
+/* Content area within each card */
 .card-content {
-  margin-top: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.card-content h3,
-.card-content p {
+/* Card title styling */
+.card-content h3 {
   margin: 5px 0;
   text-align: left;
-}
-
-.discount {
-  color: #66ff66;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
-
-.vs-button {
-  display: inline-block;
-  background-color: #555; /* Button color */
-  color: white; /* Button text color */
-  padding: 4px 12px; /* Padding for button */
-  font-size: 12px; /* Font size for button */
-  border-radius: 15px; /* Rounded corners */
-  margin-right: 10px; /* Space between buttons */
+/* Paragraph and text styling within card */
+.card-content p {
+  margin: 10px 0;
+  text-align: left;
 }
 
+/* Sport type label (e.g., Football) */
+.sport-type {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+/* 'VS' button */
+.vs-button {
+  background-color: #555;
+  color: white;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 15px;
+}
+
+/* Price and rating section */
 .rating-price {
   display: flex;
-  justify-content: space-between; /* Space between rating and price */
-  align-items: center; /* Center align items */
+  justify-content: space-between;
+  align-items: center;
 }
 
+/* Line separator above discount text */
 .discount-line {
-  height: 2px; /* Line height */
-  background-color: grey; /* Line color */
-  margin-top: 10px; /* Space above the line */
+  height: 2px;
+  background-color: grey;
+  margin-top: 10px;
 }
 
+/* Discount text styling */
 .discount {
-  color: #00ff00; /* Discount text color */
-  font-weight: bold; /* Bold text */
-  margin-top: 10px; /* Space above discount */
-  font-size: 14px; /* Font size */
+  color: #00ff00;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: left;
 }
 
+/* Rating display styling */
 .rating {
-  margin-left: 10px; /* Space between rating and text */
-  font-size: 14px; /* Font size */
-  color: #d4af37; /* Gold color for rating */
-  vertical-align: middle; /* Vertical alignment */
+  font-size: 18px;
+  color: #fff;
+  margin-left: 35px;
 }
 
-/* Scroll Buttons */
+/* Arrow buttons for scrolling */
 .scroll-button {
   background: none;
   border: none;
   color: #fff;
   font-size: 2rem;
   cursor: pointer;
-  position: relative;
-  z-index: 10;
   transition: color 0.3s ease;
 }
 
 .scroll-button.left {
-  margin-right: 15px; 
+  margin-right: 15px;
 }
 
 .scroll-button.right {
-  margin-left: 15px; 
+  margin-left: 15px;
 }
 
-.sport-type{
-  position: absolute;
-  top: 20%;
-  left: 100px;
-  background: grey;
-  border-radius: 10px;
-  padding: 6px;
-}
-
+/* Tablet view adjustments */
 @media (max-width: 768px) {
   .card {
-    flex: 0 0 calc(43.33% - 20px); 
+    flex: 0 0 calc(43.33% - 20px);
     margin: 0 10px;
   }
-
   .card-image {
-    height: 250px; 
+    height: 180px;
+  }
+
+  /* Adjusting font size for smaller screens */
+  .card-content h3 {
+    font-size: 1.1rem;
+  }
+  .discount {
+    font-size: 12px;
+  }
+  .rating {
+    font-size: 16px;
   }
 }
 
-/* Mobile View: 1 card per row */
+/* Mobile view adjustments */
 @media (max-width: 480px) {
-  .card {
-    flex: 0 0 calc(93.33% - 10px); 
-    margin: 0 5px;
+  .scroller-wrapper {
+    padding: 15px 0;
   }
 
+  .card {
+    flex: 0 0 calc(93.33% - 10px);
+    margin: 0 5px;
+  }
   .card-image {
-    height: 200px; 
+    height: 150px;
+  }
+
+  /* Further adjusting font size and layout for mobile */
+  .card-content h3 {
+    font-size: 1rem;
+  }
+  .discount {
+    font-size: 11px;
+  }
+  .rating {
+    font-size: 14px;
+  }
+
+  /* Sport type label adjustment */
+  .sport-type {
+    top: 10px;
+    left: 10px;
+    font-size: 0.8rem;
+    padding: 4px;
   }
 }
