@@ -1,9 +1,9 @@
 import React from "react";
-import NavBarComponent from "../navigation-component/NavBarComponent";
-import FooterComponent from "../footer-component/FooterComponent";
-import ButtonComponent from "../Button-Component/ButtonComponent";
-import CardComponent from "../Card-Component/CardComponent";
-import ScrollerComponent from "../Scroller-Component/ScrollerComponent";
+import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
+import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
+import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
+import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
+import ScrollerComponent from "../../Reusable-Components/Scroller-Component/ScrollerComponent";
 import "./BookingConfirmation.css";
 
 const BookingConfirmation = () => {

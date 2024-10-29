@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 const resolvers = require("./graphql/resolver");
-const { bucket } = require('./firebase'); // Import Firebase bucket for file uploads
+const { bucket } = require('./firebase'); 
 
 dotenv.config();
 

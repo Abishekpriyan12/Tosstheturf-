@@ -39,22 +39,36 @@ const AddTurfForm = () => {
     setAmenities({ ...amenities, [e.target.name]: e.target.checked });
   };
 
+  const handleImageUpload = async (file) => {
+    const imageRef = ref(storage, `turfImages/${file.name}`);
+    try {
+      // Attempt to fetch the URL of an existing image with the same name
+      const existingUrl = await getDownloadURL(imageRef);
+      console.log("Image already exists, using existing URL:", existingUrl);
+      return existingUrl; // Return existing URL if found
+    } catch (error) {
+      if (error.code === 'storage/object-not-found') {
+        // If the image doesn't exist, upload it
+        console.log("Image not found, uploading new image...");
+        await uploadBytes(imageRef, file);
+        const newUrl = await getDownloadURL(imageRef);
+        console.log("New image uploaded, URL:", newUrl);
+        return newUrl;
+      }
+      throw error; // Handle other errors (e.g., network issues)
+    }
+  };
+  
+  // Example usage in handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const mainImageRef = ref(storage, `turfImages/${mainImage.name}`);
-      await uploadBytes(mainImageRef, mainImage);
-      const mainImageURL = await getDownloadURL(mainImageRef);
-
+      const mainImageURL = await handleImageUpload(mainImage); // Use handleImageUpload to get or upload the main image
       const sliderImageURLs = await Promise.all(
-        Array.from(sliderImages).map(async (file) => {
-          const sliderImageRef = ref(storage, `turfImages/${file.name}`);
-          await uploadBytes(sliderImageRef, file);
-          return await getDownloadURL(sliderImageRef);
-        })
+        Array.from(sliderImages).map(file => handleImageUpload(file))
       );
-
+  
       const turfData = {
         turfName,
         address,
@@ -69,52 +83,51 @@ const AddTurfForm = () => {
         rating,
         firstTimeDiscount,
       };
-
+  
       const response = await graphQLCommand(
-        `
-        mutation addTurf(
-          $turfName: String!,
-          $address: String!,
-          $location: String!,
-          $phone: String!,
-          $amenities: AmenitiesInput!,
-          $timing: String!,
-          $mainImage: String!,
-          $sliderImages: [String!]!,
-          $sportType: String!,
-          $price: String!,
-          $rating: String!,
-          $firstTimeDiscount: String
-        ) {
-          addTurf(
-            turfName: $turfName,
-            address: $address,
-            location: $location,
-            phone: $phone,
-            amenities: $amenities,
-            timing: $timing,
-            mainImage: $mainImage,
-            sliderImages: $sliderImages,
-            sportType: $sportType,
-            price: $price,
-            rating: $rating,
-            firstTimeDiscount: $firstTimeDiscount
-          ) {
-            id
-            turfName
-            mainImage
-            sliderImages
-          }
-        }
-      `,
+        `mutation addTurf(
+           $turfName: String!,
+           $address: String!,
+           $location: String!,
+           $phone: String!,
+           $amenities: AmenitiesInput!,
+           $timing: String!,
+           $mainImage: String!,
+           $sliderImages: [String!]!,
+           $sportType: String!,
+           $price: String!,
+           $rating: String!,
+           $firstTimeDiscount: String
+         ) {
+           addTurf(
+             turfName: $turfName,
+             address: $address,
+             location: $location,
+             phone: $phone,
+             amenities: $amenities,
+             timing: $timing,
+             mainImage: $mainImage,
+             sliderImages: $sliderImages,
+             sportType: $sportType,
+             price: $price,
+             rating: $rating,
+             firstTimeDiscount: $firstTimeDiscount
+           ) {
+             id
+             turfName
+             mainImage
+             sliderImages
+           }
+         }`,
         turfData
       );
-
+  
       console.log("Turf added:", response);
     } catch (error) {
       console.error("Error adding turf:", error);
     }
   };
+  
 
   return (
     <div className="add-form-container">
