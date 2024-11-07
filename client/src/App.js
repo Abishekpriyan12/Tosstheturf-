@@ -1,6 +1,5 @@
-import React from "react";
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePageComponent from "./components/Pages/Home-Component/HomePageComponent";
 import ContactUsComponent from "./components/Pages/ContactUs-Component/ContactUsComponent";
 import FaqComponent from "./components/Pages/Faq-Component/FaqComponent";
@@ -17,26 +16,52 @@ import BookingPageComponent from "./components/Pages/BookingPage_Component/Booki
 import DisplayTurfComponent from "./components/Pages/DisplayTurf-Component/DisplayTurfComponent";
 import BookingConfirmation from "./components/Pages/BookingConfirmation-Component/BookingConfirmation";
 import UserProfilePage from "./components/Pages/UserProfilePage-Component/UserProfilePage";
+
 function App() {
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    setUserRole(role);
+  }, []);
+
+  if (userRole === null) {
+    return <div>Loading...</div>; // Show a loading screen until role is fetched
+  }
+
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<HomePageComponent />} />
-        <Route path="/contact" element={<ContactUsComponent />} />
-        <Route path="/faq" element={<FaqComponent />} />
-        <Route path="/payment" element={<PaymentComponent />} />
-        <Route path="/about" element={<AboutUsComponent />} />
-        <Route path="/turf/:id" element={<TurfDetailComponent />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
-        <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
-        <Route path="/addTurf" element={<AddTurfForm />} />
-        <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
-        <Route path="/bookingPage/:id" element={<BookingPageComponent />} />
-        <Route path="/displayturf" element={<DisplayTurfComponent />} />
-        <Route path="/bookingConfirmation" element={<BookingConfirmation />} />
-        <Route path="/user" element={<UserProfilePage />} />
+        {userRole === "Admin" ? (
+          <>
+            {/* Redirect from root to /displayturf for admins */}
+            <Route path="/" element={<Navigate to="/displayturf" replace />} />
+            <Route path="/displayturf" element={<DisplayTurfComponent />} />
+            <Route path="/addTurf" element={<AddTurfForm />} />
+            <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
+            {/* Catch-all for unmatched paths */}
+            <Route path="*" element={<Navigate to="/displayturf" replace />} />
+          </>
+        ) : (
+          <>
+            {/* Show HomePageComponent for regular users at root */}
+            <Route path="/" element={<HomePageComponent />} />
+            <Route path="/contact" element={<ContactUsComponent />} />
+            <Route path="/faq" element={<FaqComponent />} />
+            <Route path="/payment" element={<PaymentComponent />} />
+            <Route path="/about" element={<AboutUsComponent />} />
+            <Route path="/turf/:id" element={<TurfDetailComponent />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
+            <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
+            <Route path="/bookingPage/:id" element={<BookingPageComponent />} />
+            <Route path="/bookingConfirmation" element={<BookingConfirmation />} />
+            <Route path="/user" element={<UserProfilePage />} />
+            {/* Catch-all for unmatched paths */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
       </Routes>
     </div>
   );

@@ -16,11 +16,9 @@ const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async (e) => {
-    e.preventDefault(); 
-    setErrorMessage(''); 
-
-    console.log("Attempting login with:", { email, password, role });
-
+    e.preventDefault();
+    setErrorMessage("");
+  
     try {
       const response = await graphQLCommand(
         `
@@ -43,10 +41,13 @@ const LoginPage = () => {
   
       if (response && response.login) {
         const userRole = response.login.role;
-        if (userRole === "User") {
+        localStorage.setItem("userRole", userRole); // Store the role
+  
+        // Redirect based on role
+        if (userRole === "Admin") {
+          navigate("/displayturf"); 
+        } else if (userRole === "User") {
           navigate("/turfDetail");
-        } else if (userRole === "Admin") {
-          navigate("/payment");
         } else if (userRole === "Owner") {
           navigate("/home");
         }
@@ -57,6 +58,8 @@ const LoginPage = () => {
       console.log(error);
     }
   };
+  
+  
 
   return (
     <div className="login-container">
