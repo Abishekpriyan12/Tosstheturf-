@@ -16,7 +16,7 @@ import BookingPageComponent from "./components/Pages/BookingPage_Component/Booki
 import DisplayTurfComponent from "./components/Pages/DisplayTurf-Component/DisplayTurfComponent";
 import BookingConfirmation from "./components/Pages/BookingConfirmation-Component/BookingConfirmation";
 import UserProfilePage from "./components/Pages/UserProfilePage-Component/UserProfilePage";
-
+import OwnerDashboardComponent from "./components/Pages/owner-dashboard/ownerDashboardComponent"
 function App() {
   const [userRole, setUserRole] = useState(null);
 
@@ -25,42 +25,40 @@ function App() {
     setUserRole(role);
   }, []);
 
-  if (userRole === null) {
-    return <div>Loading...</div>; // Show a loading screen until role is fetched
-  }
-
   return (
     <div className="App">
       <Routes>
+        {/* Public routes accessible to all users */}
+        <Route path="/" element={<HomePageComponent />} />
+        <Route path="/faq" element={<FaqComponent />} />
+        <Route path="/about" element={<AboutUsComponent />} />
+        <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
+        <Route path="/turf/:id" element={<TurfDetailComponent />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/owner" element={<OwnerDashboardComponent />} />
+        
         {userRole === "Admin" ? (
           <>
-            {/* Redirect from root to /displayturf for admins */}
-            <Route path="/" element={<Navigate to="/displayturf" replace />} />
+            {/* Protected admin routes */}
             <Route path="/displayturf" element={<DisplayTurfComponent />} />
             <Route path="/addTurf" element={<AddTurfForm />} />
             <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
-            {/* Catch-all for unmatched paths */}
             <Route path="*" element={<Navigate to="/displayturf" replace />} />
           </>
-        ) : (
+        ) : userRole === "User" ? (
           <>
-            {/* Show HomePageComponent for regular users at root */}
-            <Route path="/" element={<HomePageComponent />} />
+            {/* Protected user routes */}
             <Route path="/contact" element={<ContactUsComponent />} />
-            <Route path="/faq" element={<FaqComponent />} />
             <Route path="/payment" element={<PaymentComponent />} />
-            <Route path="/about" element={<AboutUsComponent />} />
-            <Route path="/turf/:id" element={<TurfDetailComponent />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
             <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
-            <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
             <Route path="/bookingPage/:id" element={<BookingPageComponent />} />
             <Route path="/bookingConfirmation" element={<BookingConfirmation />} />
             <Route path="/user" element={<UserProfilePage />} />
-            {/* Catch-all for unmatched paths */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
+        ) : (
+          <Route path="*" element={<Navigate to="/" replace />} />
         )}
       </Routes>
     </div>
