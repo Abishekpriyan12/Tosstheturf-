@@ -1,12 +1,14 @@
 const bcrypt = require('bcrypt');
-const NavItem = require("../models/NavItems");
-const User = require("../models/User");
+const mongoose = require('mongoose');
+const NavItem = require('../models/NavItems');
+const User = require('../models/User');
 const Turf = require('../models/Turf');
 const Booking = require('../models/Booking');
-const mongoose = require('mongoose');
+const Review = require('../models/Review');
 
 const resolvers = {
   Query: {
+    // Fetch all navigation items
     getNavItems: async () => {
       try {
         return await NavItem.find();
@@ -16,6 +18,7 @@ const resolvers = {
       }
     },
 
+    // Fetch all turfs
     getTurfs: async () => {
       try {
         return await Turf.find();
@@ -25,41 +28,62 @@ const resolvers = {
       }
     },
 
+    // Fetch specific turf by ID
     turf: async (_, { id }) => {
       try {
         const turf = await Turf.findById(id);
         if (!turf) {
-          throw new Error("Turf not found");
+          throw new Error("Turf not found.");
         }
         return turf;
       } catch (error) {
         console.error("Error fetching turf details:", error);
-        throw new Error("Error fetching turf details");
+        throw new Error("Failed to fetch turf details.");
       }
     },
 
-    getBookings: async (_, { turfId, date }) => {
+    // Fetch bookings for a specific user
+    getBookings: async (_, { userId }) => {
       try {
-        const bookings = await Booking.find({ turfId, date });
-        return bookings;
+        return await Booking.find({ userId });
       } catch (error) {
         console.error("Error fetching bookings:", error);
         throw new Error("Failed to fetch bookings.");
       }
     },
-    
+
+    // Fetch bookings by turf and date
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
       try {
-        const bookings = await Booking.find({ turfId, date });
-        return bookings;
+        return await Booking.find({ turfId, date });
       } catch (error) {
         console.error("Error fetching bookings:", error);
         throw new Error("Failed to fetch bookings.");
       }
-    }
+    },
+
+    // Fetch reviews for a specific turf with average rating
+    getReviews: async (_, { turfId }) => {
+      try {
+        const reviews = await Review.find({ turfId }).sort({ createdAt: -1 });
+        const averageRating =
+          reviews.length > 0
+            ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+            : 0;
+
+        return {
+          averageRating,
+          reviews,
+        };
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        throw new Error("Failed to fetch reviews.");
+      }
+    },
   },
 
   Mutation: {
+    // User signup
     signup: async (_, { firstName, lastName, email, password, role }) => {
       try {
         const existingUser = await User.findOne({ email });
@@ -92,6 +116,7 @@ const resolvers = {
       }
     },
 
+    // User login
     login: async (_, { email, password, role }) => {
       try {
         const user = await User.findOne({ email });
@@ -121,6 +146,7 @@ const resolvers = {
       }
     },
 
+    // Add a new turf
     addTurf: async (_, { turfName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, firstTimeDiscount }) => {
       try {
         const newTurf = new Turf({
@@ -144,39 +170,18 @@ const resolvers = {
         throw new Error("Failed to add turf.");
       }
     },
-    updateTurfRating: async (_, { id, rating }) => {
-      try {
-        const turf = await Turf.findById(id);
-        if (!turf) {
-          throw new Error("Turf not found");
-        }
 
-        // Add new rating to the array
-        turf.ratings.push(rating);
-
-        // Calculate the new average rating
-        const totalRatings = turf.ratings.length;
-        const sumRatings = turf.ratings.reduce((acc, curr) => acc + curr, 0);
-        turf.averageRating = sumRatings / totalRatings;
-
-        // Save the updated turf
-        await turf.save();
-        return turf;
-      } catch (error) {
-        console.error("Error updating rating:", error);
-        throw new Error("Failed to update turf rating.");
-      }
-    },
+    // Create a new booking
     createBooking: async (_, { userId, turfId, date, time, duration, price }) => {
       try {
         const validUserId = mongoose.Types.ObjectId(userId);
         const validTurfId = mongoose.Types.ObjectId(turfId);
-    
+
         const existingBooking = await Booking.findOne({ turfId: validTurfId, date, time });
         if (existingBooking) {
           throw new Error("This time slot is already booked.");
         }
-    
+
         const newBooking = new Booking({
           userId: validUserId,
           turfId: validTurfId,
@@ -185,7 +190,7 @@ const resolvers = {
           duration,
           price,
         });
-    
+
         await newBooking.save();
         return newBooking;
       } catch (error) {
@@ -194,6 +199,7 @@ const resolvers = {
       }
     },
 
+    // Cancel a booking
     cancelBooking: async (_, { bookingId }) => {
       try {
         const booking = await Booking.findByIdAndDelete(bookingId);
@@ -204,6 +210,24 @@ const resolvers = {
       } catch (error) {
         console.error("Error canceling booking:", error);
         throw new Error("Failed to cancel booking.");
+      }
+    },
+
+    // Add a new review
+    addReview: async (_, { turfId, username, rating, review }) => {
+      try {
+        const newReview = new Review({
+          turfId,
+          username,
+          rating,
+          review,
+        });
+
+        await newReview.save();
+        return newReview;
+      } catch (error) {
+        console.error("Error adding review:", error);
+        throw new Error("Failed to add review.");
       }
     },
   },

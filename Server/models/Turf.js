@@ -27,8 +27,6 @@ const turfSchema = new mongoose.Schema({
   },
   sportType: { type: String, required: true },
   price: { type: Number, required: true },
-  ratings: { type: [Number], default: [] },  // Array for individual ratings
-  averageRating: { type: Number, default: 0, min: 0, max: 5 }, // Average rating
   firstTimeDiscount: { type: String },
   createdAt: { type: Date, default: Date.now },
 });

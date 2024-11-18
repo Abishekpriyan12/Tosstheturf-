@@ -14,8 +14,18 @@ const TurfDetailComponent = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userRating, setUserRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
   const [filteredTurfs, setFilteredTurfs] = useState([]);
+  const [visibleReviews, setVisibleReviews] = useState(1);
 
+  const handleViewMore = () => {
+    setVisibleReviews((prev) => prev + 2);
+  };
+
+  // Fetch Turf Details
   const fetchTurfDetail = useCallback(async () => {
     const query = `
       query ($id: ID!) {
@@ -36,12 +46,10 @@ const TurfDetailComponent = () => {
           sliderImages
           sportType
           price
-          averageRating
           firstTimeDiscount
         }
       }
     `;
-
     const variables = { id };
 
     try {
@@ -53,14 +61,39 @@ const TurfDetailComponent = () => {
       }
     } catch (err) {
       console.error("Error fetching turf details:", err);
-      setError(
-        `Failed to fetch turf details: ${err.message || "Unknown error"}`
-      );
+      setError("Failed to fetch turf details.");
     } finally {
       setLoading(false);
     }
   }, [id]);
 
+  // Fetch Reviews
+  const fetchReviews = useCallback(async () => {
+    const query = `
+      query ($turfId: ID!) {
+        getReviews(turfId: $turfId) {
+          averageRating
+          reviews {
+            username
+            rating
+            review
+            createdAt
+          }
+        }
+      }
+    `;
+    const variables = { turfId: id };
+
+    try {
+      const data = await graphQLCommand(query, variables);
+      setReviews(data.getReviews.reviews || []);
+      setAverageRating(data.getReviews.averageRating);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+    }
+  }, [id]);
+
+  // Fetch Related Turfs
   const fetchFilteredTurfs = useCallback(async () => {
     const query = `
       query {
@@ -70,7 +103,6 @@ const TurfDetailComponent = () => {
           location
           mainImage
           sportType
-          averageRating
           price
           firstTimeDiscount
         }
@@ -92,26 +124,31 @@ const TurfDetailComponent = () => {
     }
   }, [turfDetail]);
 
-  const updateTurfRating = async () => {
+  // Submit Review
+  const submitReview = async () => {
     const mutation = `
-      mutation ($id: ID!, $rating: Float!) {
-        updateTurfRating(id: $id, rating: $rating) {
-          id
-          averageRating
+      mutation ($turfId: ID!, $username: String!, $rating: Float!, $review: String!) {
+        addReview(turfId: $turfId, username: $username, rating: $rating, review: $review) {
+          username
+          rating
+          review
         }
       }
     `;
 
-    const variables = { id, rating: userRating };
+    const variables = {
+      turfId: id,
+      username: sessionStorage.getItem("username"),
+      rating: userRating,
+      review: reviewText,
+    };
 
     try {
-      const data = await graphQLCommand(mutation, variables);
-      setTurfDetail((prev) => ({
-        ...prev,
-        averageRating: data.updateTurfRating.averageRating,
-      }));
-    } catch (error) {
-      console.error("Error updating rating:", error);
+      await graphQLCommand(mutation, variables);
+      setIsModalOpen(false);
+      fetchReviews(); // Refresh reviews
+    } catch (err) {
+      console.error("Error submitting review:", err);
     }
   };
 
@@ -121,7 +158,8 @@ const TurfDetailComponent = () => {
 
   useEffect(() => {
     fetchTurfDetail();
-  }, [fetchTurfDetail]);
+    fetchReviews();
+  }, [fetchTurfDetail, fetchReviews]);
 
   useEffect(() => {
     if (turfDetail) fetchFilteredTurfs();
@@ -146,9 +184,7 @@ const TurfDetailComponent = () => {
             </h1>
             <div className="sport-type-rating">
               <span className="badge">{turfDetail.sportType}</span>
-              <span className="average-rating">
-                ★ {turfDetail.averageRating.toFixed(1)}
-              </span>
+              <span className="rating">★ {averageRating.toFixed(1) || "N/A"}</span>
             </div>
           </div>
           <ButtonComponent
@@ -198,21 +234,64 @@ const TurfDetailComponent = () => {
         </div>
 
         <div className="rating-section">
-          <h3>Rate this Turf</h3>
-          <div className="star-rating">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={star <= userRating ? "star filled" : "star"}
-                onClick={() => handleStarClick(star)}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-          <button onClick={updateTurfRating}>Submit Rating</button>
-        </div>
+  {reviews.length === 0 && (
+    <div className="no-reviews">No reviews yet. Be the first one to review!</div>
+  )}
+  <div className="reviews-header">
+    <h3 className="reviews-title">
+      Reviews <span className="reviews-count">({reviews.length})</span>
+    </h3>
+    <div className="add-review">
+      <ButtonComponent
+        btnName={"Add Review"}
+        onClick={() => setIsModalOpen(true)}
+      ></ButtonComponent>
+    </div>
+  </div>
+
+  <div className="reviews-section">
+    {reviews.slice(0, visibleReviews).map((review, index) => (
+      <div key={index} className="review-item">
+        <strong className="username-review">@{review.username}</strong>
+        <span className="rating"> ★ {review.rating.toFixed(1)}</span>
+        <div className="review-box">"{review.review}"</div>
       </div>
+    ))}
+    {visibleReviews < reviews.length && (
+      <i onClick={handleViewMore} className="view-more">
+        View More Reviews
+      </i>
+    )}
+  </div>
+</div>
+
+      </div>
+
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Add Your Review</h3>
+            <div className="star-rating">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  className={star <= userRating ? "star filled" : "star"}
+                  onClick={() => handleStarClick(star)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <textarea
+              placeholder="Write your review here..."
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+            ></textarea>
+            <button onClick={submitReview}>Submit</button>
+            <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
       <div className="related-turfs-section">
         {filteredTurfs.length > 0 ? (

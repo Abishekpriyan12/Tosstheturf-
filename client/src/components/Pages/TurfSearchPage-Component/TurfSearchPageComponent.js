@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
-import { graphQLCommand } from "../../../util" // Ensure this is properly implemented
+import { graphQLCommand } from "../../../util"; // Ensure this is properly implemented
 import "./TurfSearchPageComponent.css";
 import TurfCardComponent from "../TurfCard-Component/TurfCardComponent";
 
@@ -10,7 +10,9 @@ const TurfSearchPageComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const [turfs, setTurfs] = useState([]);
   const [filteredTurfs, setFilteredTurfs] = useState([]);
+  const [ratings, setRatings] = useState({}); // Store average ratings for each turf
 
+  // Fetch all turfs
   const fetchTurfData = async () => {
     const query = `
       query {
@@ -30,7 +32,6 @@ const TurfSearchPageComponent = () => {
           sliderImages
           sportType
           price
-          averageRating
           firstTimeDiscount
         }
       }
@@ -43,11 +44,55 @@ const TurfSearchPageComponent = () => {
       console.error("Error fetching turf data:", error);
     }
   };
-  
+
+  // Fetch average ratings for all turfs
+  const fetchRatings = async () => {
+    try {
+      const query = `
+        query {
+          getTurfs {
+            id
+            turfName
+          }
+        }
+      `;
+      const data = await graphQLCommand(query);
+
+      const ratingPromises = (data.getTurfs || []).map(async (turf) => {
+        const ratingQuery = `
+          query ($turfId: ID!) {
+            getReviews(turfId: $turfId) {
+              averageRating
+            }
+          }
+        `;
+        const variables = { turfId: turf.id };
+
+        try {
+          const ratingData = await graphQLCommand(ratingQuery, variables);
+          return { id: turf.id, averageRating: ratingData.getReviews.averageRating || 0 };
+        } catch (error) {
+          console.error(`Error fetching rating for turf ${turf.id}:`, error);
+          return { id: turf.id, averageRating: 0 };
+        }
+      });
+
+      const ratingsData = await Promise.all(ratingPromises);
+      const ratingsMap = {};
+      ratingsData.forEach(({ id, averageRating }) => {
+        ratingsMap[id] = averageRating;
+      });
+
+      setRatings(ratingsMap);
+    } catch (error) {
+      console.error("Error fetching ratings:", error);
+    }
+  };
 
   const handleFilterBySport = (sport) => {
     setFilteredTurfs(turfs.filter((turf) => turf.sportType === sport));
   };
+
   const fetchNavBarData = async () => {
     const query = `
       query {
@@ -64,6 +109,7 @@ const TurfSearchPageComponent = () => {
 
   useEffect(() => {
     fetchTurfData();
+    fetchRatings();
     fetchNavBarData();
   }, []);
 
@@ -160,7 +206,7 @@ const TurfSearchPageComponent = () => {
                 sport={turf.sportType}
                 name={turf.turfName}
                 location={turf.address}
-                rating={turf.averageRating.toFixed(1)}
+                rating={ratings[turf.id] || "0.0"} 
                 price={turf.price}
                 firstTimeDiscount={turf.firstTimeDiscount}
               />

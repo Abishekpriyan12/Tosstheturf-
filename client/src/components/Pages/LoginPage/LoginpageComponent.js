@@ -41,16 +41,12 @@ const LoginPage = () => {
   
       if (response && response.login) {
         const userRole = response.login.role;
-        localStorage.setItem("userRole", userRole); // Store the role
+        sessionStorage.setItem("username", `${response.login.firstName} ${response.login.lastName}`);
   
-        // Redirect based on role
-        if (userRole === "Admin") {
-          navigate("/displayturf"); 
-        } else if (userRole === "User") {
-          navigate("/turfDetail");
-        } else if (userRole === "Owner") {
+  
+      
           navigate("/home");
-        }
+        
       } else {
         setErrorMessage("Login failed. Please check your credentials and role.");
       }
