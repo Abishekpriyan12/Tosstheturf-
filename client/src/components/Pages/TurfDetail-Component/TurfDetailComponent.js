@@ -1,33 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { graphQLCommand } from "../../../util";
-import { useParams, useNavigate } from 'react-router-dom';
-import SliderComponent from '../../Reusable-Components/slider-component/SliderComponent';
+import { useParams, useNavigate } from "react-router-dom";
+import SliderComponent from "../../Reusable-Components/slider-component/SliderComponent";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import ScrollerComponent from "../../Reusable-Components/Scroller-Component/ScrollerComponent";
-import offerIcon from '../../../assests/icons/offericon.png';
+import offerIcon from "../../../assests/icons/offericon.png";
 import "./TurfDetailComponent.css";
 
 const TurfDetailComponent = () => {
-  const { id } = useParams(); // Get the turfId from the URL
-  const navigate = useNavigate(); // Hook to navigate programmatically
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [turfDetail, setTurfDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userRating, setUserRating] = useState(0);
   const [filteredTurfs, setFilteredTurfs] = useState([]);
 
-  // Function to handle "Book Now" click, navigate to the booking page with turfId
-  const handleBookNow = () => {
-    navigate(`/bookingPage/${id}`); // Redirect to booking page with the turf ID
-  };
-
-  // Fetch single turf by ID
-  const fetchTurfDetail = async () => {
-    if (!id) {
-      setError("No turf ID provided. Please check the URL.");
-      setLoading(false);
-      return;
-    }
-
+  const fetchTurfDetail = useCallback(async () => {
     const query = `
       query ($id: ID!) {
         turf(id: $id) {
@@ -47,7 +36,7 @@ const TurfDetailComponent = () => {
           sliderImages
           sportType
           price
-          rating
+          averageRating
           firstTimeDiscount
         }
       }
@@ -70,56 +59,73 @@ const TurfDetailComponent = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  // Fetch all turfs and filter by location for related turfs
-  const fetchTurfData = async () => {
+  const fetchFilteredTurfs = useCallback(async () => {
     const query = `
       query {
         getTurfs {
           id
           turfName
-          address
           location
-          phone
-          amenities {
-            parking
-            drinkingWater
-            spareKits
-            nonAC
-          }
-          timing
           mainImage
-          sliderImages
           sportType
+          averageRating
           price
-          rating
           firstTimeDiscount
         }
       }
     `;
+
     try {
       const data = await graphQLCommand(query);
       if (turfDetail && data.getTurfs) {
-        const turfsByLocation = data.getTurfs.filter(
+        const relatedTurfs = data.getTurfs.filter(
           (turf) =>
             turf.location.toLowerCase() === turfDetail.location.toLowerCase() &&
             turf.id !== turfDetail.id
         );
-        setFilteredTurfs(turfsByLocation);
+        setFilteredTurfs(relatedTurfs);
       }
     } catch (error) {
-      console.error("Error fetching related turf data:", error);
+      console.error("Error fetching related turfs:", error);
+    }
+  }, [turfDetail]);
+
+  const updateTurfRating = async () => {
+    const mutation = `
+      mutation ($id: ID!, $rating: Float!) {
+        updateTurfRating(id: $id, rating: $rating) {
+          id
+          averageRating
+        }
+      }
+    `;
+
+    const variables = { id, rating: userRating };
+
+    try {
+      const data = await graphQLCommand(mutation, variables);
+      setTurfDetail((prev) => ({
+        ...prev,
+        averageRating: data.updateTurfRating.averageRating,
+      }));
+    } catch (error) {
+      console.error("Error updating rating:", error);
     }
   };
 
+  const handleStarClick = (rating) => {
+    setUserRating(rating);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchTurfDetail();
-      await fetchTurfData();
-    };
-    fetchData();
-  }, [id, turfDetail]);
+    fetchTurfDetail();
+  }, [fetchTurfDetail]);
+
+  useEffect(() => {
+    if (turfDetail) fetchFilteredTurfs();
+  }, [fetchFilteredTurfs, turfDetail]);
 
   if (loading) return <div>Loading turf details...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -128,11 +134,9 @@ const TurfDetailComponent = () => {
   return (
     <div className="turf-detail">
       <div className="back-button">
-        {" "}
-        <ButtonComponent btnName={"Back"}></ButtonComponent>
+        <ButtonComponent btnName={"Back"} onClick={() => navigate(-1)} />
       </div>
       <SliderComponent class="slider-comp" slides={turfDetail.sliderImages} />
-      {/* Slider showing images */}     
 
       <div className="info-section">
         <div className="turf-header">
@@ -142,24 +146,26 @@ const TurfDetailComponent = () => {
             </h1>
             <div className="sport-type-rating">
               <span className="badge">{turfDetail.sportType}</span>
-              <span className="rating">★ {turfDetail.rating}</span>
+              <span className="average-rating">
+                ★ {turfDetail.averageRating.toFixed(1)}
+              </span>
             </div>
           </div>
-          {/* Book Now button redirects to booking page */}
-          <ButtonComponent btnName="Book Now" onClick={handleBookNow} />
+          <ButtonComponent
+            btnName="Book Now"
+            onClick={() => navigate(`/bookingPage/${id}`)}
+          />
         </div>
 
-        {/* Address Section */}
         <div className="address-section">
           <h3>Address</h3>
           <p>{turfDetail.address}</p>
           <div className="address-icons">
-          <img src={offerIcon} alt="Discount Icon" className="discountIcon" />
+            <img src={offerIcon} alt="Discount Icon" className="discountIcon" />
             <p>{turfDetail.phone}</p>
           </div>
         </div>
 
-        {/* Amenities Section */}
         <div className="amenities-section">
           <h3>Amenities</h3>
           <ul className="amenities-list">
@@ -186,20 +192,28 @@ const TurfDetailComponent = () => {
           </ul>
         </div>
 
-        {/* Timing Section */}
         <div className="timing-section">
           <h3>Timings</h3>
           <p>{turfDetail.timing}</p>
         </div>
 
-        {/* Reviews Section */}
-        <div className="reviews-section">
-          <h3>Reviews</h3>
-          <span className="review-rating">★ {turfDetail.rating}</span>
+        <div className="rating-section">
+          <h3>Rate this Turf</h3>
+          <div className="star-rating">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                className={star <= userRating ? "star filled" : "star"}
+                onClick={() => handleStarClick(star)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          <button onClick={updateTurfRating}>Submit Rating</button>
         </div>
       </div>
 
-      {/* Related Turfs Section */}
       <div className="related-turfs-section">
         {filteredTurfs.length > 0 ? (
           <ScrollerComponent items={filteredTurfs} />

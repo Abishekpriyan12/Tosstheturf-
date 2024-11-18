@@ -44,12 +44,12 @@
   margin: 20px 0;
   border-top: 1px solid #333;
   padding-top: 15px;
-  text-align: left; 
+  text-align: left;
 }
 
 .address-section p,
 .timing-section p {
-  text-align: left; 
+  text-align: left;
 }
 
 .address-icons {
@@ -92,6 +92,37 @@
 .button-container {
   text-align: right;
 }
+
+/* Slider Navigation Arrows */
+.slider-comp .left-arrow,
+.slider-comp .right-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; /* Ensures the arrows appear above the content */
+  background-color: rgba(0, 0, 0, 0.5); /* Optional for better visibility */
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.slider-comp .left-arrow {
+  left: 10px;
+}
+
+.slider-comp .right-arrow {
+  right: 10px;
+}
+.star {
+  font-size: 2rem;
+  cursor: pointer;
+  color: lightgray;
+}
+
+.star.filled {
+  color: gold;
+}
+
 
 /* Responsive Adjustments */
 

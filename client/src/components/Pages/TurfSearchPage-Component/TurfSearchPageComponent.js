@@ -30,7 +30,7 @@ const TurfSearchPageComponent = () => {
           sliderImages
           sportType
           price
-          rating
+          averageRating
           firstTimeDiscount
         }
       }
@@ -43,6 +43,7 @@ const TurfSearchPageComponent = () => {
       console.error("Error fetching turf data:", error);
     }
   };
+  
 
   const handleFilterBySport = (sport) => {
     setFilteredTurfs(turfs.filter((turf) => turf.sportType === sport));
@@ -159,7 +160,7 @@ const TurfSearchPageComponent = () => {
                 sport={turf.sportType}
                 name={turf.turfName}
                 location={turf.address}
-                rating={turf.rating}
+                rating={turf.averageRating.toFixed(1)}
                 price={turf.price}
                 firstTimeDiscount={turf.firstTimeDiscount}
               />

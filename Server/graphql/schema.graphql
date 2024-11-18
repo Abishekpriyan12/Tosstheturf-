@@ -41,7 +41,6 @@ type Amenities {
   nonAC: Boolean!
 }
 
-# Turf type to store turf details
 type Turf {
   id: ID!
   turfName: String!
@@ -54,40 +53,30 @@ type Turf {
   sliderImages: [String!]!
   sportType: String!
   price: String!
-  rating: String
+  ratings: [Float!]!    # Array of individual ratings
+  averageRating: Float! # Calculated average rating
   firstTimeDiscount: String
 }
 
-# New Booking type
 type Booking {
   id: ID!
-  userId: User! # Reference to the User who made the booking
-  turfId: Turf! # Reference to the Turf being booked
-  date: String! # Date of booking
-  time: String! # Time slot selected for booking
-  duration: Int! # Duration in hours
-  price: Float! # Total price for the booking
-  createdAt: String! # Booking creation time
-}
-
-# Queries to retrieve nav items, turfs, and bookings
-type Query {
-  getNavItems: [NavItem!]!
-  getTurfs: [Turf!]!
-  turf(id: ID!): Turf
-  getBookings(userId: ID!): [Booking!]! # Fetch bookings for a user
+  userId: User!
+  turfId: Turf!
+  date: String!
+  time: String!
+  duration: Int!
+  price: Float!
+  createdAt: String!
 }
 
 type Query {
   getNavItems: [NavItem!]!
   getTurfs: [Turf!]!
   turf(id: ID!): Turf
-  getBookings(userId: ID!): [Booking!]! # Existing query for fetching bookings by user
-  # New query to fetch bookings by turf and date
+  getBookings(userId: ID!): [Booking!]!
   getBookingsByTurfAndDate(turfId: ID!, date: String!): [Booking!]!
 }
 
-# Mutation to create turf and handle bookings
 type Mutation {
   signup(
     firstName: String!
@@ -110,7 +99,6 @@ type Mutation {
     sliderImages: [String!]!
     sportType: String!
     price: String!
-    rating: String
     firstTimeDiscount: String
   ): Turf!
 
@@ -121,11 +109,13 @@ type Mutation {
     time: String!
     duration: Int!
     price: Float!
-  ): Booking! # Mutation to create a booking
-  cancelBooking(bookingId: ID!): String! # Mutation to cancel a booking
+  ): Booking!
+
+  cancelBooking(bookingId: ID!): String!
+
+  updateTurfRating(id: ID!, rating: Float!): Turf!
 }
 
-# Input type for amenities when adding a turf
 input AmenitiesInput {
   parking: Boolean!
   drinkingWater: Boolean!

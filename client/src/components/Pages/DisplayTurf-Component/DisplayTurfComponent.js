@@ -31,7 +31,6 @@ const DisplayTurfComponent = () => {
           sliderImages
           sportType
           price
-          rating
           firstTimeDiscount
         }
       }
