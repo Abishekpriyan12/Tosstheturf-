@@ -42,6 +42,7 @@ const LoginPage = () => {
       if (response && response.login) {
         sessionStorage.setItem("username", `${response.login.firstName} ${response.login.lastName}`);
         sessionStorage.setItem("userId", `${response.login.id}`);
+        sessionStorage.setItem("role", `${response.login.role}`);
           navigate("/");
         
       } else {

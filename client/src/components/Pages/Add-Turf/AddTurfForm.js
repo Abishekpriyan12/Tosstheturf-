@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   storage,
@@ -11,6 +11,7 @@ import "./AddTurfForm.css";
 
 const AddTurfForm = () => {
   const [turfName, setTurfName] = useState("");
+  const [ownerName, setOwnerName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [amenities, setAmenities] = useState({
@@ -27,6 +28,14 @@ const AddTurfForm = () => {
   const [price, setPrice] = useState("");
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
   const navigate = useNavigate();
+
+  // Set owner name automatically from session
+  useEffect(() => {
+    const role = sessionStorage.getItem("role");
+    if (role === "Owner") {
+      setOwnerName(sessionStorage.getItem("username"));
+    }
+  }, []);
 
   const handleSliderImagesChange = (e) => {
     setSliderImages(e.target.files);
@@ -65,6 +74,7 @@ const AddTurfForm = () => {
 
       const turfData = {
         turfName,
+        ownerName,
         address,
         location,
         phone,
@@ -75,11 +85,13 @@ const AddTurfForm = () => {
         sportType,
         price,
         firstTimeDiscount,
+        status: sessionStorage.getItem("role") === "Admin" ? "Approved" : "Pending", 
       };
-
+      console.log("Payload being sent:", turfData);
       const response = await graphQLCommand(
         `mutation addTurf(
            $turfName: String!,
+           $ownerName: String!,
            $address: String!,
            $location: String!,
            $phone: String!,
@@ -89,10 +101,12 @@ const AddTurfForm = () => {
            $sliderImages: [String!]!,
            $sportType: String!,
            $price: String!,
-           $firstTimeDiscount: String
+           $firstTimeDiscount: String,
+           $status: String!
          ) {
            addTurf(
              turfName: $turfName,
+             ownerName: $ownerName,
              address: $address,
              location: $location,
              phone: $phone,
@@ -102,19 +116,19 @@ const AddTurfForm = () => {
              sliderImages: $sliderImages,
              sportType: $sportType,
              price: $price,
-             firstTimeDiscount: $firstTimeDiscount
+             firstTimeDiscount: $firstTimeDiscount,
+             status: $status
            ) {
              id
              turfName
-             mainImage
-             sliderImages
+             status
            }
          }`,
         turfData
       );
 
       console.log("Turf added:", response);
-      navigate("/displayturf");
+      navigate(sessionStorage.getItem("role") === "Admin" ? "/displayturf" : "/ownerDashboard");
     } catch (error) {
       console.error("Error adding turf:", error);
     }
@@ -130,6 +144,16 @@ const AddTurfForm = () => {
             type="text"
             value={turfName}
             onChange={(e) => setTurfName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="add-form-group">
+          <label>Owner Name:</label>
+          <input
+            type="text"
+            value={ownerName}
+            readOnly={sessionStorage.getItem("role") === "Owner"}
+            onChange={(e) => setOwnerName(e.target.value)}
             required
           />
         </div>

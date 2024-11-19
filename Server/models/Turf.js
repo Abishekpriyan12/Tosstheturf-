@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Amenities schema
 const amenitiesSchema = new mongoose.Schema({
   parking: { type: Boolean, default: false },
   drinkingWater: { type: Boolean, default: false },
@@ -7,13 +8,23 @@ const amenitiesSchema = new mongoose.Schema({
   nonAC: { type: Boolean, default: false },
 });
 
+// Turf schema
 const turfSchema = new mongoose.Schema({
   turfName: { type: String, required: true },
+  ownerName: { type: String, required: true },
   address: { type: String, required: true },
-  location: { type: String, required: true, enum: ['Cambridge', 'Waterloo', 'Kitchner'] },
+  location: {
+    type: String,
+    required: true,
+    enum: ['Cambridge', 'Waterloo', 'Kitchner'],
+  },
   phone: { type: String, required: true },
   amenities: amenitiesSchema,
-  timing: { type: String, required: true, enum: ['5 AM to 9 AM', '9 AM to 1 PM', '1 PM to 5 PM', '5 PM to 9 PM'] },
+  timing: {
+    type: String,
+    required: true,
+    enum: ['5 AM to 9 AM', '9 AM to 1 PM', '1 PM to 5 PM', '5 PM to 9 PM'],
+  },
   mainImage: { type: String, required: true },
   sliderImages: {
     type: [String],
@@ -29,6 +40,12 @@ const turfSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   firstTimeDiscount: { type: String },
   createdAt: { type: Date, default: Date.now },
+  status: {
+    type: String,
+    required: true,
+    enum: ['Pending', 'Approved', 'Rejected'],
+    default: 'Pending', 
+  },
 });
 
 const Turf = mongoose.model('Turf', turfSchema);
