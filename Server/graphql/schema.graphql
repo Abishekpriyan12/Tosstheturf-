@@ -9,7 +9,7 @@ enum Timing {
   "5 PM to 9 PM"
   FIVE_PM_TO_NINE_PM
 }
-
+ 
 enum Location {
   "Cambridge"
   CAMBRIDGE
@@ -18,7 +18,7 @@ enum Location {
   "Kitchner"
   KITCHNER
 }
-
+ 
 # User type for authentication and role management
 type User {
   id: String!
@@ -29,14 +29,14 @@ type User {
   role: String!
   token: String
 }
-
+ 
 # Navigation items for the application
 type NavItem {
   id: ID!
   name: String!
   url: String!
 }
-
+ 
 # Amenities for the turf
 type Amenities {
   parking: Boolean!
@@ -44,7 +44,7 @@ type Amenities {
   spareKits: Boolean!
   nonAC: Boolean!
 }
-
+ 
 # Turf details
 type Turf {
   id: ID!
@@ -62,7 +62,26 @@ type Turf {
   firstTimeDiscount: String
   status: String! # Status to track turf approval
 }
-
+type Mutation {
+  updateTurf(
+    id: ID!
+    turfName: String!
+    address: String!
+    location: String!
+    phone: String!
+    amenities: AmenitiesInput!
+    timing: String!
+    mainImage: String!
+    sliderImages: [String!]!
+    sportType: String!
+    price: String!
+    firstTimeDiscount: String
+  ): Turf!
+}
+ 
+type Mutation {
+  deleteTurf(id: ID!): Turf
+}
 # Review details
 type Review {
   id: ID!
@@ -72,13 +91,13 @@ type Review {
   review: String!
   createdAt: String!
 }
-
+ 
 # Reviews response with calculated average rating
 type ReviewsResponse {
   averageRating: Float!
   reviews: [Review!]!
 }
-
+ 
 # Booking details
 type Booking {
   id: ID!
@@ -91,35 +110,36 @@ type Booking {
   price: Float!
   createdAt: String!
 }
-
+ 
 # Root Query type
 type Query {
   # Fetch navigation items
   getNavItems: [NavItem!]!
-
+ 
   # Fetch all turfs
   getTurfs: [Turf!]!
-
+ 
   # Fetch a specific turf by ID
   turf(id: ID!): Turf
-
+ 
   # Fetch bookings by user
   getBookings(userId: ID!): [Booking!]!
-
+ 
   # Fetch bookings for a specific turf on a specific date
   getBookingsByTurfAndDate(turfId: ID!, date: String!): [Booking!]!
-
+ 
   # Fetch reviews for a specific turf with average rating
   getReviews(turfId: ID!): ReviewsResponse!
-
+ 
   # Fetch fully booked dates for a specific turf
   getFullyBookedDates(turfId: ID!): [String!]!
   getPendingTurfs: [Turf!]!
   getOwnerTurfs(ownerName: String!): [Turf!]!
   getOwnerBookings(turfId: ID!): [Booking!]!
    getAllBookings: [Booking!]!
+   
 }
-
+ 
 # Root Mutation type
 type Mutation {
   # Signup for new users
@@ -131,10 +151,10 @@ type Mutation {
     password: String!
     role: String!
   ): User!
-
+ 
   # Login for existing users
   login(email: String!, password: String!, role: String!): User!
-
+ 
   # Add a new turf
   addTurf(
     turfName: String!
@@ -151,7 +171,7 @@ type Mutation {
     firstTimeDiscount: String
     status: String! # Add status field
   ): Turf!
-
+ 
   # Create a new booking
   createBooking(
     userId: ID!
@@ -162,10 +182,10 @@ type Mutation {
     duration: Int!
     price: Float!
   ): Booking!
-
+ 
   # Cancel an existing booking
   cancelBooking(bookingId: ID!): String!
-
+ 
   # Add a new review
   addReview(
     turfId: ID!
@@ -173,14 +193,14 @@ type Mutation {
     rating: Float!
     review: String!
   ): Review!
-
+ 
   # Approve a turf (Admin only)
   approveTurf(turfId: ID!): Turf!
-
+ 
   # Reject a turf (Admin only)
   rejectTurf(turfId: ID!): Turf!
 }
-
+ 
 # Input type for amenities
 input AmenitiesInput {
   parking: Boolean!
@@ -188,3 +208,4 @@ input AmenitiesInput {
   spareKits: Boolean!
   nonAC: Boolean!
 }
+ 

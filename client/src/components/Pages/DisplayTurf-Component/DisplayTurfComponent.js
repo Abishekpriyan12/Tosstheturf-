@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import "./DisplayTurfComponent.css";
@@ -17,6 +18,9 @@ const DisplayTurfComponent = () => {
     { id: 5, name: "Booking History", url: "/bookingHistory" },
   ];
   // Fetch turf data from the database
+  const navigate = useNavigate();
+ 
+  // Fetch turf data
   const fetchTurfData = async () => {
     const query = `
       query {
@@ -76,12 +80,30 @@ const DisplayTurfComponent = () => {
                     className="turf-image-display"
                   />
                   <div className="turf-info">
-                    <p><strong>Name:</strong> {turf.turfName}</p>
-                    <p><strong>Price:</strong> {turf.price} per hour</p>
-                    <p><strong>Location:</strong> {turf.location}</p>
+                    <p>
+                      <strong>Name:</strong> {turf.turfName}
+                    </p>
+                    <p>
+                      <strong>Price:</strong> {turf.price} per hour
+                    </p>
+                    <p>
+                      <strong>Location:</strong> {turf.location}
+                    </p>
                     <div className="turf-buttons">
-                      <button className="edit-button">Edit</button>
-                      <button className="delete-button">Delete</button>
+                      <button
+                        className="edit-button"
+                        onClick={() =>
+                          navigate("/edit-turf", { state: { turf } })
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(turf.id)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </div>
