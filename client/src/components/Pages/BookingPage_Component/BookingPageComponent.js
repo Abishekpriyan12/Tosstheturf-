@@ -9,6 +9,7 @@ const CREATE_BOOKING_MUTATION = `
   mutation CreateBooking(
     $userId: ID!
     $turfId: ID!
+    $turfName:String!
     $date: String!
     $time: [String!]!
     $duration: Int!
@@ -17,12 +18,14 @@ const CREATE_BOOKING_MUTATION = `
     createBooking(
       userId: $userId
       turfId: $turfId
+      turfName:$turfName
       date: $date
       time: $time
       duration: $duration
       price: $price
     ) {
       id
+      turfName
       date
       time
       duration
@@ -183,6 +186,7 @@ const BookingPageComponent = () => {
     const variables = {
       userId,
       turfId: turfData.id,
+      turfName:turfData.turfName,
       date: selectedDate,
       time: selectedSlots,
       duration,
