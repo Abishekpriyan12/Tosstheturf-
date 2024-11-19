@@ -16,7 +16,7 @@ const app = express();
 // CORS configuration
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+    const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'https://studio.apollographql.com'];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, origin);
     } else {
