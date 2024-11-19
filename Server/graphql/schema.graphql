@@ -49,7 +49,7 @@ type Amenities {
 type Turf {
   id: ID!
   turfName: String!
-  ownerName:String!
+  ownerName: String!
   location: String!
   address: String!
   phone: String!
@@ -60,6 +60,7 @@ type Turf {
   sportType: String!
   price: String!
   firstTimeDiscount: String
+  status: String! # Status to track turf approval
 }
 
 # Review details
@@ -84,7 +85,7 @@ type Booking {
   userId: User!
   turfId: Turf!
   date: String!
-  time: [String!]! # Updated to allow multiple time slots
+  time: [String!]!
   duration: Int!
   price: Float!
   createdAt: String!
@@ -110,14 +111,17 @@ type Query {
   # Fetch reviews for a specific turf with average rating
   getReviews(turfId: ID!): ReviewsResponse!
 
-   getFullyBookedDates(turfId: ID!): [String!]!
+  # Fetch fully booked dates for a specific turf
+  getFullyBookedDates(turfId: ID!): [String!]!
+  getPendingTurfs: [Turf!]!
+  getOwnerTurfs(ownerName: String!): [Turf!]!
 }
 
 # Root Mutation type
 type Mutation {
   # Signup for new users
   signup(
-  id:String!
+    id: String!
     firstName: String!
     lastName: String!
     email: String!
@@ -131,7 +135,7 @@ type Mutation {
   # Add a new turf
   addTurf(
     turfName: String!
-    ownerName:String!
+    ownerName: String!
     location: String!
     address: String!
     phone: String!
@@ -142,6 +146,7 @@ type Mutation {
     sportType: String!
     price: String!
     firstTimeDiscount: String
+    status: String! # Add status field
   ): Turf!
 
   # Create a new booking
@@ -149,7 +154,7 @@ type Mutation {
     userId: ID!
     turfId: ID!
     date: String!
-    time: [String!]! # Updated to allow multiple time slots
+    time: [String!]!
     duration: Int!
     price: Float!
   ): Booking!
@@ -164,6 +169,12 @@ type Mutation {
     rating: Float!
     review: String!
   ): Review!
+
+  # Approve a turf (Admin only)
+  approveTurf(turfId: ID!): Turf!
+
+  # Reject a turf (Admin only)
+  rejectTurf(turfId: ID!): Turf!
 }
 
 # Input type for amenities

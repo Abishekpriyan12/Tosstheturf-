@@ -1,0 +1,53 @@
+.admin-dashboard {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+  }
+  
+  .admin-table th, .admin-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .admin-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .approve-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .approve-button:hover {
+    background-color: #45a049;
+  }
+  
+  .reject-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .reject-button:hover {
+    background-color: #d32f2f;
+  }
+  

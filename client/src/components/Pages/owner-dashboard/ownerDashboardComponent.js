@@ -1,69 +1,91 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { graphQLCommand } from "../../../util";
+import { useNavigate } from "react-router-dom";
 import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
-import "./ownerDashboardComponent.css";
+import "./OwnerDashboardComponent.css";
 
 const OwnerDashboardComponent = () => {
-  // Dummy data for testing
-  const turfs = [
-    {
-      id: 1,
-      turfName: "SMR Sports Arena",
-      cost: 1000,
-      location: "Waterloo",
-      imageUrl: "", // Replace with an actual image URL
-    },
-    {
-      id: 2,
-      turfName: "KWC Arena",
-      cost: 1200,
-      location: "Waterloo",
-      imageUrl: "", // Replace with an actual image URL
-    },
-    {
-      id: 3,
-      turfName: "City Sports Complex",
-      cost: 1500,
-      location: "Toronto",
-      imageUrl: "", // Replace with an actual image URL
-    },
-    {
-      id: 4,
-      turfName: "Downtown Sports Hub",
-      cost: 1100,
-      location: "Toronto",
-      imageUrl: "", // Replace with an actual image URL
-    },
-  ];
+  const [ownerTurfs, setOwnerTurfs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const ownerName = sessionStorage.getItem("username"); // Assuming the owner's name is stored here
+  const navigate = useNavigate();
 
-  // Dummy functions for edit and delete actions
-  const onEdit = (id) => {
-    console.log("Edit turf with ID:", id);
+  // Fetch turfs added by the owner
+  const fetchOwnerTurfs = async () => {
+    const query = `
+      query ($ownerName: String!) {
+        getOwnerTurfs(ownerName: $ownerName) {
+          id
+          turfName
+          location
+          price
+          mainImage
+          status
+        }
+      }
+    `;
+    const variables = { ownerName };
+
+    try {
+      const data = await graphQLCommand(query, variables);
+      setOwnerTurfs(data.getOwnerTurfs || []);
+    } catch (error) {
+      console.error("Error fetching owner turfs:", error);
+      setError("Failed to fetch turfs.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const onDelete = (id) => {
-    console.log("Delete turf with ID:", id);
-  };
+  useEffect(() => {
+    fetchOwnerTurfs();
+  }, []);
+
+  if (loading) return <div>Loading your turfs...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="owner-dashboard">
-      <h2 className="dashboard-title">Turf Available</h2>
-      <button className="view-booking-button">View Booking Details</button>
-      <div className="turf-grid">
-        {turfs.map((turf) => (
-          <CardComponent key={turf.id} width="300px" height="auto" backgroundColor="#333">
-            <img src={turf.imageUrl} alt={turf.turfName} className="turf-image" />
-            <div className="turf-info">
-              <p><strong>Name :</strong> {turf.turfName}</p>
-              <p><strong>Cost:</strong> {turf.cost} per hour</p>
-              <p><strong>Location:</strong> {turf.location}</p>
-              <div className="button-group">
-                <button className="edit-button" onClick={() => onEdit(turf.id)}>Edit</button>
-                <button className="delete-button" onClick={() => onDelete(turf.id)}>Delete</button>
+      <h1>Owner Dashboard</h1>
+      <button
+        className="add-turf-button"
+        onClick={() => navigate("/addturf")}
+      >
+        Add New Turf
+      </button>
+      {ownerTurfs.length === 0 ? (
+        <p>No turfs added yet.</p>
+      ) : (
+        <div className="turf-grid">
+          {ownerTurfs.map((turf) => (
+            <CardComponent
+              key={turf.id}
+              width="300px"
+              height="auto"
+              backgroundColor="#f4f4f4"
+            >
+              <img
+                src={turf.mainImage}
+                alt={turf.turfName}
+                className="turf-image"
+              />
+              <div className="turf-info">
+                <p><strong>Name:</strong> {turf.turfName}</p>
+                <p><strong>Location:</strong> {turf.location}</p>
+                <p><strong>Price:</strong> ${turf.price} per hour</p>
+                <p><strong>Status:</strong> {turf.status}</p>
+                <button
+                  className="view-bookings-button"
+                  onClick={() => navigate(`/bookinghistory/${turf.id}`)}
+                >
+                  View Bookings
+                </button>
               </div>
-            </div>
-          </CardComponent>
-        ))}
-      </div>
+            </CardComponent>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

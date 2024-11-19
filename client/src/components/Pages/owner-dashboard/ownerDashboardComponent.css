@@ -1,69 +1,55 @@
 .owner-dashboard {
-    background-color: #000;
-    color: white;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .dashboard-title {
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  .view-booking-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-bottom: 20px;
-  }
-  
-  .turf-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-  }
-  
-  .turf-image {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .turf-info {
-    text-align: left;
-  }
-  
-  .turf-info p {
-    margin: 5px 0;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-  }
-  
-  .edit-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .delete-button {
-    background-color: #666;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.add-turf-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.add-turf-button:hover {
+  background-color: #0056b3;
+}
+
+.turf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.turf-info {
+  padding: 10px;
+  text-align: left;
+}
+
+.turf-image {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.view-bookings-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-bookings-button:hover {
+  background-color: #218838;
+}

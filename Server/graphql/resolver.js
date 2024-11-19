@@ -21,7 +21,7 @@ const resolvers = {
     // Fetch all turfs
     getTurfs: async () => {
       try {
-        return await Turf.find();
+        return await Turf.find({ status: "Approved" }); // Only fetch approved turfs
       } catch (error) {
         console.error("Failed to fetch turfs:", error);
         throw new Error("Failed to fetch turfs.");
@@ -65,7 +65,6 @@ const resolvers = {
         throw new Error("Failed to fetch bookings.");
       }
     },
-    
 
     // Fetch reviews for a specific turf with average rating
     getReviews: async (_, { turfId }) => {
@@ -84,42 +83,75 @@ const resolvers = {
         console.error("Error fetching reviews:", error);
         throw new Error("Failed to fetch reviews.");
       }
-    },  
+    },
+
+    // Fetch fully booked dates
     getFullyBookedDates: async (_, { turfId }) => {
       try {
         const turf = await Turf.findById(turfId);
         if (!turf) {
           throw new Error("Turf not found.");
         }
-    
+
         // Generate time slots based on turf's timing
         const [openingTime, closingTime] = turf.timing.split(" to ");
         const totalSlots = parseInt(closingTime.split(" ")[0]) - parseInt(openingTime.split(" ")[0]);
-    
+
         const bookings = await Booking.find({ turfId });
-    
+
         // Count bookings by date
         const bookingCountByDate = bookings.reduce((acc, booking) => {
           acc[booking.date] = (acc[booking.date] || 0) + booking.time.length;
           return acc;
         }, {});
-    
+
         // Fully booked dates
         const fullyBookedDates = Object.keys(bookingCountByDate).filter(
           (date) => bookingCountByDate[date] >= totalSlots
         );
-    
+
         return fullyBookedDates;
       } catch (error) {
         console.error("Error fetching fully booked dates:", error);
         throw new Error("Failed to fetch fully booked dates.");
       }
-    },      
+    },
+
+    // Fetch pending turfs for admin approval
+    getPendingTurfs: async () => {
+      try {
+        return await Turf.find({ status: "Pending" });
+      } catch (error) {
+        console.error("Error fetching pending turfs:", error);
+        throw new Error("Failed to fetch pending turfs.");
+      }
+    },
+    getOwnerTurfs: async (_, { ownerName }) => {
+      try {
+        return await Turf.find({ ownerName });
+      } catch (error) {
+        console.error("Error fetching turfs for owner:", error);
+        throw new Error("Failed to fetch owner turfs.");
+      }
+    },   
+    getOwnerBookings: async (_, { ownerName }) => {
+      try {
+        const turfs = await Turf.find({ ownerName }); // Fetch turfs by ownerName
+        const turfIds = turfs.map((turf) => turf._id); // Extract turf IDs
+        const bookings = await Booking.find({ turfId: { $in: turfIds } })
+          .populate("turf")
+          .populate("user");
+        return bookings;
+      } catch (error) {
+        console.error("Error fetching owner bookings:", error);
+        throw new Error("Failed to fetch bookings.");
+      }
+    },       
   },
 
   Mutation: {
     // User signup
-    signup: async (_, {id, firstName, lastName, email, password, role }) => {
+    signup: async (_, { id, firstName, lastName, email, password, role }) => {
       try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -183,7 +215,7 @@ const resolvers = {
     },
 
     // Add a new turf
-    addTurf: async (_, { turfName,ownerName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, firstTimeDiscount }) => {
+    addTurf: async (_, { turfName, ownerName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, firstTimeDiscount,status }) => {
       try {
         const newTurf = new Turf({
           turfName,
@@ -198,6 +230,7 @@ const resolvers = {
           sportType,
           price,
           firstTimeDiscount,
+          status, // New turf starts with Pending status
         });
 
         await newTurf.save();
@@ -208,24 +241,61 @@ const resolvers = {
       }
     },
 
+    // Approve a turf
+    approveTurf: async (_, { turfId }) => {
+      try {
+        const turf = await Turf.findByIdAndUpdate(
+          turfId,
+          { status: "Approved" },
+          { new: true }
+        );
+        if (!turf) {
+          throw new Error("Turf not found.");
+        }
+        return turf;
+      } catch (error) {
+        console.error("Error approving turf:", error);
+        throw new Error("Failed to approve turf.");
+      }
+    },
+
+    // Reject a turf
+    rejectTurf: async (_, { turfId }) => {
+      try {
+        const turf = await Turf.findByIdAndUpdate(
+          turfId,
+          { status: "Rejected" },
+          { new: true }
+        );
+        if (!turf) {
+          throw new Error("Turf not found.");
+        }
+        return turf;
+      } catch (error) {
+        console.error("Error rejecting turf:", error);
+        throw new Error("Failed to reject turf.");
+      }
+    },
+
+    // Create a new booking
     createBooking: async (_, { userId, turfId, date, time, duration, price }) => {
       try {
         // Ensure turfId is valid
         if (!mongoose.Types.ObjectId.isValid(turfId)) {
           throw new Error("Invalid turf ID.");
         }
-    
+
         // Check for existing bookings in the provided slots
         const existingBookings = await Booking.find({
           turfId,
           date,
           time: { $in: time },
         });
-    
+
         if (existingBookings.length > 0) {
           throw new Error("One or more selected time slots are already booked.");
         }
-    
+
         // Create a new booking without validating userId as ObjectId
         const newBooking = new Booking({
           userId, // Store userId as a raw string
@@ -235,7 +305,7 @@ const resolvers = {
           duration,
           price,
         });
-    
+
         await newBooking.save();
         return newBooking;
       } catch (error) {
@@ -243,7 +313,6 @@ const resolvers = {
         throw new Error("Failed to create booking.");
       }
     },
-    
 
     // Cancel a booking
     cancelBooking: async (_, { bookingId }) => {
