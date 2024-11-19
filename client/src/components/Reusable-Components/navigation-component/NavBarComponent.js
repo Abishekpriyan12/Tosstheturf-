@@ -18,6 +18,7 @@ const NavBarComponent = ({ navBarData }) => {
       // Perform logout
       sessionStorage.removeItem("username"); 
       sessionStorage.removeItem("userId"); 
+      sessionStorage.removeItem("role"); 
       setIsLoggedIn(false); 
       navigate("/"); 
     } else {
