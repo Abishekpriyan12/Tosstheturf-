@@ -134,19 +134,21 @@ const resolvers = {
         throw new Error("Failed to fetch owner turfs.");
       }
     },   
-    getOwnerBookings: async (_, { ownerName }) => {
+    getOwnerBookings: async (_, { turfId }) => {
       try {
-        const turfs = await Turf.find({ ownerName }); // Fetch turfs by ownerName
-        const turfIds = turfs.map((turf) => turf._id); // Extract turf IDs
-        const bookings = await Booking.find({ turfId: { $in: turfIds } })
-          .populate("turf")
-          .populate("user");
-        return bookings;
+        const bookings = await Booking.find({ turfId });
+        return bookings.map((booking) => ({
+          userId: booking.userId, // Return userId as a string
+          time: booking.time,
+          duration: booking.duration,
+          price: booking.price,
+        }));
       } catch (error) {
-        console.error("Error fetching owner bookings:", error);
+        console.error("Error fetching bookings:", error);
         throw new Error("Failed to fetch bookings.");
       }
-    },       
+    },    
+    
   },
 
   Mutation: {
@@ -298,7 +300,7 @@ const resolvers = {
 
         // Create a new booking without validating userId as ObjectId
         const newBooking = new Booking({
-          userId, // Store userId as a raw string
+          userId, 
           turfId,
           date,
           time,

@@ -82,7 +82,7 @@ type ReviewsResponse {
 # Booking details
 type Booking {
   id: ID!
-  userId: User!
+  userId: String!
   turfId: Turf!
   date: String!
   time: [String!]!
@@ -115,6 +115,7 @@ type Query {
   getFullyBookedDates(turfId: ID!): [String!]!
   getPendingTurfs: [Turf!]!
   getOwnerTurfs(ownerName: String!): [Turf!]!
+  getOwnerBookings(turfId: ID!): [Booking!]!
 }
 
 # Root Mutation type

@@ -19,6 +19,8 @@ import BookingConfirmation from "./components/Pages/BookingConfirmation-Componen
 import UserProfilePage from "./components/Pages/UserProfilePage-Component/UserProfilePage";
 import OwnerDashboardComponent from "./components/Pages/owner-dashboard/OwnerDashboardComponent"
 import AdminDashboardComponent from "./components/Pages/Admin-Dashboard/AdminDashboardComponent"
+import OwnerTurfBookingHistory from "./components/Pages/owner-booking/OwnerTurfBookingHistory";
+
 function App() {
   return (
     <div className="App">
@@ -41,6 +43,7 @@ function App() {
         <Route path="/user" element={<UserProfilePage />} />
         <Route path="/ownerDashboard" element={<OwnerDashboardComponent/>}></Route>
         <Route path="/adminDashboard" element={<AdminDashboardComponent/>}></Route>
+        <Route path="/bookinghistory/:turfId" element={<OwnerTurfBookingHistory />} />
         
       </Routes>
     </div>

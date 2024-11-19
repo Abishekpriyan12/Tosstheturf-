@@ -15,7 +15,7 @@ const bookingSchema = new mongoose.Schema({
     required: true
   },
   time: {
-    type: [String], // Updated to an array of strings for multiple time slots
+    type: [String], 
     required: true
   },
   duration: {

@@ -1,0 +1,85 @@
+.booking-history-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.booking-history-container h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.back-arrow {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.back-arrow .back-text {
+  margin-left: 5px;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 15px;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.booking-table th {
+  background-color: #4caf50;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-weight: bold;
+}
+
+.booking-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.booking-table tr:nth-child(odd) {
+  background-color: #e7f7e9;
+}
+
+.booking-table tr:hover {
+  background-color: #c8f0d2;
+}
+
+.booking-table td {
+  border-bottom: 1px solid #ddd;
+  color: #555;
+}
+
+.booking-table td:last-child {
+  font-weight: bold;
+  color: #2a9d8f;
+}
+
+.booking-table th:first-child,
+.booking-table td:first-child {
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .booking-table th,
+  .booking-table td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
