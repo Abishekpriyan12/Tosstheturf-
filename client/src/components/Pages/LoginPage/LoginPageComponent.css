@@ -231,3 +231,63 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
     text-align: center;
   }
 }
+
+
+/* Dropdown styling */
+.form-group select {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: 2px solid #6EC207;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #fff;
+  appearance: none; /* Remove default dropdown arrow */
+  position: relative;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50; /* Change border color on focus */
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper .icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6EC207;
+  pointer-events: none;
+}
+
+.select-wrapper img.icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px; /* Adjust size as needed */
+  height: 20px;
+  pointer-events: none;
+}
+
+.select-wrapper option{
+  color: #000;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px; 
+  height: 20px;
+}
+

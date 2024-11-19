@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   storage,
   ref,
   uploadBytes,
   getDownloadURL,
 } from "../../../firebaseClient";
-import { graphQLCommand } from  "../../../util";
+import { graphQLCommand } from "../../../util";
 import "./AddTurfForm.css";
 
 const AddTurfForm = () => {
@@ -19,13 +20,13 @@ const AddTurfForm = () => {
     nonAC: false,
   });
   const [timing, setTiming] = useState("");
-  const [location, setlocation] = useState("");
+  const [location, setLocation] = useState("");
   const [mainImage, setMainImage] = useState(null);
   const [sliderImages, setSliderImages] = useState([]);
   const [sportType, setSportType] = useState("");
   const [price, setPrice] = useState("");
-  const [rating, setRating] = useState("");
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
+  const navigate = useNavigate();
 
   const handleSliderImagesChange = (e) => {
     setSliderImages(e.target.files);
@@ -39,25 +40,29 @@ const AddTurfForm = () => {
     setAmenities({ ...amenities, [e.target.name]: e.target.checked });
   };
 
+  const handleImageUpload = async (file) => {
+    const imageRef = ref(storage, `turfImages/${file.name}`);
+    try {
+      const existingUrl = await getDownloadURL(imageRef);
+      return existingUrl;
+    } catch (error) {
+      if (error.code === "storage/object-not-found") {
+        await uploadBytes(imageRef, file);
+        return await getDownloadURL(imageRef);
+      }
+      throw error;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Upload main image
-      const mainImageRef = ref(storage, `turfImages/${mainImage.name}`);
-      await uploadBytes(mainImageRef, mainImage);
-      const mainImageURL = await getDownloadURL(mainImageRef);
-
-      // Upload slider images
+      const mainImageURL = await handleImageUpload(mainImage);
       const sliderImageURLs = await Promise.all(
-        Array.from(sliderImages).map(async (file) => {
-          const sliderImageRef = ref(storage, `turfImages/${file.name}`);
-          await uploadBytes(sliderImageRef, file);
-          return await getDownloadURL(sliderImageRef);
-        })
+        Array.from(sliderImages).map((file) => handleImageUpload(file))
       );
 
- 
       const turfData = {
         turfName,
         address,
@@ -69,75 +74,57 @@ const AddTurfForm = () => {
         sliderImages: sliderImageURLs,
         sportType,
         price,
-        rating,
         firstTimeDiscount,
       };
 
-      // Call your GraphQL mutation here
       const response = await graphQLCommand(
-        `
-        mutation addTurf(
-          $turfName: String!,
-          $address: String!,
-          $location:String!,
-          $phone: String!,
-          $amenities: AmenitiesInput!,
-          $timing: String!,
-          $mainImage: String!,
-          $sliderImages: [String!]!,
-          $sportType: String!,
-         $price: String!   
-          $rating: String!,
-          $firstTimeDiscount: String
-        ) {
-          addTurf(
-            turfName: $turfName,
-            address: $address,
-            location:$location,
-            phone: $phone,
-            amenities: $amenities,
-            timing: $timing,
-            mainImage: $mainImage,
-            sliderImages: $sliderImages,
-            sportType: $sportType,
-            price: $price,
-            rating: $rating,
-            firstTimeDiscount: $firstTimeDiscount
-          ) {
-            id
-            turfName
-            mainImage
-            sliderImages
-          }
-        }
-      `,
-        {
-          turfName: turfData.turfName,
-          address: turfData.address,
-          location:turfData.location,
-          phone: turfData.phone,
-          amenities: turfData.amenities,
-          timing: turfData.timing,
-          mainImage: turfData.mainImage,
-          sliderImages: turfData.sliderImages,
-          sportType: turfData.sportType,
-          price: turfData.price,
-          rating: turfData.rating,
-          firstTimeDiscount: turfData.firstTimeDiscount,
-        }
+        `mutation addTurf(
+           $turfName: String!,
+           $address: String!,
+           $location: String!,
+           $phone: String!,
+           $amenities: AmenitiesInput!,
+           $timing: String!,
+           $mainImage: String!,
+           $sliderImages: [String!]!,
+           $sportType: String!,
+           $price: String!,
+           $firstTimeDiscount: String
+         ) {
+           addTurf(
+             turfName: $turfName,
+             address: $address,
+             location: $location,
+             phone: $phone,
+             amenities: $amenities,
+             timing: $timing,
+             mainImage: $mainImage,
+             sliderImages: $sliderImages,
+             sportType: $sportType,
+             price: $price,
+             firstTimeDiscount: $firstTimeDiscount
+           ) {
+             id
+             turfName
+             mainImage
+             sliderImages
+           }
+         }`,
+        turfData
       );
 
       console.log("Turf added:", response);
+      navigate("/displayturf");
     } catch (error) {
       console.error("Error adding turf:", error);
     }
   };
 
   return (
-    <div className="form-container">
+    <div className="add-form-container">
       <h1>Add Turf</h1>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Turf Name:</label>
           <input
             type="text"
@@ -146,7 +133,7 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Address:</label>
           <input
             type="text"
@@ -155,20 +142,20 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Location:</label>
           <select
             value={location}
-            onChange={(e) => setlocation(e.target.value)}
+            onChange={(e) => setLocation(e.target.value)}
             required
           >
-            <option value="">Select Timing</option>
+            <option value="">Select City</option>
             <option value="Cambridge">Cambridge</option>
             <option value="Waterloo">Waterloo</option>
             <option value="Kitchner">Kitchner</option>
           </select>
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Phone:</label>
           <input
             type="tel"
@@ -177,16 +164,21 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Sport Type:</label>
-          <input
-            type="text"
+          <select
             value={sportType}
             onChange={(e) => setSportType(e.target.value)}
             required
-          />
+          >
+            <option value="">Select Sport Type</option>
+            <option value="Cricket">Cricket</option>
+            <option value="Football">Football</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Tennis">Tennis</option>
+          </select>
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Price:</label>
           <input
             type="number"
@@ -195,21 +187,9 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <div className="form-group">
-          <label>Rating:</label>
-          <input
-            type="number"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-            max="5"
-            min="0"
-            step="0.1"
-            required
-          />
-        </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Amenities:</label>
-          <div className="checkbox-group">
+          <div className="add-form-checkbox-group">
             <label>
               <input
                 type="checkbox"
@@ -248,7 +228,7 @@ const AddTurfForm = () => {
             </label>
           </div>
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>First-Time Discount:</label>
           <input
             type="text"
@@ -256,7 +236,7 @@ const AddTurfForm = () => {
             onChange={(e) => setFirstTimeDiscount(e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Timing:</label>
           <select
             value={timing}
@@ -270,7 +250,7 @@ const AddTurfForm = () => {
             <option value="5 PM to 9 PM">Evening (5 PM to 9 PM)</option>
           </select>
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Upload Main Image:</label>
           <input
             type="file"
@@ -279,7 +259,7 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="add-form-group">
           <label>Upload Slider Images (at least 3):</label>
           <input
             type="file"
@@ -289,7 +269,7 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <button type="submit" className="submit-button">
+        <button type="submit" className="add-form-submit-button">
           Submit
         </button>
       </form>

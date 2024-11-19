@@ -3,10 +3,11 @@ import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonCo
 import "./SignupPageComponent.css";
 import signupBackground from "../../../assests/images/signupbg.jpg";
 import logo from "../../../assests/images/logov1.png";
-import { graphQLCommand } from "../../../util" // Import the graphQLCommand function
+import { graphQLCommand } from "../../../util"; // Import the graphQLCommand function
 import { useNavigate } from "react-router-dom"; // Change to useNavigate
 
 const SignupPage = () => {
+  const [userId, setUserId] = useState(""); // State for user-provided ID
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ const SignupPage = () => {
 
     const query = `
         mutation {
-            signup(firstName: "${firstName}", lastName: "${lastName}", email: "${email}", password: "${password}", role: "${role}") {
+            signup(id: "${userId}", firstName: "${firstName}", lastName: "${lastName}", email: "${email}", password: "${password}", role: "${role}") {
                 id
                 email
             }
@@ -59,9 +60,23 @@ const SignupPage = () => {
         <p>Streamline turf care with efficient scheduling, monitoring, and resource management.</p>
 
         <form onSubmit={handleSignup}>
+          <div className="form-group">
+            <label htmlFor="userId" className="labelSignup">User ID</label>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                id="userId"
+                placeholder="Enter a unique User ID"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
           <div className="two-column">
             <div className="input-wrapper">
-              <label htmlFor="firstName" className='labelSignup'>First Name</label>
+              <label htmlFor="firstName" className="labelSignup">First Name</label>
               <input
                 type="text"
                 id="firstName"
@@ -72,7 +87,7 @@ const SignupPage = () => {
             </div>
 
             <div className="input-wrapper">
-              <label htmlFor="lastName" className='labelSignup'>Last Name</label>
+              <label htmlFor="lastName" className="labelSignup">Last Name</label>
               <input
                 type="text"
                 id="lastName"
@@ -84,7 +99,7 @@ const SignupPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email" className='labelSignup'>Email</label>
+            <label htmlFor="email" className="labelSignup">Email</label>
             <div className="input-wrapper">
               <input
                 type="email"
@@ -97,7 +112,7 @@ const SignupPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password" className='labelSignup'>Password</label>
+            <label htmlFor="password" className="labelSignup">Password</label>
             <div className="input-wrapper">
               <input
                 type="password"
@@ -110,7 +125,7 @@ const SignupPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword" className='labelSignup'>Confirm Password</label>
+            <label htmlFor="confirmPassword" className="labelSignup">Confirm Password</label>
             <div className="input-wrapper">
               <input
                 type="password"
@@ -123,7 +138,7 @@ const SignupPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="role" className='labelSignup'>Role</label>
+            <label htmlFor="role" className="labelSignup">Role</label>
             <select
               id="role"
               value={role}

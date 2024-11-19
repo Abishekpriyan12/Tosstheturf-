@@ -1,82 +1,415 @@
+/* General Information Section */
+.info-section {
+  margin: 3% 15%;
+}
 
-  .info-section{
-    margin: 3% 15%;
+.turf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.turf-details h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.sport-type-rating {
+  display: flex;
+  gap: 10px;
+}
+
+.slider-comp {
+  margin-top: 30%;
+}
+
+.badge {
+  background-color: #444;
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.rating {
+  color: #44ff44;
+  font-size: 18px;
+  margin-left: 10%;
+}
+
+.address-section,
+.amenities-section,
+.timing-section,
+.rating-section ,
+.related-turfs-section{
+  margin: 20px 0;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  text-align: left;
+}
+
+.address-section p,
+.timing-section p {
+  text-align: left;
+}
+
+.address-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* .back-button {
+  margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 2px;
+  width: fit-content;
+  font-size: 10px;
+  font-weight: 700;
+} */
+.back-arrow {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.back-arrow span:first-child {
+  font-size: 30px; 
+  margin-right: 5px; 
+}
+
+
+
+
+.amenities-list {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.amenities-list li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.timing-section p,
+.address-section p {
+  font-size: 16px;
+}
+
+.review-rating {
+  font-size: 24px;
+  color: #44ff44;
+}
+
+.button-container {
+  text-align: right;
+}
+
+/* Slider Navigation Arrows */
+.slider-comp .left-arrow,
+.slider-comp .right-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; /* Ensures the arrows appear above the content */
+  background-color: rgba(0, 0, 0, 0.5); /* Optional for better visibility */
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.slider-comp .left-arrow {
+  left: 10px;
+}
+
+.slider-comp .right-arrow {
+  right: 10px;
+}
+.star {
+  font-size: 2rem;
+  cursor: pointer;
+  color: lightgray;
+}
+
+.star.filled {
+  color: gold;
+}
+
+.no-reviews{
+  font-size: 16px;
+  color: #555;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Modal Overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Modal Title */
+.modal-content h3 {
+  margin: 0 0 20px;
+  font-size: 1.5em;
+  color: #333;
+  text-align: center;
+}
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.star-rating .star {
+  font-size: 24px;
+  cursor: pointer;
+  color: #ddd;
+  transition: color 0.3s;
+}
+
+.star-rating .star.filled {
+  color: #ffc107; /* Gold for filled stars */
+}
+
+/* Textarea for Review */
+.modal-content textarea {
+  height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.modal-content button {
+  display: inline-block;
+  background-color: #007bff; /* Primary button color */
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+/* Cancel Button */
+.modal-content button:last-child {
+  background-color: #6c757d; /* Secondary button color */
+}
+
+.modal-content button:last-child:hover {
+  background-color: #495057;
+}
+
+.view-more {
+  display: block;
+  text-align: center;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.username-review{
+  text-transform: capitalize;
+  font-size: 24px; 
+  margin-top: 3px;
+  color: #acbdaa;
+}
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+
+
+.reviews-count {
+  font-size: 16px;
+  color: #666;
+}
+
+.add-review {
+  display: flex;
+  justify-content: flex-end;
+}
+.review-box{
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.5;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px 10px;
+  max-width: 80%;
+  box-shadow: 0 6px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Adjustments */
+
+/* Tablet View (Up to 768px) */
+@media (max-width: 768px) {
+  .info-section {
+    margin: 3% 5%;
   }
- 
-  
+
   .turf-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
+
   .turf-details h1 {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 22px;
   }
-  
+
+  .rating {
+    font-size: 16px;
+  }
+
+  .review-rating {
+    font-size: 20px;
+  }
+
+  .amenities-list {
+    gap: 15px;
+  }
+
+  .amenities-list li {
+    font-size: 13px;
+  }
+}
+
+/* Mobile View (Up to 480px) */
+@media (max-width: 480px) {
+  .info-section {
+    margin: 3% 3%;
+  }
+
+  .turf-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .turf-details h1 {
+    font-size: 20px;
+    text-align: left;
+  }
+
+  /* Sport Type and Review Buttons in Same Line */
   .sport-type-rating {
     display: flex;
     gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
   }
-  
-  .badge {
+
+  .badge,
+  .review-rating {
+    display: inline-block;
     background-color: #444;
+    color: #fff;
     padding: 5px 10px;
     border-radius: 15px;
-    color: #fff;
-    font-size: 14px;
+    font-size: 0.8rem;
   }
-  
+
   .rating {
-    color: #44ff44;
-    font-size: 18px;
+    font-size: 16px;
+    margin-left: 0;
   }
-  
-  .address-section, .amenities-section, .timing-section, .reviews-section {
-    margin: 20px 0;
-    border-top: 1px solid #333;
-    padding-top: 15px;
-    text-align: left; /* Left-align all text */
-  }
-  
-  .address-section p, .timing-section p {
-    text-align: left; /* Ensure paragraphs are left-aligned */
-  }
-  
-  .address-icons {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .amenities-list {
-    list-style-type: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin-top: 10px;
-  }
-  
-  .amenities-list li {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+
+  .address-section p,
+  .timing-section p {
     font-size: 14px;
   }
-  
-  .timing-section p, .address-section p {
-    font-size: 16px;
+
+  .badge {
+    font-size: 12px;
+    padding: 4px 8px;
   }
-  
+
   .review-rating {
-    font-size: 24px;
-    color: #44ff44;
+    font-size: 14px;
+    padding: 5px 8px;
+    background-color: #444;
   }
-  
+
+  .back-button {
+    float: none;
+    margin-bottom: 20px;
+  }
+
+  .address-icons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .amenities-list {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .amenities-list li {
+    font-size: 12px;
+  }
+
   .button-container {
-    text-align: right;
+    text-align: left;
   }
-  
+
+  .related-turfs-section {
+    margin-top: 20px;
+  }
+
+  /* Adjust "Book Now" button to be full-width */
+  .button-container button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+}
