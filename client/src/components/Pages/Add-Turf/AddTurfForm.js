@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   storage,
   ref,
@@ -24,8 +25,8 @@ const AddTurfForm = () => {
   const [sliderImages, setSliderImages] = useState([]);
   const [sportType, setSportType] = useState("");
   const [price, setPrice] = useState("");
-  const [rating, setRating] = useState("");
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
+  const navigate = useNavigate();
 
   const handleSliderImagesChange = (e) => {
     setSliderImages(e.target.files);
@@ -42,33 +43,26 @@ const AddTurfForm = () => {
   const handleImageUpload = async (file) => {
     const imageRef = ref(storage, `turfImages/${file.name}`);
     try {
-      // Attempt to fetch the URL of an existing image with the same name
       const existingUrl = await getDownloadURL(imageRef);
-      console.log("Image already exists, using existing URL:", existingUrl);
-      return existingUrl; // Return existing URL if found
+      return existingUrl;
     } catch (error) {
-      if (error.code === 'storage/object-not-found') {
-        // If the image doesn't exist, upload it
-        console.log("Image not found, uploading new image...");
+      if (error.code === "storage/object-not-found") {
         await uploadBytes(imageRef, file);
-        const newUrl = await getDownloadURL(imageRef);
-        console.log("New image uploaded, URL:", newUrl);
-        return newUrl;
+        return await getDownloadURL(imageRef);
       }
-      throw error; // Handle other errors (e.g., network issues)
+      throw error;
     }
   };
-  
-  // Example usage in handleSubmit
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const mainImageURL = await handleImageUpload(mainImage); // Use handleImageUpload to get or upload the main image
+      const mainImageURL = await handleImageUpload(mainImage);
       const sliderImageURLs = await Promise.all(
-        Array.from(sliderImages).map(file => handleImageUpload(file))
+        Array.from(sliderImages).map((file) => handleImageUpload(file))
       );
-  
+
       const turfData = {
         turfName,
         address,
@@ -80,10 +74,9 @@ const AddTurfForm = () => {
         sliderImages: sliderImageURLs,
         sportType,
         price,
-        rating,
         firstTimeDiscount,
       };
-  
+
       const response = await graphQLCommand(
         `mutation addTurf(
            $turfName: String!,
@@ -96,7 +89,6 @@ const AddTurfForm = () => {
            $sliderImages: [String!]!,
            $sportType: String!,
            $price: String!,
-           $rating: String!,
            $firstTimeDiscount: String
          ) {
            addTurf(
@@ -110,7 +102,6 @@ const AddTurfForm = () => {
              sliderImages: $sliderImages,
              sportType: $sportType,
              price: $price,
-             rating: $rating,
              firstTimeDiscount: $firstTimeDiscount
            ) {
              id
@@ -121,13 +112,13 @@ const AddTurfForm = () => {
          }`,
         turfData
       );
-  
+
       console.log("Turf added:", response);
+      navigate("/displayturf");
     } catch (error) {
       console.error("Error adding turf:", error);
     }
   };
-  
 
   return (
     <div className="add-form-container">
@@ -193,18 +184,6 @@ const AddTurfForm = () => {
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </div>
-        <div className="add-form-group">
-          <label>Rating:</label>
-          <input
-            type="number"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-            max="5"
-            min="0"
-            step="0.1"
             required
           />
         </div>

@@ -33,6 +33,12 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
+.sport-tag {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 5px;
+  color: #333;
+}
 
 /* Image styling within each card */
 .card-image {
@@ -113,7 +119,7 @@
 .rating {
   font-size: 18px;
   color: #fff;
-  margin-left: 35px;
+  margin-left: 46%;
 }
 
 /* Arrow buttons for scrolling */
