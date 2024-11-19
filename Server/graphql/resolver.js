@@ -55,12 +55,17 @@ const resolvers = {
     // Fetch bookings by turf and date
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
       try {
-        return await Booking.find({ turfId, date });
+        const bookings = await Booking.find({ turfId, date });
+        return bookings.map((booking) => ({
+          ...booking.toObject(),
+          time: booking.time || [], // Ensure time is always an array
+        }));
       } catch (error) {
-        console.error("Error fetching bookings:", error);
+        console.error("Error fetching bookings by turf and date:", error);
         throw new Error("Failed to fetch bookings.");
       }
     },
+    
 
     // Fetch reviews for a specific turf with average rating
     getReviews: async (_, { turfId }) => {
@@ -79,12 +84,42 @@ const resolvers = {
         console.error("Error fetching reviews:", error);
         throw new Error("Failed to fetch reviews.");
       }
-    },
+    },  
+    getFullyBookedDates: async (_, { turfId }) => {
+      try {
+        const turf = await Turf.findById(turfId);
+        if (!turf) {
+          throw new Error("Turf not found.");
+        }
+    
+        // Generate time slots based on turf's timing
+        const [openingTime, closingTime] = turf.timing.split(" to ");
+        const totalSlots = parseInt(closingTime.split(" ")[0]) - parseInt(openingTime.split(" ")[0]);
+    
+        const bookings = await Booking.find({ turfId });
+    
+        // Count bookings by date
+        const bookingCountByDate = bookings.reduce((acc, booking) => {
+          acc[booking.date] = (acc[booking.date] || 0) + booking.time.length;
+          return acc;
+        }, {});
+    
+        // Fully booked dates
+        const fullyBookedDates = Object.keys(bookingCountByDate).filter(
+          (date) => bookingCountByDate[date] >= totalSlots
+        );
+    
+        return fullyBookedDates;
+      } catch (error) {
+        console.error("Error fetching fully booked dates:", error);
+        throw new Error("Failed to fetch fully booked dates.");
+      }
+    },      
   },
 
   Mutation: {
     // User signup
-    signup: async (_, { firstName, lastName, email, password, role }) => {
+    signup: async (_, {id, firstName, lastName, email, password, role }) => {
       try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -94,6 +129,7 @@ const resolvers = {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = new User({
+          id,
           firstName,
           lastName,
           email,
@@ -171,26 +207,34 @@ const resolvers = {
       }
     },
 
-    // Create a new booking
     createBooking: async (_, { userId, turfId, date, time, duration, price }) => {
       try {
-        const validUserId = mongoose.Types.ObjectId(userId);
-        const validTurfId = mongoose.Types.ObjectId(turfId);
-
-        const existingBooking = await Booking.findOne({ turfId: validTurfId, date, time });
-        if (existingBooking) {
-          throw new Error("This time slot is already booked.");
+        // Ensure turfId is valid
+        if (!mongoose.Types.ObjectId.isValid(turfId)) {
+          throw new Error("Invalid turf ID.");
         }
-
+    
+        // Check for existing bookings in the provided slots
+        const existingBookings = await Booking.find({
+          turfId,
+          date,
+          time: { $in: time },
+        });
+    
+        if (existingBookings.length > 0) {
+          throw new Error("One or more selected time slots are already booked.");
+        }
+    
+        // Create a new booking without validating userId as ObjectId
         const newBooking = new Booking({
-          userId: validUserId,
-          turfId: validTurfId,
+          userId, // Store userId as a raw string
+          turfId,
           date,
           time,
           duration,
           price,
         });
-
+    
         await newBooking.save();
         return newBooking;
       } catch (error) {
@@ -198,6 +242,7 @@ const resolvers = {
         throw new Error("Failed to create booking.");
       }
     },
+    
 
     // Cancel a booking
     cancelBooking: async (_, { bookingId }) => {

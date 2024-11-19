@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const bookingSchema = new mongoose.Schema({
   turfId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -8,24 +7,23 @@ const bookingSchema = new mongoose.Schema({
     required: true
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: String, 
+    required: true,
   },
   date: {
     type: String,
     required: true
   },
   time: {
-    type: String,
+    type: [String], // Updated to an array of strings for multiple time slots
     required: true
   },
   duration: {
-    type: Number, 
+    type: Number,
     required: true
   },
   price: {
-    type: Number, 
+    type: Number,
     required: true
   },
   createdAt: {
@@ -33,7 +31,6 @@ const bookingSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-
 
 const Booking = mongoose.model('Booking', bookingSchema);
 

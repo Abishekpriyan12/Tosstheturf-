@@ -21,7 +21,7 @@ const TurfCardComponent = ({ imageUrl, name, location, sport, rating, price,firs
       {/* Info Section */}
       <div className="turf-info">
         <div className="turf-title-rating">
-          <h3>{name}, <span className="location">{location}</span></h3>
+          <h3><span className='card-name-turf'>{name}</span>, <span className="location">{location}</span></h3>
           <div className="turf-rating">
           ★ <span>{rating}</span> 
           </div>

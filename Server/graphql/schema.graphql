@@ -21,7 +21,7 @@ enum Location {
 
 # User type for authentication and role management
 type User {
-  id: ID!
+  id: String!
   firstName: String!
   lastName: String!
   email: String!
@@ -83,7 +83,7 @@ type Booking {
   userId: User!
   turfId: Turf!
   date: String!
-  time: String!
+  time: [String!]! # Updated to allow multiple time slots
   duration: Int!
   price: Float!
   createdAt: String!
@@ -108,12 +108,15 @@ type Query {
 
   # Fetch reviews for a specific turf with average rating
   getReviews(turfId: ID!): ReviewsResponse!
+
+   getFullyBookedDates(turfId: ID!): [String!]!
 }
 
 # Root Mutation type
 type Mutation {
   # Signup for new users
   signup(
+  id:String!
     firstName: String!
     lastName: String!
     email: String!
@@ -144,7 +147,7 @@ type Mutation {
     userId: ID!
     turfId: ID!
     date: String!
-    time: String!
+    time: [String!]! # Updated to allow multiple time slots
     duration: Int!
     price: Float!
   ): Booking!

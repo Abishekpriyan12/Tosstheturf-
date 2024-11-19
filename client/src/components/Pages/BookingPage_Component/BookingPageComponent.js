@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
-import './BookingPageComponent.css';
+import "./BookingPageComponent.css";
 import { graphQLCommand } from "../../../util";
-
 
 const CREATE_BOOKING_MUTATION = `
   mutation CreateBooking(
     $userId: ID!
     $turfId: ID!
     $date: String!
-    $time: String!
+    $time: [String!]!
     $duration: Int!
     $price: Float!
   ) {
@@ -48,14 +47,14 @@ const BookingPageComponent = () => {
   const [turfData, setTurfData] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedTime, setSelectedTime] = useState("");
-  const [showBookingDetails, setShowBookingDetails] = useState(false);
+  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [navBarData, setNavBarData] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
-
-  const dummyUserId = "60c72b2f9b1e8a001c8e4d48"; // Dummy user ID for testing
-
-  
+  const [showBookingDetails, setShowBookingDetails] = useState(false);
+  const userId = sessionStorage.getItem("userId");
+  const [fullyBookedDates, setFullyBookedDates] = useState([]);
+  const navigate = useNavigate();
   const fetchNavBarData = async () => {
     const query = `
       query {
@@ -69,8 +68,32 @@ const BookingPageComponent = () => {
     const data = await graphQLCommand(query);
     setNavBarData(data.getNavItems || []);
   };
+  const fetchFullyBookedDates = async () => {
+    const query = `
+      query ($turfId: ID!) {
+        getFullyBookedDates(turfId: $turfId)
+      }
+    `;
+    const variables = { turfId: id };
 
-  
+    try {
+      const data = await graphQLCommand(query, variables);
+      setFullyBookedDates(data.getFullyBookedDates || []);
+    } catch (error) {
+      console.error("Error fetching fully booked dates:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFullyBookedDates();
+  }, []);
+
+  useEffect(() => {
+    if (fullyBookedDates.length > 0) {
+      console.log(`Fully booked dates: ${fullyBookedDates.join(", ")}`);
+    }
+  }, [fullyBookedDates]);
+
   const fetchTurfDetails = async () => {
     const query = `
       query ($id: ID!) {
@@ -97,7 +120,6 @@ const BookingPageComponent = () => {
     }
   };
 
-  // Fetching  already booked slots for the selected date
   const fetchBookedSlots = async (date) => {
     const query = `
       query ($turfId: ID!, $date: String!) {
@@ -110,8 +132,9 @@ const BookingPageComponent = () => {
 
     try {
       const data = await graphQLCommand(query, variables);
-      const bookedTimes = data.getBookingsByTurfAndDate.map((booking) => booking.time);
-      console.log("Booked slots: ", bookedTimes); // Debugging: shows booked slots in console
+      const bookedTimes = data.getBookingsByTurfAndDate.flatMap(
+        (booking) => booking.time
+      );
       setBookedSlots(bookedTimes);
     } catch (error) {
       console.error("Error fetching booked slots:", error);
@@ -121,27 +144,40 @@ const BookingPageComponent = () => {
   const handleDateChange = (e) => {
     const selected = e.target.value;
     setSelectedDate(selected);
-    fetchBookedSlots(selected); 
+    fetchBookedSlots(selected);
   };
 
-  const handleProceedToBook = () => {
-    setShowBookingDetails(true);
+  const handleSlotChange = (slot) => {
+    setSelectedSlots((prev) =>
+      prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]
+    );
   };
-
   const handleProceedToPayment = async () => {
+    navigate("/payment");
+  };
+
+  const handleProceedToBook = async () => {
+    if (selectedSlots.length === 0) {
+      alert("Please select at least one time slot.");
+      return;
+    }
+
+    const duration = selectedSlots.length; 
     const variables = {
-      userId: dummyUserId,
+      userId,
       turfId: turfData.id,
       date: selectedDate,
-      time: selectedTime,
-      duration: 1,
-      price: parseFloat(turfData.price),
+      time: selectedSlots,
+      duration,
+      price: parseFloat(turfData.price) * duration, 
     };
 
     try {
       const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
       console.log("Booking created successfully:", data.createBooking);
-      fetchBookedSlots(selectedDate); // Refresh booked slots after booking
+      fetchBookedSlots(selectedDate);
+      setShowDropdown(false);
+      setShowBookingDetails(true);
     } catch (error) {
       console.error("Failed to create booking:", error);
     }
@@ -157,46 +193,98 @@ const BookingPageComponent = () => {
   return (
     <div>
       <NavBarComponent navBarData={navBarData} className="nav-bar" />
+       <div className="back-arrow" onClick={() => navigate(-1)}>
+      <span>&#8249;</span> 
+      <span className="back-text">Back</span>
+    </div>
+      {fullyBookedDates.length > 0 && (
+          <div className="alert">
+             Fully booked dates: {fullyBookedDates.join(", ")}
+          </div>
+        )}
       <div className="booking-section">
         <div className="Booking-card">
           <h2>{turfData.turfName}</h2>
-          <div className="toss-points">Earn 5 Toss points each time you book!!!</div>
+          <div className="toss-points">
+            Earn 5 Toss points each time you book!!!
+          </div>
           <div className="input-group">
             <label>Sports</label>
-            <select>
-              <option value={turfData.sportType}>{turfData.sportType}</option>
-            </select>
+            <input
+              type="text"
+              value={turfData.sportType}
+              readOnly
+              className="non-editable-input"
+            />
           </div>
           <div className="input-group">
             <label>Date</label>
-            <input type="date" value={selectedDate} onChange={handleDateChange} />
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              min={new Date().toISOString().split("T")[0]}
+            />
           </div>
           <div className="input-group">
-            <label>Time</label>
-            <select value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
-              <option>Select Time</option>
-              {availableSlots.map((time, index) => (
-                <option key={index} value={time} disabled={bookedSlots.includes(time)}>
-                  {time} {bookedSlots.includes(time) && "(Booked)"}
-                </option>
-              ))}
-            </select>
+            <label>Time Slots</label>
+            <button
+              className="dropdown-button"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              {selectedSlots.length > 0
+                ? selectedSlots.join(", ")
+                : "Select Time Slots"}
+            </button>
+            {showDropdown && (
+              <div className="dropdown-checkbox">
+                <span
+                  className="close-icon"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  ✖
+                </span>
+                {availableSlots.map((slot, index) => (
+                  <label key={index}>
+                    <input
+                      className="check-drop"
+                      type="checkbox"
+                      value={slot}
+                      checked={selectedSlots.includes(slot)}
+                      onChange={() => handleSlotChange(slot)}
+                      disabled={bookedSlots.includes(slot)}
+                    />
+                    {slot} {bookedSlots.includes(slot) && "(Booked)"}
+                  </label>
+                ))}
+                <span
+                  className="submit-icon"
+                  onClick={() => setShowDropdown(false)}
+                >
+                  ✔
+                </span>
+              </div>
+            )}
           </div>
           <div className="input-group">
             <label>Duration</label>
-            <input type="number" min="1" placeholder="1 hr" />
+            <p>{selectedSlots.length} hrs</p>
           </div>
-          <button className="proceed-button" onClick={handleProceedToBook}>Proceed to Book</button>
+          <button className="proceed-button" onClick={handleProceedToBook}>
+            Proceed to Book
+          </button>
         </div>
-
         {showBookingDetails && (
           <div className="booking-details-card">
             <h3>Booking Details</h3>
             <p>Location: {turfData.location}</p>
             <p>Date: {selectedDate}</p>
-            <p>Time: {selectedTime}</p>
-            <p>Cost: ${turfData.price} / hr</p>
-            <button className="proceed-button" onClick={handleProceedToPayment}>Proceed to Payment</button>
+            <p>Time: {selectedSlots.join(", ")}</p>
+            <p>Duration: {selectedSlots.length} hrs</p>
+            <p>Cost: ${parseFloat(turfData.price) * selectedSlots.length}</p>
+            <button className="proceed-button" onClick={handleProceedToPayment}>
+              Proceed to Payment
+            </button>
           </div>
         )}
       </div>

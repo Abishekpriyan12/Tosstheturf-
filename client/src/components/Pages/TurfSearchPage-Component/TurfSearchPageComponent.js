@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
-import { graphQLCommand } from "../../../util"; // Ensure this is properly implemented
+import { graphQLCommand } from "../../../util";
 import "./TurfSearchPageComponent.css";
 import TurfCardComponent from "../TurfCard-Component/TurfCardComponent";
 
@@ -10,9 +10,10 @@ const TurfSearchPageComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const [turfs, setTurfs] = useState([]);
   const [filteredTurfs, setFilteredTurfs] = useState([]);
-  const [ratings, setRatings] = useState({}); // Store average ratings for each turf
+  const [ratings, setRatings] = useState({});
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedSport, setSelectedSport] = useState("");
 
-  // Fetch all turfs
   const fetchTurfData = async () => {
     const query = `
       query {
@@ -20,6 +21,7 @@ const TurfSearchPageComponent = () => {
           id
           turfName
           address
+          location
           phone
           amenities {
             parking
@@ -82,15 +84,19 @@ const TurfSearchPageComponent = () => {
       ratingsData.forEach(({ id, averageRating }) => {
         ratingsMap[id] = averageRating;
       });
-
       setRatings(ratingsMap);
     } catch (error) {
       console.error("Error fetching ratings:", error);
     }
   };
 
-  const handleFilterBySport = (sport) => {
-    setFilteredTurfs(turfs.filter((turf) => turf.sportType === sport));
+  const handleSearch = () => {
+    const filtered = turfs.filter(
+      (turf) =>
+        (!selectedCity || turf.location === selectedCity) &&
+        (!selectedSport || turf.sportType === selectedSport)
+    );
+    setFilteredTurfs(filtered);
   };
 
   const fetchNavBarData = async () => {
@@ -131,20 +137,26 @@ const TurfSearchPageComponent = () => {
           <h1>Find Your Perfect Turf</h1>
           <p>Book the best spots for your sports games with ease.</p>
           <div className="search-bar">
-            <select>
-              <option>Select the City</option>
-              <option>Kitchener</option>
-              <option>Cambridge</option>
-              <option>Waterloo</option>
+            <select
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+            >
+              <option value="">Select the City</option>
+              <option value="Kitchener">Kitchener</option>
+              <option value="Cambridge">Cambridge</option>
+              <option value="Waterloo">Waterloo</option>
             </select>
-            <select>
-              <option>Select Sport</option>
-              <option>Football</option>
-              <option>Basketball</option>
-              <option>Soccer</option>
-              <option>Badminton</option>
+            <select
+              value={selectedSport}
+              onChange={(e) => setSelectedSport(e.target.value)}
+            >
+              <option value="">Select Sport</option>
+              <option value="Football">Football</option>
+              <option value="Basketball">Basketball</option>
+              <option value="Cricket">Cricket</option>
+              <option value="Tennis">Tennis</option>
             </select>
-            <button>Search</button>
+            <button onClick={handleSearch}>Search</button>
           </div>
         </div>
       </div>
@@ -155,10 +167,10 @@ const TurfSearchPageComponent = () => {
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/football.jpg)`,
           }}
-          onClick={() => handleFilterBySport("Football")}
+          onClick={() => setSelectedSport("Football")}
         >
           <div className="tag">New Turf</div>
-          <div className="turf-info">
+          <div className="turf-info-search">
             <h3>Football</h3>
             <p>Book turf and score like a pro!</p>
           </div>
@@ -168,11 +180,11 @@ const TurfSearchPageComponent = () => {
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/badminton.jpg)`,
           }}
-          onClick={() => handleFilterBySport("Badminton")}
+          onClick={() => setSelectedSport("Tennis")}
         >
           <div className="tag">New Turf</div>
-          <div className="turf-info">
-            <h3>Badminton</h3>
+          <div className="turf-info-search">
+            <h3>Tennis</h3>
             <p>Smash your way to victory!</p>
           </div>
         </div>
@@ -181,12 +193,25 @@ const TurfSearchPageComponent = () => {
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/basketball.jpg)`,
           }}
-          onClick={() => handleFilterBySport("Basketball")}
+          onClick={() => setSelectedSport("Basketball")}
         >
           <div className="tag">New Turf</div>
-          <div className="turf-info">
+          <div className="turf-info-search">
             <h3>Basketball</h3>
             <p>Dominate the court!</p>
+          </div>
+        </div>
+        <div
+          className="new-turf-card"
+          style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/football.jpg)`,
+          }}
+          onClick={() => setSelectedSport("Football")}
+        >
+          <div className="tag">New Turf</div>
+          <div className="turf-info-search">
+            <h3>Cricket</h3>
+            <p>Book turf and score like a pro!</p>
           </div>
         </div>
       </div>
@@ -205,8 +230,8 @@ const TurfSearchPageComponent = () => {
                 imageUrl={turf.mainImage}
                 sport={turf.sportType}
                 name={turf.turfName}
-                location={turf.address}
-                rating={ratings[turf.id] || "0.0"} 
+                location={turf.location}
+                rating={ratings[turf.id] || "0.0"}
                 price={turf.price}
                 firstTimeDiscount={turf.firstTimeDiscount}
               />

@@ -61,10 +61,31 @@
   margin-top: 10px;
 }
 
-.back-button {
-  float: right;
+/* .back-button {
   margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 2px;
+  width: fit-content;
+  font-size: 10px;
+  font-weight: 700;
+} */
+.back-arrow {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
 }
+
+.back-arrow span:first-child {
+  font-size: 30px; 
+  margin-right: 5px; 
+}
+
+
+
 
 .amenities-list {
   list-style-type: none;
@@ -234,6 +255,7 @@
   text-transform: capitalize;
   font-size: 24px; 
   margin-top: 3px;
+  color: #acbdaa;
 }
 .reviews-header {
   display: flex;

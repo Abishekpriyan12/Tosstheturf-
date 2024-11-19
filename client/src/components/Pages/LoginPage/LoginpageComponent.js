@@ -40,12 +40,9 @@ const LoginPage = () => {
       );
   
       if (response && response.login) {
-        const userRole = response.login.role;
         sessionStorage.setItem("username", `${response.login.firstName} ${response.login.lastName}`);
-  
-  
-      
-          navigate("/home");
+        sessionStorage.setItem("userId", `${response.login.id}`);
+          navigate("/");
         
       } else {
         setErrorMessage("Login failed. Please check your credentials and role.");

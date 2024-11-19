@@ -171,8 +171,9 @@ const TurfDetailComponent = () => {
 
   return (
     <div className="turf-detail">
-      <div className="back-button">
-        <ButtonComponent btnName={"Back"} onClick={() => navigate(-1)} />
+      <div className="back-arrow" onClick={() => navigate(-1)}>
+        <span>&#8249;</span>
+        <span className="back-text">Back</span>
       </div>
       <SliderComponent class="slider-comp" slides={turfDetail.sliderImages} />
 
@@ -184,12 +185,22 @@ const TurfDetailComponent = () => {
             </h1>
             <div className="sport-type-rating">
               <span className="badge">{turfDetail.sportType}</span>
-              <span className="rating">★ {averageRating.toFixed(1) || "N/A"}</span>
+              <span className="rating">
+                ★ {averageRating.toFixed(1) || "N/A"}
+              </span>
             </div>
           </div>
           <ButtonComponent
             btnName="Book Now"
-            onClick={() => navigate(`/bookingPage/${id}`)}
+            onClick={() => {
+              const userId = sessionStorage.getItem("userId");
+              if (userId) {
+                navigate(`/bookingPage/${id}`);
+              } else {
+                alert("Please log in to book a turf.");
+                navigate("/login");
+              }
+            }}
           />
         </div>
 
@@ -234,37 +245,38 @@ const TurfDetailComponent = () => {
         </div>
 
         <div className="rating-section">
-  {reviews.length === 0 && (
-    <div className="no-reviews">No reviews yet. Be the first one to review!</div>
-  )}
-  <div className="reviews-header">
-    <h3 className="reviews-title">
-      Reviews <span className="reviews-count">({reviews.length})</span>
-    </h3>
-    <div className="add-review">
-      <ButtonComponent
-        btnName={"Add Review"}
-        onClick={() => setIsModalOpen(true)}
-      ></ButtonComponent>
-    </div>
-  </div>
+          {reviews.length === 0 && (
+            <div className="no-reviews">
+              No reviews yet. Be the first one to review!
+            </div>
+          )}
+          <div className="reviews-header">
+            <h3 className="reviews-title">
+              Reviews <span className="reviews-count">({reviews.length})</span>
+            </h3>
+            <div className="add-review">
+              <ButtonComponent
+                btnName={"Add Review"}
+                onClick={() => setIsModalOpen(true)}
+              ></ButtonComponent>
+            </div>
+          </div>
 
-  <div className="reviews-section">
-    {reviews.slice(0, visibleReviews).map((review, index) => (
-      <div key={index} className="review-item">
-        <strong className="username-review">@{review.username}</strong>
-        <span className="rating"> ★ {review.rating.toFixed(1)}</span>
-        <div className="review-box">"{review.review}"</div>
-      </div>
-    ))}
-    {visibleReviews < reviews.length && (
-      <i onClick={handleViewMore} className="view-more">
-        View More Reviews
-      </i>
-    )}
-  </div>
-</div>
-
+          <div className="reviews-section">
+            {reviews.slice(0, visibleReviews).map((review, index) => (
+              <div key={index} className="review-item">
+                <strong className="username-review">@{review.username}</strong>
+                <span className="rating"> ★ {review.rating.toFixed(1)}</span>
+                <div className="review-box">"{review.review}"</div>
+              </div>
+            ))}
+            {visibleReviews < reviews.length && (
+              <i onClick={handleViewMore} className="view-more">
+                View More Reviews
+              </i>
+            )}
+          </div>
+        </div>
       </div>
 
       {isModalOpen && (
