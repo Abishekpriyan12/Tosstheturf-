@@ -32,15 +32,32 @@ const CREATE_BOOKING_MUTATION = `
 `;
 
 const generateTimeSlots = (openingTime, closingTime) => {
-  const start = parseInt(openingTime.split(" ")[0]);
-  const end = parseInt(closingTime.split(" ")[0]);
+  const parseTime = (time) => {
+    const [hour, period] = time.split(" ");
+    let militaryHour = parseInt(hour, 10);
+    if (period === "PM" && militaryHour !== 12) {
+      militaryHour += 12;
+    }
+    if (period === "AM" && militaryHour === 12) {
+      militaryHour = 0;
+    }
+    return militaryHour;
+  };
+
+  const start = parseTime(openingTime);
+  const end = parseTime(closingTime);
 
   const slots = [];
   for (let i = start; i < end; i++) {
-    slots.push(`${i} AM - ${i + 1} AM`);
+    const startPeriod = i < 12 || i === 24 ? "AM" : "PM";
+    const endPeriod = i + 1 < 12 || i + 1 === 24 ? "AM" : "PM";
+    const startHour = i % 12 === 0 ? 12 : i % 12;
+    const endHour = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
+    slots.push(`${startHour} ${startPeriod} - ${endHour} ${endPeriod}`);
   }
   return slots;
 };
+
 
 const BookingPageComponent = () => {
   const { id } = useParams();
