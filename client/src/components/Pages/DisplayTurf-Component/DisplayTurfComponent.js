@@ -8,16 +8,7 @@ import FooterComponent from "../../Reusable-Components/footer-component/FooterCo
 import { graphQLCommand } from "../../../util";
  
 const DisplayTurfComponent = () => {
-  
   const [turfs, setTurfs] = useState([]);
-  const navBarData = [
-    { id: 1, name: "Turves", url: "/displayturf" },
-    { id: 2, name: "Dashboard", url: "/adminDashboard" },
-    { id: 3, name: "Add Turf", url: "/addTurf" },
-    { id: 4, name: "User Profile", url: "/user" },
-    { id: 5, name: "Booking History", url: "/bookingHistory" },
-  ];
-  // Fetch turf data from the database
   const navigate = useNavigate();
  
   // Fetch turf data
@@ -53,8 +44,41 @@ const DisplayTurfComponent = () => {
     }
   };
  
+  // Fetch NavBar data
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
+
+
+  // Delete a turf by ID
+  const handleDelete = async (id) => {
+    const mutation = `
+      mutation deleteTurf($id: ID!) {
+        deleteTurf(id: $id) {
+          id
+          turfName
+        }
+      }
+    `;
+    try {
+      const response = await graphQLCommand(mutation, { id });
+      console.log("Turf deleted successfully:", response);
+      alert("Turf deleted successfully!");
+      // Refresh the turfs list after deletion
+      fetchTurfData();
+    } catch (error) {
+      console.error("Error deleting turf:", error);
+      alert("Failed to delete turf: " + error.message);
+    }
+  };
+ 
   useEffect(() => {
     fetchTurfData();
+   
   }, []);
  
   return (
@@ -121,4 +145,3 @@ const DisplayTurfComponent = () => {
 };
  
 export default DisplayTurfComponent;
- 
