@@ -87,10 +87,7 @@ const DisplayTurfComponent = () => {
  
       <div className="displayturfdata-page">
         <div className="booking-button-container">
-          <ButtonComponent
-            btnName="View Booking Details"
-            onClick={() => alert("View booking details clicked!")}
-          />
+          All Turf Details
         </div>
  
         <div className="turf-cards-container">

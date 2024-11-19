@@ -4,12 +4,14 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebaseClient"; // Firebase instance
 import { graphQLCommand } from "../../../util";
 import "./EditTurfDetailComponent.css";
+import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
+import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
  
 const EditTurfDetailComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
  
-  // Extract turf data from location state
+
   const { turf } = location.state || {};
  
   // State variables for each field
@@ -45,8 +47,8 @@ const EditTurfDetailComponent = () => {
   const uploadToFirebase = async (file) => {
     const fileRef = ref(storage, `turfImages/${file.name}`);
     console.log("Uploading file:", file.name);
-    await uploadBytes(fileRef, file); // Upload file
-    const url = await getDownloadURL(fileRef); // Get the Cloud URL
+    await uploadBytes(fileRef, file); 
+    const url = await getDownloadURL(fileRef); 
     console.log("File uploaded. URL:", url);
     return url;
   };
@@ -58,15 +60,15 @@ const EditTurfDetailComponent = () => {
     try {
       console.log("Starting update process...");
  
-      let mainImageURL = turf.mainImage; // Retain the current main image URL
+      let mainImageURL = turf.mainImage; 
       if (mainImage) {
-        mainImageURL = await uploadToFirebase(mainImage); // Upload new main image
+        mainImageURL = await uploadToFirebase(mainImage); 
       }
  
       const sliderImageURLs = await Promise.all(
         sliderImages.length > 0
-          ? sliderImages.map((file) => uploadToFirebase(file)) // Upload new slider images
-          : turf.sliderImages.map((url) => url) // Retain current slider image URLs
+          ? sliderImages.map((file) => uploadToFirebase(file)) 
+          : turf.sliderImages.map((url) => url) 
       );
  
       // Prepare updated turf data
@@ -136,56 +138,74 @@ const EditTurfDetailComponent = () => {
  
   return (
     <div className="edit-turf-container">
-      <h1>Edit Turf</h1>
+      
+      <h1>Edit Turf Details</h1>
       <form onSubmit={handleSubmit}>
         <div className="edit-turf-form-group">
-          <label>Turf Name:</label>
+          <label htmlFor="turfName">Turf Name:</label>
           <input
+            id="turfName"
             type="text"
             value={turfName}
             onChange={(e) => setTurfName(e.target.value)}
+            placeholder="Enter the turf name"
             required
+            aria-label="Turf Name"
           />
         </div>
         <div className="edit-turf-form-group">
-          <label>Address:</label>
+          <label htmlFor="address">Address:</label>
           <input
+            id="address"
             type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter the address"
             required
+            aria-label="Address"
           />
         </div>
         <div className="edit-turf-form-group">
-          <label>Location:</label>
+          <label htmlFor="locationCity">Location:</label>
           <select
+            id="locationCity"
             value={locationCity}
             onChange={(e) => setLocationCity(e.target.value)}
             required
+            aria-label="Location City"
           >
-            <option value="">Select City</option>
+            <option value="" disabled>
+              Select City
+            </option>
             <option value="Cambridge">Cambridge</option>
             <option value="Waterloo">Waterloo</option>
             <option value="Kitchner">Kitchner</option>
           </select>
         </div>
         <div className="edit-turf-form-group">
-          <label>Phone:</label>
+          <label htmlFor="phone">Phone:</label>
           <input
+            id="phone"
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            placeholder="Enter phone number"
             required
+            aria-label="Phone Number"
           />
         </div>
         <div className="edit-turf-form-group">
-          <label>Sport Type:</label>
+          <label htmlFor="sportType">Sport Type:</label>
           <select
+            id="sportType"
             value={sportType}
             onChange={(e) => setSportType(e.target.value)}
             required
+            aria-label="Sport Type"
           >
-            <option value="">Select Sport Type</option>
+            <option value="" disabled>
+              Select Sport Type
+            </option>
             <option value="Cricket">Cricket</option>
             <option value="Football">Football</option>
             <option value="Basketball">Basketball</option>
@@ -193,12 +213,15 @@ const EditTurfDetailComponent = () => {
           </select>
         </div>
         <div className="edit-turf-form-group">
-          <label>Price:</label>
+          <label htmlFor="price">Price:</label>
           <input
+            id="price"
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            placeholder="Enter price per hour"
             required
+            aria-label="Price"
           />
         </div>
         <div className="edit-turf-form-group">
@@ -218,21 +241,28 @@ const EditTurfDetailComponent = () => {
           </div>
         </div>
         <div className="edit-turf-form-group">
-          <label>First-Time Discount:</label>
+          <label htmlFor="firstTimeDiscount">First-Time Discount:</label>
           <input
+            id="firstTimeDiscount"
             type="text"
             value={firstTimeDiscount}
             onChange={(e) => setFirstTimeDiscount(e.target.value)}
+            placeholder="Enter first-time discount"
+            aria-label="First-Time Discount"
           />
         </div>
         <div className="edit-turf-form-group">
-          <label>Timing:</label>
+          <label htmlFor="timing">Timing:</label>
           <select
+            id="timing"
             value={timing}
             onChange={(e) => setTiming(e.target.value)}
             required
+            aria-label="Timing"
           >
-            <option value="">Select Timing</option>
+            <option value="" disabled>
+              Select Timing
+            </option>
             <option value="5 AM to 9 AM">Morning (5 AM to 9 AM)</option>
             <option value="9 AM to 1 PM">Late Morning (9 AM to 1 PM)</option>
             <option value="1 PM to 5 PM">Afternoon (1 PM to 5 PM)</option>
@@ -240,24 +270,33 @@ const EditTurfDetailComponent = () => {
           </select>
         </div>
         <div className="edit-turf-form-group">
-          <label>Main Image:</label>
-          <input type="file" onChange={handleMainImageChange} accept="image/*" />
+          <label htmlFor="mainImage">Main Image:</label>
+          <input
+            id="mainImage"
+            type="file"
+            onChange={handleMainImageChange}
+            accept="image/*"
+            aria-label="Main Image"
+          />
         </div>
         <div className="edit-turf-form-group">
-          <label>Slider Images:</label>
+          <label htmlFor="sliderImages">Slider Images:</label>
           <input
+            id="sliderImages"
             type="file"
             onChange={handleSliderImagesChange}
             accept="image/*"
             multiple
+            aria-label="Slider Images"
           />
         </div>
-        <button type="submit" className="submit-button">
+        <button  type="submit" className="submit-button">
           Save Changes
         </button>
       </form>
+      
     </div>
-  );
+  );  
 };
  
 export default EditTurfDetailComponent;
