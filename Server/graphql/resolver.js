@@ -1,10 +1,10 @@
-const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
-const NavItem = require('../models/NavItems');
-const User = require('../models/User');
-const Turf = require('../models/Turf');
-const Booking = require('../models/Booking');
-const Review = require('../models/Review');
+const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
+const NavItem = require("../models/NavItems");
+const User = require("../models/User");
+const Turf = require("../models/Turf");
+const Booking = require("../models/Booking");
+const Review = require("../models/Review");
 
 const resolvers = {
   Query: {
@@ -51,7 +51,25 @@ const resolvers = {
         throw new Error("Failed to fetch bookings.");
       }
     },
+    getAllBookings: async () => {
+      try {
+        const bookings = await Booking.find()
+          .populate("turfId", "turfName")
+          .exec();
 
+        return bookings.map((booking) => ({
+          turfName: booking.turfId.turfName,
+          userId: booking.userId,
+          duration: booking.duration,
+          time: booking.time,
+          price: booking.price,
+          date: booking.date,
+        }));
+      } catch (error) {
+        console.error("Error fetching all bookings:", error);
+        throw new Error("Failed to fetch booking details.");
+      }
+    },
     // Fetch bookings by turf and date
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
       try {
@@ -72,7 +90,8 @@ const resolvers = {
         const reviews = await Review.find({ turfId }).sort({ createdAt: -1 });
         const averageRating =
           reviews.length > 0
-            ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+            ? reviews.reduce((acc, review) => acc + review.rating, 0) /
+              reviews.length
             : 0;
 
         return {
@@ -95,7 +114,9 @@ const resolvers = {
 
         // Generate time slots based on turf's timing
         const [openingTime, closingTime] = turf.timing.split(" to ");
-        const totalSlots = parseInt(closingTime.split(" ")[0]) - parseInt(openingTime.split(" ")[0]);
+        const totalSlots =
+          parseInt(closingTime.split(" ")[0]) -
+          parseInt(openingTime.split(" ")[0]);
 
         const bookings = await Booking.find({ turfId });
 
@@ -133,7 +154,7 @@ const resolvers = {
         console.error("Error fetching turfs for owner:", error);
         throw new Error("Failed to fetch owner turfs.");
       }
-    },   
+    },
     getOwnerBookings: async (_, { turfId }) => {
       try {
         const bookings = await Booking.find({ turfId });
@@ -147,8 +168,7 @@ const resolvers = {
         console.error("Error fetching bookings:", error);
         throw new Error("Failed to fetch bookings.");
       }
-    },    
-    
+    },
   },
 
   Mutation: {
@@ -200,7 +220,9 @@ const resolvers = {
         }
 
         if (user.role !== role) {
-          throw new Error(`User role '${user.role}' does not match the requested role '${role}'.`);
+          throw new Error(
+            `User role '${user.role}' does not match the requested role '${role}'.`
+          );
         }
 
         return {
@@ -217,7 +239,24 @@ const resolvers = {
     },
 
     // Add a new turf
-    addTurf: async (_, { turfName, ownerName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, firstTimeDiscount,status }) => {
+    addTurf: async (
+      _,
+      {
+        turfName,
+        ownerName,
+        address,
+        location,
+        phone,
+        amenities,
+        timing,
+        mainImage,
+        sliderImages,
+        sportType,
+        price,
+        firstTimeDiscount,
+        status,
+      }
+    ) => {
       try {
         const newTurf = new Turf({
           turfName,
@@ -280,7 +319,10 @@ const resolvers = {
     },
 
     // Create a new booking
-    createBooking: async (_, { userId, turfId, date, time, duration, price }) => {
+    createBooking: async (
+      _,
+      { userId, turfId, turfName, date, time, duration, price }
+    ) => {
       try {
         // Ensure turfId is valid
         if (!mongoose.Types.ObjectId.isValid(turfId)) {
@@ -295,12 +337,15 @@ const resolvers = {
         });
 
         if (existingBookings.length > 0) {
-          throw new Error("One or more selected time slots are already booked.");
+          throw new Error(
+            "One or more selected time slots are already booked."
+          );
         }
 
         // Create a new booking without validating userId as ObjectId
         const newBooking = new Booking({
-          userId, 
+          userId,
+          turfName,
           turfId,
           date,
           time,

@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { graphQLCommand } from "../../../util";
+import { Link } from "react-router-dom";
 import "./AdminDashboardComponent.css";
+import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 
 const AdminDashboardComponent = () => {
   const [pendingTurfs, setPendingTurfs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
- 
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
+
   const fetchPendingTurfs = async () => {
     const query = `
       query {
@@ -44,7 +53,6 @@ const AdminDashboardComponent = () => {
     }
   };
 
-  // Approve a turf
   const approveTurf = async (turfId) => {
     const mutation = `
       mutation ($turfId: ID!) {
@@ -66,7 +74,6 @@ const AdminDashboardComponent = () => {
     }
   };
 
-  // Reject a turf
   const rejectTurf = async (turfId) => {
     const mutation = `
       mutation ($turfId: ID!) {
@@ -97,6 +104,7 @@ const AdminDashboardComponent = () => {
 
   return (
     <div className="admin-dashboard">
+      <NavBarComponent navBarData={navBarData}></NavBarComponent>
       <h1>Admin Dashboard</h1>
       <h2>Pending Turf Approvals</h2>
       {pendingTurfs.length === 0 ? (

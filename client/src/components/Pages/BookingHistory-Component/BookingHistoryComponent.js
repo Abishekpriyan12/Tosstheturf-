@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
-import "./BookingHistoryComponent.css"; // Assuming the CSS below
+import "./BookingHistoryComponent.css";
 import { graphQLCommand } from "../../../util";
 
 const BookingHistoryComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const [bookingHistory, setBookingHistory] = useState([]);
+  const [visibleBookings, setVisibleBookings] = useState(2); // Initially show 2 bookings
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchNavBarData = async () => {
     const query = `
@@ -19,38 +22,49 @@ const BookingHistoryComponent = () => {
         }
       }
     `;
-    const data = await graphQLCommand(query);
-    setNavBarData(data.getNavItems || []);
+    try {
+      const data = await graphQLCommand(query);
+      setNavBarData(data.getNavItems || []);
+    } catch (error) {
+      console.error("Error fetching navigation items:", error);
+    }
   };
 
-  // Dummy booking data
   const fetchBookingHistory = async () => {
-    const dummyBookingHistory = [
-      {
-        userName: "User 1",
-        turfName: "SMR Arena",
-        duration: "1 hour",
-        bookedFor: "Cricket",
-        paymentStatus: "Paid",
-        reservedTime: "6:00 AM to 7:00 AM",
-      },
-      {
-        userName: "User 1",
-        turfName: "SMR Arena",
-        duration: "1 hour",
-        bookedFor: "Cricket",
-        paymentStatus: "Paid",
-        reservedTime: "7:00 AM to 8:00 AM",
-      },
-    ];
+    const query = `
+      query {
+        getAllBookings {
+          turfName
+          userId
+          duration
+          time
+          price
+          date
+        }
+      }
+    `;
+    try {
+      const data = await graphQLCommand(query);
+      setBookingHistory(data.getAllBookings || []);
+    } catch (error) {
+      console.error("Error fetching booking history:", error);
+      setError("Failed to fetch booking history.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    setBookingHistory(dummyBookingHistory);
+  const handleViewMore = () => {
+    setVisibleBookings((prev) => prev + 2); // Show 2 more bookings
   };
 
   useEffect(() => {
     fetchNavBarData();
     fetchBookingHistory();
   }, []);
+
+  if (loading) return <div>Loading booking history...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="bookingHistory-page">
@@ -65,7 +79,7 @@ const BookingHistoryComponent = () => {
             </span>
             <input
               type="text"
-              placeholder="Search by user name"
+              placeholder="Search by user ID"
               className="search-input"
             />
           </div>
@@ -73,24 +87,30 @@ const BookingHistoryComponent = () => {
         </div>
 
         <div className="booking-cards">
-          {bookingHistory.map((booking, index) => (
-            <div key={index} className="booking-card">
-              <div className="booking-info">
-                <p><strong>User Name:</strong> {booking.userName}</p>
-                <p><strong>Turf Booked Name:</strong> {booking.turfName}</p>
-                <p><strong>Duration:</strong> {booking.duration}</p>
+          {bookingHistory.length === 0 ? (
+            <p>No bookings available.</p>
+          ) : (
+            bookingHistory.slice(0, visibleBookings).map((booking, index) => (
+              <div key={index} className="booking-card">
+                <div className="booking-info">
+                  <p><strong>User ID:</strong> {booking.userId}</p>
+                  <p><strong>Turf Name:</strong> {booking.turfName}</p>
+                  <p><strong>Duration:</strong> {booking.duration} hours</p>
+                </div>
+                <div className="booking-details">
+                  <p><strong>Time Slots:</strong> {booking.time.join(", ")}</p>
+                  <p><strong>Price:</strong> ${booking.price}</p>
+                  <p><strong>Date:</strong> {booking.date}</p>
+                </div>
               </div>
-              <div className="booking-details">
-                <p><strong>Booked For:</strong> {booking.bookedFor}</p>
-                <p><strong>Payment Status:</strong> {booking.paymentStatus}</p>
-                <p><strong>Reserved Time:</strong> {booking.reservedTime}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
-        <div className="viewmorehistory-button">
-        <ButtonComponent btnName="View More" />
-        </div>
+        {visibleBookings < bookingHistory.length && (
+          <div className="viewmorehistory-button">
+            <ButtonComponent btnName="View More" onClick={handleViewMore} />
+          </div>
+        )}
       </div>
 
       <FooterComponent />
