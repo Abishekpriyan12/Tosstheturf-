@@ -7,11 +7,13 @@ import "./UserProfilePage.css";
 
 const UserProfilePage = () => {
   const [user, setUser] = useState({
-    username: "jennywilson",
-    email: "jenny@gmail.com",
-    address: "New York, USA",
-    userType: "user",
+    firstName: "Abishek Priyan",
+    lastName: "Kabilan",
+    email: "abishekpriyan11@gmail.com",
+    phone: "(549) 398 0430",
   });
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [editForm, setEditForm] = useState(user);
 
   const [navBarData, setNavBarData] = useState([]);
 
@@ -33,38 +35,131 @@ const UserProfilePage = () => {
     fetchNavBarData();
   }, []);
 
+  const handleEditClick = () => {
+    setEditForm(user); // Populate the form with current user data
+    setIsEditPopupOpen(true);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm({ ...editForm, [name]: value });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setUser(editForm); // Save the updated user data
+    setIsEditPopupOpen(false); // Close the popup
+  };
+
+  const closePopup = () => setIsEditPopupOpen(false);
+
   return (
-    <div className="user-profile-container">
+    <div className="profile-container">
       <NavBarComponent navBarData={navBarData} />
-      <section className="user-profile-section">
-        <CardComponent className="user-profile-card">
-          <div className="profile-header">
-            <img
-              src="./assests/icons/user.png"
-              alt="Profile"
-              className="profile-picture"
-            />
+      <section className="profile-section">
+        <div className="profile-cards">
+          <CardComponent className="profile-card">
+            <div className="profile-header">
+              <h2>My Profile</h2>
+              <button className="edit-button" onClick={handleEditClick}>
+                Edit
+              </button>
+            </div>
+            <div className="profile-content">
+              <div className="profile-picture-section">
+                <img
+                  src="./assests/icons/user.png"
+                  alt="Profile"
+                  className="profile-picture"
+                />
+              </div>
+              <div className="profile-details">
+                <p className="profile-name">{`${user.firstName} ${user.lastName}`}</p>
+                <p>{user.email}</p>
+                <p>{user.phone}</p>
+              </div>
+            </div>
+          </CardComponent>
+
+          <CardComponent className="profile-card">
+            <div className="profile-header">
+              <h2>Personal Information</h2>
+              <button className="edit-button" onClick={handleEditClick}>
+                Edit
+              </button>
+            </div>
+            <div className="personal-info">
+              <div className="info-item">
+                <label>First Name</label>
+                <p>{user.firstName}</p>
+              </div>
+              <div className="info-item">
+                <label>Last Name</label>
+                <p>{user.lastName}</p>
+              </div>
+              <div className="info-item">
+                <label>Email</label>
+                <p>{user.email}</p>
+              </div>
+              <div className="info-item">
+                <label>Phone</label>
+                <p>{user.phone}</p>
+              </div>
+            </div>
+          </CardComponent>
         </div>
-          <div className="profile-details-display">
-            <div className="data-container">
-              <label>Username:</label>
-              <p>{user.username}</p>
-            </div>
-            <div className="data-container">
-              <label>Email:</label>
-              <p>{user.email}</p>
-            </div>
-            <div className="data-container">
-              <label>Address:</label>
-              <p>{user.address}</p>
-            </div>
-            <div className="data-container">
-              <label>User Type:</label>
-              <p>{user.userType}</p>
-            </div>
-          </div>
-        </CardComponent>
       </section>
+
+      {isEditPopupOpen && (
+        <div className="edit-popup">
+          <div className="edit-popup-content">
+            <button className="close-popup-button" onClick={closePopup}>
+              ✕
+            </button>
+            <form onSubmit={handleFormSubmit}>
+              <div className="form-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={editForm.firstName}
+                  onChange={handleFormChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={editForm.lastName}
+                  onChange={handleFormChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={editForm.email}
+                  onChange={handleFormChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={editForm.phone}
+                  onChange={handleFormChange}
+                />
+              </div>
+              <button type="submit" className="save-button">
+                Save
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
       <FooterComponent />
     </div>
   );

@@ -11,6 +11,7 @@ import "./AddTurfForm.css";
 
 const AddTurfForm = () => {
   const [turfName, setTurfName] = useState("");
+  const [ownerName, setownerName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [amenities, setAmenities] = useState({
@@ -65,6 +66,7 @@ const AddTurfForm = () => {
 
       const turfData = {
         turfName,
+        ownerName,
         address,
         location,
         phone,
@@ -80,6 +82,7 @@ const AddTurfForm = () => {
       const response = await graphQLCommand(
         `mutation addTurf(
            $turfName: String!,
+           $ownerName: String!,
            $address: String!,
            $location: String!,
            $phone: String!,
@@ -93,6 +96,7 @@ const AddTurfForm = () => {
          ) {
            addTurf(
              turfName: $turfName,
+             ownerName: $ownerName,
              address: $address,
              location: $location,
              phone: $phone,
@@ -130,6 +134,15 @@ const AddTurfForm = () => {
             type="text"
             value={turfName}
             onChange={(e) => setTurfName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="add-form-group">
+          <label>Owner Name:</label>
+          <input
+            type="text"
+            value={ownerName}
+            onChange={(e) => setownerName(e.target.value)}
             required
           />
         </div>

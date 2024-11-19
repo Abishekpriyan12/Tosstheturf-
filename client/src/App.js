@@ -17,6 +17,7 @@ import BookingPageComponent from "./components/Pages/BookingPage_Component/Booki
 import DisplayTurfComponent from "./components/Pages/DisplayTurf-Component/DisplayTurfComponent";
 import BookingConfirmation from "./components/Pages/BookingConfirmation-Component/BookingConfirmation";
 import UserProfilePage from "./components/Pages/UserProfilePage-Component/UserProfilePage";
+import OwnerDashboardComponent from "./components/Pages/owner-dashboard/ownerDashboardComponent"
 function App() {
   return (
     <div className="App">
@@ -37,6 +38,7 @@ function App() {
         <Route path="/displayturf" element={<DisplayTurfComponent />} />
         <Route path="/bookingConfirmation" element={<BookingConfirmation />} />
         <Route path="/user" element={<UserProfilePage />} />
+        <Route path="/owner" element={<OwnerDashboardComponent/>}></Route>
       </Routes>
     </div>
   );
