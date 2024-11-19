@@ -64,21 +64,18 @@ const PaymentComponent = () => {
       <NavBarComponent navBarData={navBarData} />
 
       <div className="payment-body">
-        <h2>PAYMENT CONFIRMATION</h2>
+        <h2 className="payment-header">PAYMENT CONFIRMATION</h2>
         <div className="payment-icons">
-          <img src="/assests/icons/visa.png" alt="Visa" />
-          <img src="/assests/icons/mastercard.png" alt="MasterCard" />
-          <img src="/assests/icons/discover.png" alt="Discover" />
-          <img src="/assests/icons/amex.png" alt="American Express" />
+          <img src="/assests/icons/card.png" alt="American Express" />
         </div>
 
         <div className="payment-container">
           <div className="payment-card">
             <CardComponent>
-              <h2>Payment Details</h2>
+              {/* <h2>Payment Details</h2> */}
               <form className="fillup-form" onSubmit={handlePayment}>
                 <div className="input-row">
-                  <div className="input-container">
+                  <div className="payment-input-container">
                     <label>Name on the Card</label>
                     <input
                       type="text"
@@ -91,7 +88,7 @@ const PaymentComponent = () => {
                 </div>
 
                 <div className="input-row">
-                  <div className="input-container">
+                  <div className="payment-input-container">
                     <label>Card Number</label>
                     <input
                       type="text"
@@ -102,7 +99,7 @@ const PaymentComponent = () => {
                       maxLength={16}
                     />
                   </div>
-                  <div className="input-container">
+                  <div className="payment-input-container">
                     <label>CVV</label>
                     <input
                       type="text"
@@ -116,7 +113,7 @@ const PaymentComponent = () => {
                 </div>
 
                 <div className="input-row">
-                  <div className="input-container">
+                  <div className="payment-input-container">
                     <label>Expiry Month</label>
                     <input
                       type="text"
@@ -127,7 +124,7 @@ const PaymentComponent = () => {
                       maxLength={2}
                     />
                   </div>
-                  <div className="input-container">
+                  <div className="payment-input-container">
                     <label>Expiry Year</label>
                     <input
                       type="text"
@@ -141,7 +138,7 @@ const PaymentComponent = () => {
                 </div>
 
                 <div className="input-row">
-                  <div className="input-container">
+                  <div className="payment-input-container">
                     <label>Postal Code</label>
                     <input
                       type="text"
