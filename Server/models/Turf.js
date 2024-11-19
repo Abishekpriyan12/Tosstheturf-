@@ -9,6 +9,7 @@ const amenitiesSchema = new mongoose.Schema({
 
 const turfSchema = new mongoose.Schema({
   turfName: { type: String, required: true },
+  ownerName: { type: String, required: true },
   address: { type: String, required: true },
   location: { type: String, required: true, enum: ['Cambridge', 'Waterloo', 'Kitchner'] },
   phone: { type: String, required: true },

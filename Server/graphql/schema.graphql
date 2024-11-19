@@ -49,6 +49,7 @@ type Amenities {
 type Turf {
   id: ID!
   turfName: String!
+  ownerName:String!
   location: String!
   address: String!
   phone: String!
@@ -130,6 +131,7 @@ type Mutation {
   # Add a new turf
   addTurf(
     turfName: String!
+    ownerName:String!
     location: String!
     address: String!
     phone: String!

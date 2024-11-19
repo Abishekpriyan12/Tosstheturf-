@@ -183,10 +183,11 @@ const resolvers = {
     },
 
     // Add a new turf
-    addTurf: async (_, { turfName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, firstTimeDiscount }) => {
+    addTurf: async (_, { turfName,ownerName, address, location, phone, amenities, timing, mainImage, sliderImages, sportType, price, firstTimeDiscount }) => {
       try {
         const newTurf = new Turf({
           turfName,
+          ownerName,
           address,
           location,
           phone,
