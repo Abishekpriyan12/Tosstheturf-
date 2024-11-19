@@ -7,9 +7,15 @@ import FooterComponent from "../../Reusable-Components/footer-component/FooterCo
 import { graphQLCommand } from "../../../util";
  
 const DisplayTurfComponent = () => {
-  const [navBarData, setNavBarData] = useState([]);
+  
   const [turfs, setTurfs] = useState([]);
- 
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
   // Fetch turf data from the database
   const fetchTurfData = async () => {
     const query = `
@@ -43,24 +49,8 @@ const DisplayTurfComponent = () => {
     }
   };
  
-  // Fetch NavBar data
-  const fetchNavBarData = async () => {
-    const query = `
-      query {
-        getNavItems {
-          id
-          name
-          url
-        }
-      }
-    `;
-    const data = await graphQLCommand(query);
-    setNavBarData(data.getNavItems || []);
-  };
- 
   useEffect(() => {
     fetchTurfData();
-    fetchNavBarData();
   }, []);
  
   return (

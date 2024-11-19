@@ -6,29 +6,19 @@ import "./BookingHistoryComponent.css";
 import { graphQLCommand } from "../../../util";
 
 const BookingHistoryComponent = () => {
-  const [navBarData, setNavBarData] = useState([]);
+  
   const [bookingHistory, setBookingHistory] = useState([]);
-  const [visibleBookings, setVisibleBookings] = useState(2); // Initially show 2 bookings
+  const [visibleBookings, setVisibleBookings] = useState(2); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const fetchNavBarData = async () => {
-    const query = `
-      query {
-        getNavItems {
-          id
-          name
-          url
-        }
-      }
-    `;
-    try {
-      const data = await graphQLCommand(query);
-      setNavBarData(data.getNavItems || []);
-    } catch (error) {
-      console.error("Error fetching navigation items:", error);
-    }
-  };
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
+ 
 
   const fetchBookingHistory = async () => {
     const query = `
@@ -59,7 +49,6 @@ const BookingHistoryComponent = () => {
   };
 
   useEffect(() => {
-    fetchNavBarData();
     fetchBookingHistory();
   }, []);
 
