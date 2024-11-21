@@ -5,7 +5,8 @@ const User = require("../models/User");
 const Turf = require("../models/Turf");
 const Booking = require("../models/Booking");
 const Review = require("../models/Review");
- 
+const sendEmail = require("../config/emailService");
+
 const resolvers = {
   Query: {
     // Fetch all navigation items
@@ -17,7 +18,7 @@ const resolvers = {
         throw new Error("Failed to fetch navigation items.");
       }
     },
- 
+
     // Fetch all turfs
     getTurfs: async () => {
       try {
@@ -27,7 +28,7 @@ const resolvers = {
         throw new Error("Failed to fetch turfs.");
       }
     },
- 
+
     // Fetch specific turf by ID
     turf: async (_, { id }) => {
       try {
@@ -41,7 +42,7 @@ const resolvers = {
         throw new Error("Failed to fetch turf details.");
       }
     },
- 
+
     // Fetch bookings for a specific user
     getBookings: async (_, { userId }) => {
       try {
@@ -53,33 +54,27 @@ const resolvers = {
     },
     getAllBookings: async () => {
       try {
+        // Fetch bookings and populate turf details
         const bookings = await Booking.find()
-          .populate("turfId", "turfName")
+          .populate('turfId', 'turfName') // Populate turfName from Turf model
           .exec();
     
-        return bookings
-          .filter((booking) => {
-            if (!booking.turfId) {
-              return false;
-            }
-            return true;
-          })
-          .map((booking) => ({
-            turfId: {
-              id: booking.turfId._id.toString(),
-              turfName: booking.turfId.turfName,
-            },
-            userId: booking.userId.toString(),
-            duration: booking.duration,
-            time: booking.time,
-            price: booking.price,
-            date: booking.date,
-          }));
+        // Transform data for response
+        return bookings.map((booking) => ({
+          id: booking._id,
+          turfName: booking.turfId ? booking.turfId.turfName : null, // Handle missing turfName
+          userId: booking.userId,
+          duration: booking.duration,
+          time: booking.time,
+          price: booking.price,
+          date: booking.date,
+        }));
       } catch (error) {
-        console.error("Error fetching all bookings:", error);
-        throw new Error("Failed to fetch booking details.");
+        console.error('Error fetching all bookings:', error);
+        throw new Error('Failed to fetch booking details.');
       }
-    },    
+    },
+    
     // Fetch bookings by turf and date
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
       try {
@@ -93,7 +88,7 @@ const resolvers = {
         throw new Error("Failed to fetch bookings.");
       }
     },
- 
+
     // Fetch reviews for a specific turf with average rating
     getReviews: async (_, { turfId }) => {
       try {
@@ -103,7 +98,7 @@ const resolvers = {
             ? reviews.reduce((acc, review) => acc + review.rating, 0) /
               reviews.length
             : 0;
- 
+
         return {
           averageRating,
           reviews,
@@ -113,7 +108,7 @@ const resolvers = {
         throw new Error("Failed to fetch reviews.");
       }
     },
- 
+
     // Fetch fully booked dates
     getFullyBookedDates: async (_, { turfId }) => {
       try {
@@ -121,33 +116,33 @@ const resolvers = {
         if (!turf) {
           throw new Error("Turf not found.");
         }
- 
+
         // Generate time slots based on turf's timing
         const [openingTime, closingTime] = turf.timing.split(" to ");
         const totalSlots =
           parseInt(closingTime.split(" ")[0]) -
           parseInt(openingTime.split(" ")[0]);
- 
+
         const bookings = await Booking.find({ turfId });
- 
+
         // Count bookings by date
         const bookingCountByDate = bookings.reduce((acc, booking) => {
           acc[booking.date] = (acc[booking.date] || 0) + booking.time.length;
           return acc;
         }, {});
- 
+
         // Fully booked dates
         const fullyBookedDates = Object.keys(bookingCountByDate).filter(
           (date) => bookingCountByDate[date] >= totalSlots
         );
- 
+
         return fullyBookedDates;
       } catch (error) {
         console.error("Error fetching fully booked dates:", error);
         throw new Error("Failed to fetch fully booked dates.");
       }
     },
- 
+
     // Fetch pending turfs for admin approval
     getPendingTurfs: async () => {
       try {
@@ -169,7 +164,7 @@ const resolvers = {
       try {
         const bookings = await Booking.find({ turfId });
         return bookings.map((booking) => ({
-          userId: booking.userId, // Return userId as a string
+          userId: booking.userId,
           time: booking.time,
           duration: booking.duration,
           price: booking.price,
@@ -180,7 +175,7 @@ const resolvers = {
       }
     },
   },
- 
+
   Mutation: {
     // User signup
     signup: async (_, { id, firstName, lastName, email, password, role }) => {
@@ -189,9 +184,9 @@ const resolvers = {
         if (existingUser) {
           throw new Error("User already exists.");
         }
- 
+
         const hashedPassword = await bcrypt.hash(password, 10);
- 
+
         const user = new User({
           id,
           firstName,
@@ -200,9 +195,9 @@ const resolvers = {
           password: hashedPassword,
           role,
         });
- 
+
         await user.save();
- 
+
         return {
           id: user._id,
           firstName: user.firstName,
@@ -215,69 +210,26 @@ const resolvers = {
         throw new Error("Failed to create user.");
       }
     },
-    updateTurf: async (_, args) => {
-      const {
-        id,
-        turfName,
-        address,
-        location,
-        phone,
-        amenities,
-        timing,
-        mainImage,
-        sliderImages,
-        sportType,
-        price,
-        firstTimeDiscount,
-      } = args;
-   
-      try {
-        const updatedTurf = await Turf.findByIdAndUpdate( // Use Turf instead of TurfModel
-          id,
-          {
-            turfName,
-            address,
-            location,
-            phone,
-            amenities,
-            timing,
-            mainImage,
-            sliderImages,
-            sportType,
-            price,
-            firstTimeDiscount,
-          },
-          { new: true } // Return the updated document
-        );
-   
-        if (!updatedTurf) {
-          throw new Error("Turf not found");
-        }
-   
-        return updatedTurf;
-      } catch (error) {
-        throw new Error("Failed to update turf: " + error.message);
-      }
-    },
-   
+
+    // User login
     login: async (_, { email, password, role }) => {
       try {
         const user = await User.findOne({ email });
         if (!user) {
           throw new Error(`No user found with email: ${email}`);
         }
- 
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
           throw new Error("Incorrect password. Please try again.");
         }
- 
+
         if (user.role !== role) {
           throw new Error(
             `User role '${user.role}' does not match the requested role '${role}'.`
           );
         }
- 
+
         return {
           id: user.id,
           firstName: user.firstName,
@@ -290,13 +242,14 @@ const resolvers = {
         throw new Error("Login failed.");
       }
     },
- 
+
     // Add a new turf
     addTurf: async (
       _,
       {
         turfName,
         ownerName,
+        userId,
         address,
         location,
         phone,
@@ -314,6 +267,7 @@ const resolvers = {
         const newTurf = new Turf({
           turfName,
           ownerName,
+          userId,
           address,
           location,
           phone,
@@ -324,9 +278,9 @@ const resolvers = {
           sportType,
           price,
           firstTimeDiscount,
-          status, // New turf starts with Pending status
+          status,
         });
- 
+
         await newTurf.save();
         return newTurf;
       } catch (error) {
@@ -334,50 +288,144 @@ const resolvers = {
         throw new Error("Failed to add turf.");
       }
     },
- 
+
     // Approve a turf
     approveTurf: async (_, { turfId }) => {
       try {
-        const turf = await Turf.findByIdAndUpdate(
-          turfId,
-          { status: "Approved" },
-          { new: true }
-        );
+        // Fetch the turf details
+        const turf = await Turf.findById(turfId);
         if (!turf) {
           throw new Error("Turf not found.");
         }
+
+        // Fetch the owner's details using the userId (string)
+        const owner = await User.findOne({ id: turf.userId });
+        if (!owner) {
+          throw new Error("Owner not found for this turf.");
+        }
+
+        // Update the turf status to "Approved"
+        turf.status = "Approved";
+        await turf.save();
+        console.log(owner.mail)
+        // Send email to the owner's email address
+        const emailSubject = `Your Turf "${turf.turfName}" Has Been Approved`;
+        const emailText = `
+          Dear ${owner.firstName} ${owner.lastName},
+    
+          Congratulations! Your turf "${turf.turfName}" located at "${turf.address}" has been approved by the admin.
+    
+          Regards,
+          Turf Management System
+        `;
+        await sendEmail(owner.email, emailSubject, emailText);
+
         return turf;
       } catch (error) {
         console.error("Error approving turf:", error);
         throw new Error("Failed to approve turf.");
       }
     },
- 
     // Reject a turf
-    rejectTurf: async (_, { turfId }) => {
+    rejectTurf :async (_, { turfId }) => {
       try {
-        const turf = await Turf.findByIdAndUpdate(
-          turfId,
-          { status: "Rejected" },
-          { new: true }
-        );
+        // Fetch the turf details
+        const turf = await Turf.findById(turfId);
         if (!turf) {
           throw new Error("Turf not found.");
         }
+    
+        // Fetch the owner's details using the userId (string)
+        const owner = await User.findOne({ id: turf.userId });
+        if (!owner) {
+          throw new Error("Owner not found for this turf.");
+        }
+    
+        // Update the turf status to "Rejected"
+        turf.status = "Rejected";
+        await turf.save();
+        console.log(owner.mail)
+    
+        // Send email to the owner's email address
+        const emailSubject = `Your Turf "${turf.turfName}" Has Been Rejected`;
+        const emailText = `
+          Dear ${owner.firstName} ${owner.lastName},
+    
+          We regret to inform you that your turf "${turf.turfName}" located at "${turf.address}" has been rejected by the admin.
+    
+          Regards,
+          Turf Management System
+        `;
+        await sendEmail(owner.email, emailSubject, emailText);
+    
         return turf;
       } catch (error) {
         console.error("Error rejecting turf:", error);
         throw new Error("Failed to reject turf.");
       }
     },
+
+    // Update turf details
+    updateTurf: async (_, args) => {
+      const {
+        id,
+        turfName,
+        address,
+        location,
+        phone,
+        amenities,
+        timing,
+        mainImage,
+        sliderImages,
+        sportType,
+        price,
+        firstTimeDiscount,
+      } = args;
+
+      try {
+        const updatedTurf = await Turf.findByIdAndUpdate(
+          id,
+          {
+            turfName,
+            address,
+            location,
+            phone,
+            amenities,
+            timing,
+            mainImage,
+            sliderImages,
+            sportType,
+            price,
+            firstTimeDiscount,
+          },
+          { new: true }
+        );
+
+        if (!updatedTurf) {
+          throw new Error("Turf not found");
+        }
+
+        return updatedTurf;
+      } catch (error) {
+        throw new Error("Failed to update turf: " + error.message);
+      }
+    },
+
+    // Delete a turf
     deleteTurf: async (_, { id }) => {
       try {
+        // Find and delete the turf
         const turf = await Turf.findByIdAndDelete(id);
         if (!turf) {
           throw new Error("Turf not found");
         }
+    
+        // Delete all bookings associated with the turf
+        await Booking.deleteMany({ turfId: id });
+    
         return turf;
       } catch (error) {
+        console.error("Error deleting turf and related bookings:", error);
         throw new Error("Failed to delete turf: " + error.message);
       }
     },    
@@ -387,25 +435,22 @@ const resolvers = {
       { userId, turfId, turfName, date, time, duration, price }
     ) => {
       try {
-        // Ensure turfId is valid
         if (!mongoose.Types.ObjectId.isValid(turfId)) {
           throw new Error("Invalid turf ID.");
         }
- 
-        // Check for existing bookings in the provided slots
+
         const existingBookings = await Booking.find({
           turfId,
           date,
           time: { $in: time },
         });
- 
+
         if (existingBookings.length > 0) {
           throw new Error(
             "One or more selected time slots are already booked."
           );
         }
- 
-        // Create a new booking without validating userId as ObjectId
+
         const newBooking = new Booking({
           userId,
           turfName,
@@ -415,7 +460,7 @@ const resolvers = {
           duration,
           price,
         });
- 
+
         await newBooking.save();
         return newBooking;
       } catch (error) {
@@ -423,7 +468,7 @@ const resolvers = {
         throw new Error("Failed to create booking.");
       }
     },
- 
+
     // Cancel a booking
     cancelBooking: async (_, { bookingId }) => {
       try {
@@ -437,7 +482,7 @@ const resolvers = {
         throw new Error("Failed to cancel booking.");
       }
     },
- 
+
     // Add a new review
     addReview: async (_, { turfId, username, rating, review }) => {
       try {
@@ -447,7 +492,7 @@ const resolvers = {
           rating,
           review,
         });
- 
+
         await newReview.save();
         return newReview;
       } catch (error) {
@@ -457,6 +502,5 @@ const resolvers = {
     },
   },
 };
- 
+
 module.exports = resolvers;
- 

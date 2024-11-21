@@ -27,6 +27,7 @@ const AddTurfForm = () => {
   const [sportType, setSportType] = useState("");
   const [price, setPrice] = useState("");
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
 
   // Set owner name automatically from session
@@ -34,6 +35,7 @@ const AddTurfForm = () => {
     const role = sessionStorage.getItem("role");
     if (role === "Owner") {
       setOwnerName(sessionStorage.getItem("username"));
+      setUserId(sessionStorage.getItem("userId"));
     }
   }, []);
 
@@ -75,6 +77,7 @@ const AddTurfForm = () => {
       const turfData = {
         turfName,
         ownerName,
+        userId,
         address,
         location,
         phone,
@@ -92,6 +95,7 @@ const AddTurfForm = () => {
         `mutation addTurf(
            $turfName: String!,
            $ownerName: String!,
+            $userId: String!,
            $address: String!,
            $location: String!,
            $phone: String!,
@@ -107,6 +111,7 @@ const AddTurfForm = () => {
            addTurf(
              turfName: $turfName,
              ownerName: $ownerName,
+              userId: $userId,
              address: $address,
              location: $location,
              phone: $phone,

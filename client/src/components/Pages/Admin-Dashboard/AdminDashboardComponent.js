@@ -24,6 +24,7 @@ const AdminDashboardComponent = () => {
           id
           turfName
           ownerName
+          userId
           address
           location
           phone
