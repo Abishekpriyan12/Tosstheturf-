@@ -55,7 +55,7 @@ const resolvers = {
     getAllBookings: async () => {
       try {
         const bookings = await Booking.find()
-          .populate("turfId", "turfName") // Populate only the "turfName" field from Turf
+          .populate("turfId", "turfName") 
           .exec();
     
         return bookings.map((booking) => ({
