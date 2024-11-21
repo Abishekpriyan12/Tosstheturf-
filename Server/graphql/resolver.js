@@ -56,24 +56,30 @@ const resolvers = {
         const bookings = await Booking.find()
           .populate("turfId", "turfName")
           .exec();
- 
-        return bookings.map((booking) => ({
-          turfId: {
-            id: booking.turfId._id, 
-            turfName: booking.turfId.turfName,
-          },
-          turfName: booking.turfId.turfName,
-          userId: booking.userId,
-          duration: booking.duration,
-          time: booking.time,
-          price: booking.price,
-          date: booking.date,
-        }));
+    
+        return bookings
+          .filter((booking) => {
+            if (!booking.turfId) {
+              return false;
+            }
+            return true;
+          })
+          .map((booking) => ({
+            turfId: {
+              id: booking.turfId._id.toString(),
+              turfName: booking.turfId.turfName,
+            },
+            userId: booking.userId.toString(),
+            duration: booking.duration,
+            time: booking.time,
+            price: booking.price,
+            date: booking.date,
+          }));
       } catch (error) {
         console.error("Error fetching all bookings:", error);
         throw new Error("Failed to fetch booking details.");
       }
-    },
+    },    
     // Fetch bookings by turf and date
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
       try {

@@ -156,7 +156,7 @@ const OwnerDashboardComponent = () => {
       {
         data: chartData.bookingSeriesData,
         type: "bar",
-        barWidth: window.innerWidth < 768 ? "50%" : "30%", // Adjust bar width
+        barWidth: window.innerWidth < 768 ? "50%" : "30%", 
         itemStyle: { color: "#5470C6" },
       },
     ],
