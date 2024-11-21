@@ -5,35 +5,6 @@ import NavBarComponent from "../../Reusable-Components/navigation-component/NavB
 import "./BookingPageComponent.css";
 import { graphQLCommand } from "../../../util";
 
-const CREATE_BOOKING_MUTATION = `
-  mutation CreateBooking(
-    $userId: ID!
-    $turfId: ID!
-    $turfName:String!
-    $date: String!
-    $time: [String!]!
-    $duration: Int!
-    $price: Float!
-  ) {
-    createBooking(
-      userId: $userId
-      turfId: $turfId
-      turfName:$turfName
-      date: $date
-      time: $time
-      duration: $duration
-      price: $price
-    ) {
-      id
-      turfName
-      date
-      time
-      duration
-      price
-    }
-  }
-`;
-
 const generateTimeSlots = (openingTime, closingTime) => {
   const parseTime = (time) => {
     const [hour, period] = time.split(" ");
@@ -61,7 +32,6 @@ const generateTimeSlots = (openingTime, closingTime) => {
   return slots;
 };
 
-
 const BookingPageComponent = () => {
   const { id } = useParams();
   const [turfData, setTurfData] = useState(null);
@@ -75,6 +45,7 @@ const BookingPageComponent = () => {
   const userId = sessionStorage.getItem("userId");
   const [fullyBookedDates, setFullyBookedDates] = useState([]);
   const navigate = useNavigate();
+
   const fetchNavBarData = async () => {
     const query = `
       query {
@@ -88,6 +59,7 @@ const BookingPageComponent = () => {
     const data = await graphQLCommand(query);
     setNavBarData(data.getNavItems || []);
   };
+
   const fetchFullyBookedDates = async () => {
     const query = `
       query ($turfId: ID!) {
@@ -172,36 +144,29 @@ const BookingPageComponent = () => {
       prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]
     );
   };
-  const handleProceedToPayment = async () => {
-    navigate("/payment");
-  };
 
-  const handleProceedToBook = async () => {
+  const handleProceedToBook = () => {
     if (selectedSlots.length === 0) {
       alert("Please select at least one time slot.");
       return;
     }
+    setShowBookingDetails(true);
+  };
 
-    const duration = selectedSlots.length; 
-    const variables = {
-      userId,
-      turfId: turfData.id,
-      turfName:turfData.turfName,
-      date: selectedDate,
-      time: selectedSlots,
-      duration,
-      price: parseFloat(turfData.price) * duration, 
-    };
-
-    try {
-      const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
-      console.log("Booking created successfully:", data.createBooking);
-      fetchBookedSlots(selectedDate);
-      setShowDropdown(false);
-      setShowBookingDetails(true);
-    } catch (error) {
-      console.error("Failed to create booking:", error);
-    }
+  const handleProceedToPayment = () => {
+    navigate("/payment", {
+      state: {
+        bookingDetails: {
+          userId,
+          turfId: turfData.id,
+          turfName: turfData.turfName,
+          date: selectedDate,
+          time: selectedSlots,
+          duration: selectedSlots.length,
+          price: parseFloat(turfData.price) * selectedSlots.length,
+        },
+      },
+    });
   };
 
   useEffect(() => {
@@ -214,15 +179,15 @@ const BookingPageComponent = () => {
   return (
     <div>
       <NavBarComponent navBarData={navBarData} className="nav-bar" />
-       <div className="back-arrow" onClick={() => navigate(-1)}>
-      <span>&#8249;</span> 
-      <span className="back-text">Back</span>
-    </div>
+      <div className="back-arrow" onClick={() => navigate(-1)}>
+        <span>&#8249;</span>
+        <span className="back-text">Back</span>
+      </div>
       {fullyBookedDates.length > 0 && (
-          <div className="alert">
-             Fully booked dates: {fullyBookedDates.join(", ")}
-          </div>
-        )}
+        <div className="alert">
+          Fully booked dates: {fullyBookedDates.join(", ")}
+        </div>
+      )}
       <div className="booking-section">
         <div className="Booking-card">
           <h2>{turfData.turfName}</h2>
@@ -292,7 +257,7 @@ const BookingPageComponent = () => {
             <p>{selectedSlots.length} hrs</p>
           </div>
           <button className="proceed-button" onClick={handleProceedToBook}>
-            Proceed to Book
+            Show Booking Details
           </button>
         </div>
         {showBookingDetails && (

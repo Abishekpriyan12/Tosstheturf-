@@ -20,6 +20,10 @@ import UserProfilePage from "./components/Pages/UserProfilePage-Component/UserPr
 import OwnerDashboardComponent from "./components/Pages/owner-dashboard/OwnerDashboardComponent"
 import AdminDashboardComponent from "./components/Pages/Admin-Dashboard/AdminDashboardComponent"
 import OwnerTurfBookingHistory from "./components/Pages/owner-booking/OwnerTurfBookingHistory";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("pk_test_51QMj2AFVBeJqSxXdduljyneDhiZCJfl1k5uljbb5khNDmuDWvp1sofI2WZJUy0ZafgZIn1gZVDmdaLmGa71gLSEA00AtA8HDeP");
 
 function App() {
   return (
@@ -28,7 +32,14 @@ function App() {
         <Route path="/" element={<HomePageComponent />} />
         <Route path="/contact" element={<ContactUsComponent />} />
         <Route path="/faq" element={<FaqComponent />} />
-        <Route path="/payment" element={<PaymentComponent />} />
+        <Route
+          path="/payment"
+          element={
+            <Elements stripe={stripePromise}>
+              <PaymentComponent />
+            </Elements>
+          }
+        />
         <Route path="/about" element={<AboutUsComponent />} />
         <Route path="/turf/:id" element={<TurfDetailComponent />} />
         <Route path="/login" element={<LoginPage />} />
