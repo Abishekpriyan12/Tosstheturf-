@@ -1,56 +1,172 @@
+
 .owner-dashboard {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden; 
 }
 
-h1 {
-  margin-bottom: 20px;
-}
-
-.add-turf-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-.add-turf-button:hover {
-  background-color: #0056b3;
-}
-
-.turf-grid {
+.charts-revenue {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  justify-items: center;
+  margin-bottom: 20px;
 }
 
-.turf-info {
-  padding: 10px;
+
+.owner-page-turf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+  padding: 20px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.owner-page-card {
+  width: 100%;
+  max-width: 100%; 
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #333;
+  box-shadow: 0 6px 10px rgba(255, 255, 255, 0.2); 
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+
+.owner-page-card:hover {
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2),
+    0 12px 40px rgba(255, 255, 255, 0.4); 
+}
+
+.owner-page-card-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.owner-page-card-info {
+  padding: 15px;
+  color: white;
   text-align: left;
+  box-sizing: border-box; 
 }
 
-.turf-image {
-  width: 90%;
-  height: 58%;
-  border-radius: 5px;
+.owner-page-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.view-bookings-button {
-  background-color: #28a745;
+.owner-page-card-title {
+  font-size: 18px;
+  font-weight: bold;
   color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
+  text-transform: capitalize;
 }
 
-.view-bookings-button:hover {
-  background-color: #218838;
+.owner-page-city {
+  font-size: 16px;
+  color: rgb(167, 165, 165);
+  text-transform: uppercase;
+}
+
+.owner-page-status-button {
+  padding: 3px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 20px;
+  cursor: default;
+  text-transform: uppercase;
+  color: white;
+  white-space: nowrap; 
+}
+
+.owner-page-status-button.approved {
+  background-color: #28a745; 
+}
+
+.owner-page-status-button.pending {
+  background-color: #ffc107; 
+}
+
+.owner-page-status-button.rejected {
+  background-color: #dc3545; 
+}
+
+.owner-page-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.owner-page-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: yellowgreen;
+  display: inline-flex;
+  align-items: center;
+}
+
+.owner-page-timing {
+  font-size: 16px;
+  color: white;
+  font-weight: 900;
+}
+
+.owner-page-view-bookings-button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #6c757d; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap; 
+}
+
+.owner-page-view-bookings-button:hover {
+  background-color: #5a6268; 
+}
+
+
+@media (max-width: 768px) {
+  .charts-revenue {
+    grid-template-columns: 1fr; 
+    gap: 20px; 
+  }
+
+  .owner-page-turf-grid {
+    grid-template-columns: repeat(2, 1fr); 
+    padding: 10px;
+  }
+
+  .owner-page-card {
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2); 
+  }
+}
+
+
+@media (max-width: 480px) {
+  .charts-revenue {
+    grid-template-columns: 1fr; 
+    row-gap: 20px; 
+  }
+
+  .owner-page-turf-grid {
+    grid-template-columns: 1fr; 
+    padding: 10px;
+  }
+
+  .owner-page-card {
+    box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2); 
+  }
+
+  .charts-revenue > div {
+    margin-bottom: 20px; 
+  }
 }

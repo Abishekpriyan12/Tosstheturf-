@@ -6,42 +6,32 @@ import "./BookingHistoryComponent.css";
 import { graphQLCommand } from "../../../util";
 
 const BookingHistoryComponent = () => {
-  const [navBarData, setNavBarData] = useState([]);
   const [bookingHistory, setBookingHistory] = useState([]);
-  const [visibleBookings, setVisibleBookings] = useState(2); // Initially show 2 bookings
+  const [visibleBookings, setVisibleBookings] = useState(2);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const fetchNavBarData = async () => {
-    const query = `
-      query {
-        getNavItems {
-          id
-          name
-          url
-        }
-      }
-    `;
-    try {
-      const data = await graphQLCommand(query);
-      setNavBarData(data.getNavItems || []);
-    } catch (error) {
-      console.error("Error fetching navigation items:", error);
-    }
-  };
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
 
   const fetchBookingHistory = async () => {
     const query = `
-      query {
-        getAllBookings {
-          turfName
-          userId
-          duration
-          time
-          price
-          date
-        }
-      }
+        query {
+  getAllBookings {
+    turfId {
+      id
+    }
+    userId
+    duration
+    time
+    price
+    date
+  }
+}
     `;
     try {
       const data = await graphQLCommand(query);
@@ -59,7 +49,6 @@ const BookingHistoryComponent = () => {
   };
 
   useEffect(() => {
-    fetchNavBarData();
     fetchBookingHistory();
   }, []);
 
@@ -93,14 +82,23 @@ const BookingHistoryComponent = () => {
             bookingHistory.slice(0, visibleBookings).map((booking, index) => (
               <div key={index} className="booking-card">
                 <div className="booking-info">
-                  <p><strong>User ID:</strong> {booking.userId}</p>
-                  <p><strong>Turf Name:</strong> {booking.turfName}</p>
-                  <p><strong>Duration:</strong> {booking.duration} hours</p>
+                  <p>
+                    <strong>User ID:</strong> {booking.userId}
+                  </p>
+                  <p>
+                    <strong>Duration:</strong> {booking.duration} hours
+                  </p>
                 </div>
                 <div className="booking-details">
-                  <p><strong>Time Slots:</strong> {booking.time.join(", ")}</p>
-                  <p><strong>Price:</strong> ${booking.price}</p>
-                  <p><strong>Date:</strong> {booking.date}</p>
+                  <p>
+                    <strong>Time Slots:</strong> {booking.time.join(", ")}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> ${booking.price}
+                  </p>
+                  <p>
+                    <strong>Date:</strong> {booking.date}
+                  </p>
                 </div>
               </div>
             ))

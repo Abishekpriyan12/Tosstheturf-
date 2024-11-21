@@ -12,6 +12,7 @@ const amenitiesSchema = new mongoose.Schema({
 const turfSchema = new mongoose.Schema({
   turfName: { type: String, required: true },
   ownerName: { type: String, required: true },
+  userId: { type: String, ref: "User" },
   address: { type: String, required: true },
   location: {
     type: String,

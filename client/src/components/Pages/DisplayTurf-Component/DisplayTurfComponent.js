@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
+import { useNavigate } from "react-router-dom";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import "./DisplayTurfComponent.css";
 import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
@@ -7,10 +7,10 @@ import FooterComponent from "../../Reusable-Components/footer-component/FooterCo
 import { graphQLCommand } from "../../../util";
  
 const DisplayTurfComponent = () => {
-  const [navBarData, setNavBarData] = useState([]);
   const [turfs, setTurfs] = useState([]);
+  const navigate = useNavigate();
  
-  // Fetch turf data from the database
+  // Fetch turf data
   const fetchTurfData = async () => {
     const query = `
       query {
@@ -44,23 +44,40 @@ const DisplayTurfComponent = () => {
   };
  
   // Fetch NavBar data
-  const fetchNavBarData = async () => {
-    const query = `
-      query {
-        getNavItems {
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
+
+
+  // Delete a turf by ID
+  const handleDelete = async (id) => {
+    const mutation = `
+      mutation deleteTurf($id: ID!) {
+        deleteTurf(id: $id) {
           id
-          name
-          url
+          turfName
         }
       }
     `;
-    const data = await graphQLCommand(query);
-    setNavBarData(data.getNavItems || []);
+    try {
+      const response = await graphQLCommand(mutation, { id });
+      console.log("Turf deleted successfully:", response);
+      alert("Turf deleted successfully!");
+      // Refresh the turfs list after deletion
+      fetchTurfData();
+    } catch (error) {
+      console.error("Error deleting turf:", error);
+      alert("Failed to delete turf: " + error.message);
+    }
   };
  
   useEffect(() => {
     fetchTurfData();
-    fetchNavBarData();
+   
   }, []);
  
   return (
@@ -69,10 +86,7 @@ const DisplayTurfComponent = () => {
  
       <div className="displayturfdata-page">
         <div className="booking-button-container">
-          <ButtonComponent
-            btnName="View Booking Details"
-            onClick={() => alert("View booking details clicked!")}
-          />
+          All Turf Details
         </div>
  
         <div className="turf-cards-container">
@@ -86,12 +100,30 @@ const DisplayTurfComponent = () => {
                     className="turf-image-display"
                   />
                   <div className="turf-info">
-                    <p><strong>Name:</strong> {turf.turfName}</p>
-                    <p><strong>Price:</strong> {turf.price} per hour</p>
-                    <p><strong>Location:</strong> {turf.location}</p>
+                    <p>
+                      <strong>Name:</strong> {turf.turfName}
+                    </p>
+                    <p>
+                      <strong>Price:</strong> {turf.price} per hour
+                    </p>
+                    <p>
+                      <strong>Location:</strong> {turf.location}
+                    </p>
                     <div className="turf-buttons">
-                      <button className="edit-button">Edit</button>
-                      <button className="delete-button">Delete</button>
+                      <button
+                        className="edit-button"
+                        onClick={() =>
+                          navigate("/edit-turf", { state: { turf } })
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(turf.id)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -109,4 +141,3 @@ const DisplayTurfComponent = () => {
 };
  
 export default DisplayTurfComponent;
- 

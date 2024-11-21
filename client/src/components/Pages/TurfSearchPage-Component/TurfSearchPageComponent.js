@@ -47,7 +47,6 @@ const TurfSearchPageComponent = () => {
     }
   };
 
-  // Fetch average ratings for all turfs
   const fetchRatings = async () => {
     try {
       const query = `
@@ -72,7 +71,10 @@ const TurfSearchPageComponent = () => {
 
         try {
           const ratingData = await graphQLCommand(ratingQuery, variables);
-          return { id: turf.id, averageRating: ratingData.getReviews.averageRating || 0 };
+          return {
+            id: turf.id,
+            averageRating: ratingData.getReviews.averageRating || 0,
+          };
         } catch (error) {
           console.error(`Error fetching rating for turf ${turf.id}:`, error);
           return { id: turf.id, averageRating: 0 };
@@ -121,22 +123,25 @@ const TurfSearchPageComponent = () => {
 
   return (
     <div>
-      <NavBarComponent navBarData={navBarData} className="nav-bar" />
+      <NavBarComponent
+        navBarData={navBarData}
+        className="search-page-nav-bar"
+      />
 
       <div
-        className="hero-section"
+        className="search-page-hero-section"
         style={{
           backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/hero-image.jpg)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          height: "700px",
+          height: "250px",
           position: "relative",
         }}
       >
-        <div className="hero-content">
+        <div className="search-page-hero-content">
           <h1>Find Your Perfect Turf</h1>
           <p>Book the best spots for your sports games with ease.</p>
-          <div className="search-bar">
+          <div className="search-page-search-bar">
             <select
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
@@ -156,75 +161,107 @@ const TurfSearchPageComponent = () => {
               <option value="Cricket">Cricket</option>
               <option value="Tennis">Tennis</option>
             </select>
-            <button onClick={handleSearch}>Search</button>
+            <button
+              onClick={() => {
+                handleSearch();
+                document
+                  .getElementById("featured-turfs")
+                  .scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Search
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="new-turf-section">
+      <div className="search-page-new-turf-section">
         <div
-          className="new-turf-card"
+          className="search-page-new-turf-card"
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/football.jpg)`,
           }}
-          onClick={() => setSelectedSport("Football")}
+          onClick={() => {
+            setSelectedSport("Football");
+            setFilteredTurfs(
+              turfs.filter((turf) => turf.sportType === "Football")
+            );
+          }}
         >
-          <div className="tag">New Turf</div>
-          <div className="turf-info-search">
+          <div className="search-page-tag">New Turf</div>
+          <div className="search-page-turf-info-search">
             <h3>Football</h3>
             <p>Book turf and score like a pro!</p>
           </div>
         </div>
+
         <div
-          className="new-turf-card"
+          className="search-page-new-turf-card"
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/badminton.jpg)`,
           }}
-          onClick={() => setSelectedSport("Tennis")}
+          onClick={() => {
+            setSelectedSport("Tennis");
+            setFilteredTurfs(
+              turfs.filter((turf) => turf.sportType === "Tennis")
+            );
+          }}
         >
-          <div className="tag">New Turf</div>
-          <div className="turf-info-search">
+          <div className="search-page-tag">New Turf</div>
+          <div className="search-page-turf-info-search">
             <h3>Tennis</h3>
             <p>Smash your way to victory!</p>
           </div>
         </div>
+
         <div
-          className="new-turf-card"
+          className="search-page-new-turf-card"
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/basketball.jpg)`,
           }}
-          onClick={() => setSelectedSport("Basketball")}
+          onClick={() => {
+            setSelectedSport("Basketball");
+            setFilteredTurfs(
+              turfs.filter((turf) => turf.sportType === "Basketball")
+            );
+          }}
         >
-          <div className="tag">New Turf</div>
-          <div className="turf-info-search">
+          <div className="search-page-tag">New Turf</div>
+          <div className="search-page-turf-info-search">
             <h3>Basketball</h3>
             <p>Dominate the court!</p>
           </div>
         </div>
+
         <div
-          className="new-turf-card"
+          className="search-page-new-turf-card"
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/assests/images/football.jpg)`,
           }}
-          onClick={() => setSelectedSport("Football")}
+          onClick={() => {
+            setSelectedSport("Cricket");
+            setFilteredTurfs(
+              turfs.filter((turf) => turf.sportType === "Cricket")
+            );
+          }}
         >
-          <div className="tag">New Turf</div>
-          <div className="turf-info-search">
+          <div className="search-page-tag">New Turf</div>
+          <div className="search-page-turf-info-search">
             <h3>Cricket</h3>
-            <p>Book turf and score like a pro!</p>
+            <p>Hit it out of the park!</p>
           </div>
         </div>
       </div>
 
-      <h1 className="turf-list-heading">Featured Turfs Nearby</h1>
+      <h1 className="search-page-turf-list-heading" id="featured-turfs">Featured Turfs Nearby</h1>
 
-      <div className="turf-list">
+      <div className="search-page-turf-list">
         {filteredTurfs.length > 0 ? (
           filteredTurfs.map((turf) => (
             <Link
               to={`/turf/${turf.id}`}
               key={turf.id}
-              className="turf-card-link"
+              className="search-page-turf-card-link"
             >
               <TurfCardComponent
                 imageUrl={turf.mainImage}

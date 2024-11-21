@@ -25,6 +25,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe("pk_test_51QMj2AFVBeJqSxXdduljyneDhiZCJfl1k5uljbb5khNDmuDWvp1sofI2WZJUy0ZafgZIn1gZVDmdaLmGa71gLSEA00AtA8HDeP");
 
+ 
 function App() {
   return (
     <div className="App">
@@ -44,7 +45,7 @@ function App() {
         <Route path="/turf/:id" element={<TurfDetailComponent />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/editturfdetail" element={<EditTurfDetailComponent />} />
+        <Route path="/edit-turf" element={<EditTurfDetailComponent />} />
         <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
         <Route path="/addTurf" element={<AddTurfForm />} />
         <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
@@ -55,10 +56,9 @@ function App() {
         <Route path="/ownerDashboard" element={<OwnerDashboardComponent/>}></Route>
         <Route path="/adminDashboard" element={<AdminDashboardComponent/>}></Route>
         <Route path="/bookinghistory/:turfId" element={<OwnerTurfBookingHistory />} />
-        
       </Routes>
     </div>
   );
 }
-
+ 
 export default App;
