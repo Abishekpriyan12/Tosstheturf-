@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
 import "./OwnerDashboardComponent.css";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
-import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
-
+import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 const OwnerDashboardComponent = () => {
   const [ownerTurfs, setOwnerTurfs] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -22,6 +21,7 @@ const OwnerDashboardComponent = () => {
         getOwnerTurfs(ownerName: $ownerName) {
           id
           turfName
+          timing
           location
           price
           mainImage
@@ -142,6 +142,7 @@ const OwnerDashboardComponent = () => {
     yAxis: {
       type: "value",
       name: "Bookings",
+      interval:1,
       axisLine: { show: true, lineStyle: { color: "#ffffff" } },
       splitLine: { show: false },
     },
@@ -197,7 +198,7 @@ const OwnerDashboardComponent = () => {
       <NavBarComponent navBarData={navdata}></NavBarComponent>
       <h1>Owner Dashboard</h1>
       {turfsWithStats.length === 0 ? (
-        <p>No approved turfs added yet.</p>
+        <p id="owner-page-p">No approved turfs added yet.</p>
       ) : (
         <div>
           <div className="charts-revenue">
@@ -218,41 +219,55 @@ const OwnerDashboardComponent = () => {
               </CardComponent>
             </div>
           </div>
-          <div className="turf-grid">
+          <div className="owner-page-turf-grid">
             {ownerTurfs.map((turf) => (
-              <div
-                className="owner-card"
-              >
-                <img
-                  src={turf.mainImage}
-                  alt={turf.turfName}
-                  className="turf-image-owner"
-                />
-                <div className="turf-info">
-                  <p>
-                    <strong>Name:</strong> {turf.turfName}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {turf.location}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> ${turf.price} per hour
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {turf.status}
-                  </p>
-                  <ButtonComponent
-                    btnName="View Bookings"
-                    onClick={() => navigate(`/bookinghistory/${turf.id}`)}
-                  >
-                    View Bookings
-                  </ButtonComponent>
+              <div className="owner-page-card" key={turf.id}>
+                <div
+                  className="owner-page-card-image"
+                  style={{
+                    backgroundImage: `url(${turf.mainImage})`,
+                  }}
+                ></div>
+                <div className="owner-page-card-info">
+                  {/* Turf Name, City, and Status Button */}
+                  <div className="owner-page-card-header">
+                    <h3 className="owner-page-card-title">
+                      {turf.turfName},
+                      <span className="owner-page-city">{turf.location}</span>
+                    </h3>
+
+                    <button
+                      className={`owner-page-status-button ${
+                        turf.status.toLowerCase() === "approved"
+                          ? "approved"
+                          : turf.status.toLowerCase() === "rejected"
+                          ? "rejected"
+                          : "pending"
+                      }`}
+                    >
+                      {turf.status}
+                    </button>
+                  </div>
+                  {/* Price, Timing, and View Bookings Button */}
+                  <div className="owner-page-card-footer">
+                    <span className="owner-page-price">
+                      <strong>${turf.price}</strong>/Hr
+                    </span>
+                    <span className="owner-page-timing">{turf.timing}</span>
+                    <button
+                      className="owner-page-view-bookings-button"
+                      onClick={() => navigate(`/bookinghistory/${turf.id}`)}
+                    >
+                      View Bookings
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       )}
+       <FooterComponent />
     </div>
   );
 };

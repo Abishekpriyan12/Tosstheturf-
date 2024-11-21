@@ -195,7 +195,7 @@
   /* Default layout for desktop: keep 3 cards in a row */
 .search-page-turf-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 30px;
   padding: 20px;
   margin: 0 auto;
@@ -204,7 +204,7 @@
 /* Responsive adjustments for tablet (768px and below) */
 @media (max-width: 768px) {
   .search-page-turf-list {
-    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 20px;
   }
 }
@@ -212,6 +212,6 @@
 /* Responsive adjustments for mobile (480px and below) */
 @media (max-width: 480px) {
   .search-page-turf-list {
-    grid-template-columns: 1fr; /* 1 card per row */
+    grid-template-columns: 1fr; 
   }
 }
