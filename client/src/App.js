@@ -44,7 +44,6 @@ function App() {
         <Route path="/ownerDashboard" element={<OwnerDashboardComponent/>}></Route>
         <Route path="/adminDashboard" element={<AdminDashboardComponent/>}></Route>
         <Route path="/bookinghistory/:turfId" element={<OwnerTurfBookingHistory />} />
-       
       </Routes>
     </div>
   );
