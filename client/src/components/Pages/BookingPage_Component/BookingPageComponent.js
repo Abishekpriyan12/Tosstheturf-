@@ -32,6 +32,35 @@ const generateTimeSlots = (openingTime, closingTime) => {
   return slots;
 };
 
+const CREATE_BOOKING_MUTATION = `
+  mutation CreateBooking(
+    $userId: ID!
+    $turfId: ID!
+    $turfName:String!
+    $date: String!
+    $time: [String!]!
+    $duration: Int!
+    $price: Float!
+  ) {
+    createBooking(
+      userId: $userId
+      turfId: $turfId
+      turfName:$turfName
+      date: $date
+      time: $time
+      duration: $duration
+      price: $price
+    ) {
+      id
+      turfName
+      date
+      time
+      duration
+      price
+    }
+  }
+`;
+
 const BookingPageComponent = () => {
   const { id } = useParams();
   const [turfData, setTurfData] = useState(null);
@@ -145,14 +174,35 @@ const BookingPageComponent = () => {
     );
   };
 
-  const handleProceedToBook = () => {
+  const handleProceedToBook = async () => {
     if (selectedSlots.length === 0) {
       alert("Please select at least one time slot.");
       return;
     }
-    setShowBookingDetails(true);
+ 
+    const duration = selectedSlots.length;
+    const variables = {
+      userId,
+      turfId: turfData.id,
+      turfName:turfData.turfName,
+      date: selectedDate,
+      time: selectedSlots,
+      duration,
+      price: parseFloat(turfData.price) * duration,
+    };
+ 
+    try {
+      const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
+      console.log("Booking created successfully:", data.createBooking);
+      fetchBookedSlots(selectedDate);
+      setShowDropdown(false);
+      setShowBookingDetails(true);
+    } catch (error) {
+      console.error("Failed to create booking:", error);
+    }
   };
 
+  
   const handleProceedToPayment = () => {
     navigate("/payment", {
       state: {
