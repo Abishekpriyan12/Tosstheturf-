@@ -133,6 +133,7 @@ const AddTurfForm = () => {
       );
 
       console.log("Turf added:", response);
+      alert("Your Turf Added successfully!");
       navigate(sessionStorage.getItem("role") === "Admin" ? "/displayturf" : "/ownerDashboard");
     } catch (error) {
       console.error("Error adding turf:", error);
