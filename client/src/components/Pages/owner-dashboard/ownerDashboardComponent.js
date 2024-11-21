@@ -57,7 +57,7 @@ const OwnerDashboardComponent = () => {
         }
       }
     `;
-
+  
     try {
       const data = await graphQLCommand(query);
       setBookings(data.getAllBookings || []);
@@ -66,28 +66,31 @@ const OwnerDashboardComponent = () => {
       setError("Failed to fetch bookings.");
     }
   };
-
-  // Calculate stats for approved turfs
+  
+  // Ensure bookings are mapped correctly when calculating stats
   const calculateTurfStats = () => {
     const approvedTurfs = ownerTurfs.filter(
       (turf) => turf.status.toLowerCase() === "approved"
     );
-
+  
     return approvedTurfs.map((turf) => {
       const turfBookings = bookings.filter(
-        (booking) => booking.turfId.id === turf.id
+        (booking) => booking.turfId === turf.id // Match turfId from bookings
       );
-
+  
       const bookingCount = turfBookings.length;
       const totalRevenue = turfBookings.reduce(
         (sum, booking) => sum + booking.price * booking.duration,
         0
       );
-
+  
       return { ...turf, bookingCount, totalRevenue };
     });
   };
+  
 
+  // Calculate stats for approved turfs
+ 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);

@@ -22,7 +22,7 @@ const resolvers = {
     // Fetch all turfs
     getTurfs: async () => {
       try {
-        return await Turf.find({ status: "Approved" }); // Only fetch approved turfs
+        return await Turf.find({ status: "Approved" }); 
       } catch (error) {
         console.error("Failed to fetch turfs:", error);
         throw new Error("Failed to fetch turfs.");
@@ -54,15 +54,16 @@ const resolvers = {
     },
     getAllBookings: async () => {
       try {
-        // Fetch bookings and populate turf details
         const bookings = await Booking.find()
-          .populate('turfId', 'turfName') // Populate turfName from Turf model
+          .populate("turfId", "turfName") // Populate only the "turfName" field from Turf
           .exec();
     
-        // Transform data for response
         return bookings.map((booking) => ({
           id: booking._id,
-          turfName: booking.turfId ? booking.turfId.turfName : null, // Handle missing turfName
+          turfId: {
+            id: booking.turfId ? booking.turfId._id.toString() : null,
+            turfName: booking.turfId ? booking.turfId.turfName : null,
+          },
           userId: booking.userId,
           duration: booking.duration,
           time: booking.time,
@@ -70,10 +71,12 @@ const resolvers = {
           date: booking.date,
         }));
       } catch (error) {
-        console.error('Error fetching all bookings:', error);
-        throw new Error('Failed to fetch booking details.');
+        console.error("Error fetching all bookings:", error);
+        throw new Error("Failed to fetch booking details.");
       }
-    },
+    },    
+    
+    
     
     // Fetch bookings by turf and date
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
