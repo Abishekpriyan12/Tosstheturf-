@@ -196,9 +196,8 @@
 .search-page-turf-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr); 
-  gap: 30px;
   padding: 20px;
-  margin: 0 auto;
+  margin: 0 5px;
 }
 
 /* Responsive adjustments for tablet (768px and below) */

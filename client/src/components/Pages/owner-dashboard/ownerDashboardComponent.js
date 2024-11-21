@@ -126,7 +126,7 @@ const OwnerDashboardComponent = () => {
       left: "center",
       textStyle: {
         color: "#f5f5f5",
-        fontSize: 18,
+        fontSize: window.innerWidth < 768 ? 14 : 18,
       },
     },
     tooltip: {
@@ -138,19 +138,25 @@ const OwnerDashboardComponent = () => {
       data: chartData.xAxisData,
       name: "Turfs",
       axisLine: { lineStyle: { color: "#ffffff" } },
+      axisLabel: {
+        fontSize: window.innerWidth < 768 ? 10 : 12,
+      },
     },
     yAxis: {
       type: "value",
       name: "Bookings",
-      interval:1,
+      interval: 1,
       axisLine: { show: true, lineStyle: { color: "#ffffff" } },
       splitLine: { show: false },
+      axisLabel: {
+        fontSize: window.innerWidth < 768 ? 10 : 12,
+      },
     },
     series: [
       {
         data: chartData.bookingSeriesData,
         type: "bar",
-        barWidth: "30%",
+        barWidth: window.innerWidth < 768 ? "50%" : "30%", // Adjust bar width
         itemStyle: { color: "#5470C6" },
       },
     ],
@@ -162,7 +168,7 @@ const OwnerDashboardComponent = () => {
       left: "center",
       textStyle: {
         color: "#f5f5f5",
-        fontSize: 18,
+        fontSize: window.innerWidth < 768 ? 14 : 18,
       },
     },
     tooltip: {
@@ -176,18 +182,24 @@ const OwnerDashboardComponent = () => {
       data: chartData.xAxisData,
       name: "Turfs",
       axisLine: { lineStyle: { color: "#ffffff" } },
+      axisLabel: {
+        fontSize: window.innerWidth < 768 ? 10 : 12,
+      },
     },
     yAxis: {
       type: "value",
       name: "Revenue ($)",
       axisLine: { show: true, lineStyle: { color: "#ffffff" } },
       splitLine: { show: false },
+      axisLabel: {
+        fontSize: window.innerWidth < 768 ? 10 : 12,
+      },
     },
     series: [
       {
         data: chartData.revenueSeriesData,
         type: "bar",
-        barWidth: "30%",
+        barWidth: window.innerWidth < 768 ? "50%" : "30%",
         itemStyle: { color: "#91cc75" },
       },
     ],
@@ -267,7 +279,7 @@ const OwnerDashboardComponent = () => {
           </div>
         </div>
       )}
-       <FooterComponent />
+      <FooterComponent />
     </div>
   );
 };
