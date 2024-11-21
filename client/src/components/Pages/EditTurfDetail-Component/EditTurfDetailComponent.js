@@ -4,8 +4,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebaseClient"; // Firebase instance
 import { graphQLCommand } from "../../../util";
 import "./EditTurfDetailComponent.css";
-import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
-import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
+
  
 const EditTurfDetailComponent = () => {
   const location = useLocation();

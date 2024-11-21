@@ -58,6 +58,10 @@ const resolvers = {
           .exec();
  
         return bookings.map((booking) => ({
+          turfId: {
+            id: booking.turfId._id, 
+            turfName: booking.turfId.turfName,
+          },
           turfName: booking.turfId.turfName,
           userId: booking.userId,
           duration: booking.duration,

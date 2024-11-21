@@ -1,9 +1,3 @@
-.owner-dashboard {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
-
 h1 {
   margin-bottom: 20px;
 }
@@ -22,20 +16,38 @@ h1 {
 .add-turf-button:hover {
   background-color: #0056b3;
 }
+.total-revenue {
+  width: 40%;
+  color: white;
+}
 
 .turf-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
-  gap: 20px;
-  justify-items: center;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; 
+  justify-items: center; 
+  align-items: start; 
+  width: 100%;
+  margin-top: 20px; 
 }
-
+.owner-card {
+  border-radius: 10px;
+  background-color: #333;
+}
+.charts-revenue {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 20px;
+  margin-bottom: 10px;
+}
 .turf-info {
   padding: 10px;
   text-align: left;
+  display: flex;
+
 }
 
-.turf-image {
+.turf-image-owner{
   width: 90%;
   height: 58%;
   border-radius: 5px;
