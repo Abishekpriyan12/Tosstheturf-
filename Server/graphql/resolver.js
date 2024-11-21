@@ -12,6 +12,30 @@ console.log("Stripe Secret Key:", process.env.STRIPE_SECRET_KEY);
 
 const resolvers = {
   Query: {
+      getUser: async (_, { id }) => {
+        try {
+          console.log("Received ID in getUser resolver:", id); // Debugging log
+      
+          if (!id) {
+            throw new Error("No ID provided to getUser.");
+          }
+      
+          
+          const user = await User.findOne({ id }); 
+      
+          if (!user) {
+            console.error("User not found for ID:", id);
+            throw new Error("User not found.");
+          }
+      
+          console.log("Fetched User:", user);
+          return user;
+        } catch (error) {
+          console.error("Error in getUser resolver:", error);
+          throw new Error("Failed to fetch user data.");
+        }
+      },
+      
     // Fetch all navigation items
     getNavItems: async () => {
       try {
@@ -241,6 +265,27 @@ const resolvers = {
         throw new Error("Login failed.");
       }
     },
+
+     updateUser : async (_, { id, firstName, lastName, email }) => {
+      try {
+        
+        const updatedUser = await User.findOneAndUpdate(
+          { id },  
+          { firstName, lastName, email },
+          { new: true } 
+        );
+    
+        if (!updatedUser) {
+          throw new Error("User not found.");
+        }
+    
+        // Return the updated user details return updatedUser;
+      } catch (error) {
+        console.error("Error updating user:", error);
+        throw new Error("Failed to update user.");
+      }
+    },
+    
 
     // Add a new turf
     addTurf: async (

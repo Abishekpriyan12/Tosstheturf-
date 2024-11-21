@@ -103,6 +103,9 @@ type Query {
   # Fetch a specific turf by ID
   turf(id: ID!): Turf
 
+  # Fetch a specific user by ID
+  getUser(id: ID!): User
+
   # Fetch bookings by user
   getBookings(userId: ID!): [Booking!]!
 
@@ -134,6 +137,8 @@ type Mutation {
 
   # Login for existing users
   login(email: String!, password: String!, role: String!): User!
+
+  updateUser(id: ID!, firstName: String, lastName: String, email: String): User
 
   # Add a new turf
   addTurf(
