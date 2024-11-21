@@ -6,6 +6,7 @@ import CardComponent from "../../Reusable-Components/Card-Component/CardComponen
 import "./OwnerDashboardComponent.css";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
+
 const OwnerDashboardComponent = () => {
   const [ownerTurfs, setOwnerTurfs] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -57,7 +58,7 @@ const OwnerDashboardComponent = () => {
         }
       }
     `;
-  
+
     try {
       const data = await graphQLCommand(query);
       setBookings(data.getAllBookings || []);
@@ -66,31 +67,28 @@ const OwnerDashboardComponent = () => {
       setError("Failed to fetch bookings.");
     }
   };
-  
-  // Ensure bookings are mapped correctly when calculating stats
+
+  // Calculate stats for approved turfs
   const calculateTurfStats = () => {
     const approvedTurfs = ownerTurfs.filter(
       (turf) => turf.status.toLowerCase() === "approved"
     );
-  
+
     return approvedTurfs.map((turf) => {
       const turfBookings = bookings.filter(
-        (booking) => booking.turfId === turf.id // Match turfId from bookings
+        (booking) => booking.turfId?.id === turf.id // Match turfId from bookings
       );
-  
+
       const bookingCount = turfBookings.length;
       const totalRevenue = turfBookings.reduce(
         (sum, booking) => sum + booking.price * booking.duration,
         0
       );
-  
+
       return { ...turf, bookingCount, totalRevenue };
     });
   };
-  
 
-  // Calculate stats for approved turfs
- 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -117,6 +115,7 @@ const OwnerDashboardComponent = () => {
     bookingSeriesData: turfsWithStats.map((turf) => turf.bookingCount),
     revenueSeriesData: turfsWithStats.map((turf) => turf.totalRevenue),
   };
+
   const navdata = [
     { id: 1, name: "Owner Dashboard", url: "/ownerDashboard" },
     { id: 2, name: "User Profile", url: "/user" },
@@ -159,7 +158,7 @@ const OwnerDashboardComponent = () => {
       {
         data: chartData.bookingSeriesData,
         type: "bar",
-        barWidth: window.innerWidth < 768 ? "50%" : "30%", 
+        barWidth: window.innerWidth < 768 ? "50%" : "30%",
         itemStyle: { color: "#5470C6" },
       },
     ],
@@ -244,7 +243,6 @@ const OwnerDashboardComponent = () => {
                   }}
                 ></div>
                 <div className="owner-page-card-info">
-                  {/* Turf Name, City, and Status Button */}
                   <div className="owner-page-card-header">
                     <h3 className="owner-page-card-title">
                       {turf.turfName},
@@ -263,7 +261,6 @@ const OwnerDashboardComponent = () => {
                       {turf.status}
                     </button>
                   </div>
-                  {/* Price, Timing, and View Bookings Button */}
                   <div className="owner-page-card-footer">
                     <span className="owner-page-price">
                       <strong>${turf.price}</strong>/Hr

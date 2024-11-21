@@ -74,17 +74,18 @@ const resolvers = {
         console.error("Error fetching all bookings:", error);
         throw new Error("Failed to fetch booking details.");
       }
+
     },    
     
     
     
-    // Fetch bookings by turf and date
+
     getBookingsByTurfAndDate: async (_, { turfId, date }) => {
       try {
         const bookings = await Booking.find({ turfId, date });
         return bookings.map((booking) => ({
           ...booking.toObject(),
-          time: booking.time || [], // Ensure time is always an array
+          time: booking.time || [], 
         }));
       } catch (error) {
         console.error("Error fetching bookings by turf and date:", error);
