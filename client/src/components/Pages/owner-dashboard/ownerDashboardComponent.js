@@ -215,7 +215,7 @@ const OwnerDashboardComponent = () => {
         <p id="owner-page-p">No approved turfs added yet.</p>
       ) : (
         <div>
-          <div className="charts-revenue">
+           <div className="charts-revenue">
             <div>
               <CardComponent>
                 <ReactECharts
@@ -232,7 +232,7 @@ const OwnerDashboardComponent = () => {
                 />
               </CardComponent>
             </div>
-          </div>
+          </div> 
           <div className="owner-page-turf-grid">
             {ownerTurfs.map((turf) => (
               <div className="owner-page-card" key={turf.id}>
