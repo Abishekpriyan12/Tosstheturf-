@@ -12,7 +12,8 @@ const BookingHistoryComponent = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState("");
- 
+  const [showSortOptions, setShowSortOptions] = useState(false); // Toggle dropdown
+  const [sortOrder, setSortOrder] = useState("asc"); // Track sorting order
 
   const navBarData = [
     { id: 1, name: "Turves", url: "/displayturf" },
@@ -60,7 +61,20 @@ const BookingHistoryComponent = () => {
     setFilteredBookings(filtered);
   };
 
-  
+  const handleSortByDate = (order) => {
+    setSortOrder(order);
+
+    // Sort bookings by date in ascending or descending order
+    const sorted = [...filteredBookings].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      return order === "asc" ? dateA - dateB : dateB - dateA;
+    });
+    setFilteredBookings(sorted);
+    setShowSortOptions(false); // Close dropdown after selection
+  };
+
   const handleViewMore = () => {
     setVisibleBookings((prev) => prev + 2); // Show 2 more bookings
   };
@@ -91,7 +105,31 @@ const BookingHistoryComponent = () => {
               onChange={handleSearch}
             />
           </div>
+          <div className="sort-section">
+            <button
+              className="filter-button"
+              onClick={() => setShowSortOptions((prev) => !prev)}
+            >
+              Filter By Date <i className="fa fa-sort"></i>
+            </button>
+            {showSortOptions && (
+              <div className="sort-dropdown">
+                <div
+                  className="sort-option"
+                  onClick={() => handleSortByDate("asc")}
+                >
+                  <i className="fa fa-arrow-up"></i> Ascending
+                </div>
+                <div
+                  className="sort-option"
+                  onClick={() => handleSortByDate("desc")}
+                >
+                  <i className="fa fa-arrow-down"></i> Descending
+                </div>
+              </div>
+            )}
           </div>
+        </div>
 
         <div className="booking-cards">
           {filteredBookings.length === 0 ? (
