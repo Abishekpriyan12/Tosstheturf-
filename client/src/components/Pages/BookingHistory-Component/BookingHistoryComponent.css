@@ -98,6 +98,52 @@
     margin-bottom: 40px;
   }
   
+  .sort-dropdown {
+    position: absolute;
+    background: #444;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    z-index: 1000;
+    width: 200px;
+    padding: 10px 0;
+  }
+  
+  .sort-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sort-option:hover {
+    background-color: #6fbc44;
+  }
+  
+  .filter-button {
+    background-color: #6fbc44;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-button:hover {
+    background-color: #5aa334;
+  }
+  
+
   @media (max-width: 768px) {
     .booking-cards {
       grid-template-columns: 1fr; 

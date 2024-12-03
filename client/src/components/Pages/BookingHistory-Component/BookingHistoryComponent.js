@@ -7,9 +7,13 @@ import { graphQLCommand } from "../../../util";
 
 const BookingHistoryComponent = () => {
   const [bookingHistory, setBookingHistory] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
   const [visibleBookings, setVisibleBookings] = useState(2);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+ 
+
   const navBarData = [
     { id: 1, name: "Turves", url: "/displayturf" },
     { id: 2, name: "Dashboard", url: "/adminDashboard" },
@@ -20,22 +24,23 @@ const BookingHistoryComponent = () => {
 
   const fetchBookingHistory = async () => {
     const query = `
-        query {
-  getAllBookings {
-    turfId {
-      id
-    }
-    userId
-    duration
-    time
-    price
-    date
-  }
-}
+      query {
+        getAllBookings {
+          turfId {
+            id
+          }
+          userId
+          duration
+          time
+          price
+          date
+        }
+      }
     `;
     try {
       const data = await graphQLCommand(query);
       setBookingHistory(data.getAllBookings || []);
+      setFilteredBookings(data.getAllBookings || []); // Initialize filtered bookings
     } catch (error) {
       console.error("Error fetching booking history:", error);
       setError("Failed to fetch booking history.");
@@ -44,6 +49,18 @@ const BookingHistoryComponent = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchInput(value);
+
+    // Filter bookings based on user ID
+    const filtered = bookingHistory.filter((booking) =>
+      booking.userId.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredBookings(filtered);
+  };
+
+  
   const handleViewMore = () => {
     setVisibleBookings((prev) => prev + 2); // Show 2 more bookings
   };
@@ -70,16 +87,17 @@ const BookingHistoryComponent = () => {
               type="text"
               placeholder="Search by user ID"
               className="search-input"
+              value={searchInput}
+              onChange={handleSearch}
             />
           </div>
-          <button className="filter-button">Filter By Duration</button>
-        </div>
+          </div>
 
         <div className="booking-cards">
-          {bookingHistory.length === 0 ? (
-            <p>No bookings available.</p>
+          {filteredBookings.length === 0 ? (
+            <p>No bookings found.</p>
           ) : (
-            bookingHistory.slice(0, visibleBookings).map((booking, index) => (
+            filteredBookings.slice(0, visibleBookings).map((booking, index) => (
               <div key={index} className="booking-card">
                 <div className="booking-info">
                   <p>
@@ -104,7 +122,7 @@ const BookingHistoryComponent = () => {
             ))
           )}
         </div>
-        {visibleBookings < bookingHistory.length && (
+        {visibleBookings < filteredBookings.length && (
           <div className="viewmorehistory-button">
             <ButtonComponent btnName="View More" onClick={handleViewMore} />
           </div>
