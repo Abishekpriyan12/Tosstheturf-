@@ -1,66 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import "./HomePageComponent.css";
 import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import { useNavigate } from "react-router-dom";
+import ChatBot from "../../Pages/ChatBot/ChatBot"; 
 
 const HomePageComponent = () => {
-  const [navBarData, setNavBarData] = useState([]);
   const navigate = useNavigate();
-
-  // Static Navbar data
-  const getStaticNavBarData = () => {
-    const userRole = sessionStorage.getItem("role"); // Get role from sessionStorage
-    if (userRole === "User") {
-      return [
-        { id: 1, name: "Home", url: "/" },
-        { id: 2, name: "Contact Us", url: "/contact" },
-        { id: 3, name: "FAQ", url: "/faq" },
-        { id: 4, name: "Payment", url: "/payment" },
-        { id: 5, name: "User Profile", url: "/user" },
-      ];
-    } else if (userRole === "Admin") {
-      return [
-        { id: 1, name: "Home", url: "/" },
-        { id: 2, name: "Admin Dashboard", url: "/adminDashboard" },
-        { id: 3, name: "Booking History", url: "/bookinghistory" },
-        { id: 4, name: "Display Turf", url: "/displayturf" },
-        { id: 5, name: "Edit Turf", url: "/edit-turf" },
-      ];
-    } else if (userRole === "Owner") {
-      return [
-        { id: 1, name: "Home", url: "/" },
-        { id: 2, name: "Owner Dashboard", url: "/ownerDashboard" },
-        { id: 3, name: "Add Turf", url: "/addTurf" },
-        { id: 4, name: "Booking History", url: "/ownerTurfBookingHistory" },
-        { id: 5, name: "User Profile", url: "/user" },
-      ];
-    } else {
-      return [
-        { id: 1, name: "Home", url: "/" },
-        { id: 2, name: "Contact Us", url: "/contact" },
-        { id: 3, name: "FAQ", url: "/faq" },
-      ]; // Default for unauthenticated users
-    }
-  };
-
-  useEffect(() => {
-    const navItems = getStaticNavBarData();
-    setNavBarData(navItems); // Set static nav items based on login status
-  }, []);
+  const [showChatBot, setShowChatBot] = useState(false);
 
   const handleClick = () => {
     navigate("/turfDetail");
   };
 
+  const toggleChatBot = () => {
+    setShowChatBot(!showChatBot); // Toggle ChatBot visibility
+  };
+
   return (
     <div className="home-page">
-     
+      <NavBarComponent />
 
- <NavBarComponent/>{" "}
-      
       <div className="home-first-section">
         <div className="text-section">
           <div className="first-banner-text">
@@ -77,6 +39,7 @@ const HomePageComponent = () => {
           </div>
         </div>
       </div>
+
       <div className="home-first-section">
         <div className="text-section">
           <div className="home-first-banner">
@@ -93,6 +56,7 @@ const HomePageComponent = () => {
           <ButtonComponent btnName={"Book Your turf"} onClick={handleClick} />
         </div>
       </div>
+
       <div className="host-the-match">
         <CardComponent>
           <h2>Host The Match</h2>
@@ -108,6 +72,7 @@ const HomePageComponent = () => {
           </div>
         </CardComponent>
       </div>
+
       <div className="perfect-turf-card">
         <CardComponent>
           <div className="perfect-card-data">
@@ -130,6 +95,7 @@ const HomePageComponent = () => {
           </div>
         </CardComponent>
       </div>
+
       <div className="home-first-section">
         <div className="text-section">
           <div className="home-first-banner">
@@ -154,7 +120,16 @@ const HomePageComponent = () => {
           </div>
         </div>
       </div>
+
       <FooterComponent />
+      
+      {/* ChatBot Icon */}
+      <div className="chatbot-icon" onClick={toggleChatBot}>
+        <img src="Chat_Icon.png" alt="ChatBot Icon" className="chatbot-icon-image" />
+      </div>
+
+      {/* Conditionally render the ChatBot component */}
+      {showChatBot && <ChatBot />}
     </div>
   );
 };

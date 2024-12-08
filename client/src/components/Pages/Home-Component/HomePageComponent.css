@@ -93,7 +93,80 @@ img {
   font-size: 3vw;
   margin-bottom: 15px;
 }
+/* Add styles for the chatbot icon */
+/* ChatBot Icon */
+.chatbot-icon {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-color: transparent; /* Remove background circle */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure the icon stays on top of other elements */
+}
 
+.chatbot-icon-image {
+  width: 30px;
+  height: 30px;
+  object-fit: contain; /* Ensure the icon fits properly */
+}
+
+/* Chatbot popup */
+.chatbot-container {
+  position: fixed;
+  bottom: 90px; /* Adjust based on chatbot icon */
+  right: 20px;
+  width: 350px;
+  height: 350px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 999; /* Ensure the chat window stays on top */
+}
+
+/* Chat history and chat input box */
+.chat-history {
+  padding: 10px;
+  height: 180;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.chat-input button {
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-input button:hover {
+  background-color: #45a049;
+}
 /* Responsive Adjustments */
 @media (min-width: 768px) {
   .home-first-section {
