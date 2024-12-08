@@ -2,31 +2,53 @@ import React, { useEffect, useState } from "react";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import "./HomePageComponent.css";
-import CardComponent  from "../../Reusable-Components/Card-Component/CardComponent"
+import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import { useNavigate } from "react-router-dom";
-import { graphQLCommand } from "../../../util";
 
 const HomePageComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const navigate = useNavigate();
 
-  const fetchNavBarData = async () => {
-    const query = `
-      query {
-        getNavItems {
-          id
-          name
-          url
-        }
-      }
-    `;
-      const data = await graphQLCommand(query);
-      setNavBarData(data.getNavItems || []);
+  // Static Navbar data
+  const getStaticNavBarData = () => {
+    const userRole = sessionStorage.getItem("role"); // Get role from sessionStorage
+    if (userRole === "User") {
+      return [
+        { id: 1, name: "Home", url: "/" },
+        { id: 2, name: "Contact Us", url: "/contact" },
+        { id: 3, name: "FAQ", url: "/faq" },
+        { id: 4, name: "Payment", url: "/payment" },
+        { id: 5, name: "User Profile", url: "/user" },
+      ];
+    } else if (userRole === "Admin") {
+      return [
+        { id: 1, name: "Home", url: "/" },
+        { id: 2, name: "Admin Dashboard", url: "/adminDashboard" },
+        { id: 3, name: "Booking History", url: "/bookinghistory" },
+        { id: 4, name: "Display Turf", url: "/displayturf" },
+        { id: 5, name: "Edit Turf", url: "/edit-turf" },
+      ];
+    } else if (userRole === "Owner") {
+      return [
+        { id: 1, name: "Home", url: "/" },
+        { id: 2, name: "Owner Dashboard", url: "/ownerDashboard" },
+        { id: 3, name: "Add Turf", url: "/addTurf" },
+        { id: 4, name: "Booking History", url: "/ownerTurfBookingHistory" },
+        { id: 5, name: "User Profile", url: "/user" },
+      ];
+    } else {
+      return [
+        { id: 1, name: "Home", url: "/" },
+        { id: 2, name: "Contact Us", url: "/contact" },
+        { id: 3, name: "FAQ", url: "/faq" },
+      ]; // Default for unauthenticated users
+    }
   };
 
   useEffect(() => {
-    fetchNavBarData();
+    const navItems = getStaticNavBarData();
+    setNavBarData(navItems); // Set static nav items based on login status
   }, []);
 
   const handleClick = () => {
@@ -35,7 +57,9 @@ const HomePageComponent = () => {
 
   return (
     <div className="home-page">
-      <NavBarComponent navBarData={navBarData} />{" "}
+     
+
+ <NavBarComponent/>{" "}
       
       <div className="home-first-section">
         <div className="text-section">

@@ -199,18 +199,25 @@
   
   margin: 0 5px;
 }
+@media (max-width: 1024px) {
+  .search-page-turf-list {
+    grid-template-columns: repeat(2, 1fr)
+  }
+  .search-page-new-turf-card {
+    display: none;
+  }
+ 
+}
 
 /* Responsive adjustments for tablet (768px and below) */
 @media (max-width: 768px) {
   .search-page-turf-list {
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 20px;
+    grid-template-columns: 1fr; 
+  }
+  .search-page-new-turf-card {
+    display: none;
   }
 }
 
 /* Responsive adjustments for mobile (480px and below) */
-@media (max-width: 480px) {
-  .search-page-turf-list {
-    grid-template-columns: 1fr; 
-  }
-}
+

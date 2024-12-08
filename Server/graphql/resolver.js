@@ -14,7 +14,7 @@ const resolvers = {
   Query: {
       getUser: async (_, { id }) => {
         try {
-          console.log("Received ID in getUser resolver:", id); // Debugging log
+          console.log("Received ID in getUser resolver:", id); 
       
           if (!id) {
             throw new Error("No ID provided to getUser.");
