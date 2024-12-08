@@ -192,8 +192,8 @@ const BookingPageComponent = () => {
     };
  
     try {
-      const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
-      console.log("Booking created successfully:", data.createBooking);
+      // const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
+      // console.log("Booking created successfully:", data.createBooking);
       fetchBookedSlots(selectedDate);
       setShowDropdown(false);
       setShowBookingDetails(true);

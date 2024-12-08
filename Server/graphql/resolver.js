@@ -571,16 +571,15 @@ const resolvers = {
       }
     },
 
-    confirmBooking: async (_, { paymentIntentId, userId, turfId,turfName, date, time, duration, price }) => {
+    confirmBooking: async (_, { paymentIntentId, userId, turfId, turfName, date, time, duration, price }) => {
       try {
         if (!mongoose.Types.ObjectId.isValid(turfId)) {
           throw new Error("Invalid turf ID.");
         }
     
         if (paymentIntentId) {
-          const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId, {
-            payment_method: 'pm_card_visa', // Test card 
-          });
+          // Retrieve the PaymentIntent instead of confirming it again
+          const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     
           if (paymentIntent.status !== "succeeded") {
             console.log("Payment Status:", paymentIntent.status);
@@ -588,6 +587,7 @@ const resolvers = {
           }
         }
     
+        // Create a new booking after payment is verified
         const newBooking = new Booking({
           userId,
           turfId,
@@ -606,6 +606,7 @@ const resolvers = {
         throw new Error("Failed to confirm booking.");
       }
     },
+    
     
     
 
