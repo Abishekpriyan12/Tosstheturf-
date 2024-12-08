@@ -60,8 +60,6 @@ const NavBarComponent = () => {
     // Default for unauthenticated users
     return [
       { id: 1, name: "Home", url: "/" },
-      { id: 2, name: "Login", url: "/login" },
-      { id: 3, name: "Sign Up", url: "/signup" },
       { id: 4, name: "Contact Us", url: "/contact" },
       { id: 5, name: "About Us", url: "/about" },
     ];
@@ -95,6 +93,14 @@ const NavBarComponent = () => {
               <ButtonComponent
                 btnName={isLoggedIn ? "Logout" : "Login"}
                 iconPath={isLoggedIn ? "user.png" : "user.png"}
+                onClick={handleAuthClick}
+              />
+            </div>
+            <div id="button-comp" className="dropdown">
+              <ButtonComponent
+                btnName={"Sign In"}
+                iconPath={isLoggedIn ? "user.png" : "user.png"}
+                className={isLoggedIn ? "signButton" :"button"}
                 onClick={handleAuthClick}
               />
             </div>
