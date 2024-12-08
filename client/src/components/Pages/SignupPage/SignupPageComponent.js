@@ -16,12 +16,30 @@ const SignupPage = () => {
   const [role, setRole] = useState("User"); // State for selected role
   const navigate = useNavigate(); // Change to useNavigate
 
+  // Regex for email validation
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+  // Regex for password validation
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
     // Check if password and confirm password match
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
+      return;
+    }
+
+    // Validate email using regex
+    if (!emailRegex.test(email)) {
+      alert("Invalid email format. Please enter a valid email.");
+      return;
+    }
+
+    // Validate password using regex
+    if (!passwordRegex.test(password)) {
+      alert("Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
       return;
     }
 

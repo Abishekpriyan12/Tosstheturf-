@@ -4,21 +4,19 @@ import "./LoginPageComponent.css";
 import loginBackground from "../../../assests/images/loginbg.jpg";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import logo from "../../../assests/images/logov1.png";
-import { graphQLCommand } from "../../../util" 
-
-
+import { graphQLCommand } from "../../../util"; // Assuming graphQLCommand is a utility function for sending GraphQL queries
 
 const LoginPage = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(""); 
+  const [role, setRole] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
-  
+    setErrorMessage(""); // Clear previous error message
+
     try {
       const response = await graphQLCommand(
         `
@@ -32,28 +30,34 @@ const LoginPage = () => {
             }
         }
         `,
-        {
-          email,
-          password,
-          role,
-        }
+        { email, password, role }
       );
-  
+
       if (response && response.login) {
+        // Storing session data after successful login
         sessionStorage.setItem("username", `${response.login.firstName} ${response.login.lastName}`);
         sessionStorage.setItem("userId", `${response.login.id}`);
         sessionStorage.setItem("role", `${response.login.role}`);
-          navigate("/");
-        
+
+        navigate("/"); // Redirect to home page
       } else {
         setErrorMessage("Login failed. Please check your credentials and role.");
       }
     } catch (error) {
       console.log(error);
+
+      // Handle specific error cases based on the message from the backend
+      if (error.message.includes("No user found")) {
+        setErrorMessage("No user found with that email. Please try again.");
+      } else if (error.message.includes("Incorrect password")) {
+        setErrorMessage("Incorrect password. Please try again.");
+      } else if (error.message.includes("does not match the requested role")) {
+        setErrorMessage(`Your role does not match the requested role: ${role}.`);
+      } else {
+        setErrorMessage("Login failed. Please check your credentials and try again.");
+      }
     }
   };
-  
-  
 
   return (
     <div className="login-container">
@@ -62,16 +66,11 @@ const LoginPage = () => {
           <img src={logo} alt="TOSS Logo" className="logo-image" />
         </div>
         <h2>Welcome Back!</h2>
-        <p>
-          Streamline turf care with efficient scheduling, monitoring, and
-          resource management.
-        </p>
+        <p>Streamline turf care with efficient scheduling, monitoring, and resource management.</p>
 
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label htmlFor="email" className="labelLogin">
-              Email
-            </label>
+            <label htmlFor="email" className="labelLogin">Email</label>
             <div className="input-wrapper">
               <input
                 type="email"
@@ -79,15 +78,14 @@ const LoginPage = () => {
                 placeholder="Enter Your Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required 
+                required
               />
               <img src="../../../assests/icons/mail.png" alt="Email Icon" className="icon" />
             </div>
           </div>
+
           <div className="form-group">
-            <label htmlFor="password" className="labelLogin">
-              Password
-            </label>
+            <label htmlFor="password" className="labelLogin">Password</label>
             <div className="input-wrapper">
               <input
                 type="password"
@@ -95,15 +93,14 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
               />
               <img src="../../../assests/icons/hide.png" alt="Password Icon" className="icon" />
             </div>
           </div>
+
           <div className="form-group">
-            <label htmlFor="role" className="labelLogin">
-              Role
-            </label>
+            <label htmlFor="role" className="labelLogin">Role</label>
             <div className="select-wrapper">
               <select
                 value={role}
@@ -115,7 +112,7 @@ const LoginPage = () => {
                 <option value="Admin">Admin</option>
                 <option value="Owner">Owner</option>
               </select>
-              <img src="../../../assests/icons/arrow-down.png" alt="Role Icon" className="icon" /> 
+              <img src="../../../assests/icons/arrow-down.png" alt="Role Icon" className="icon" />
             </div>
           </div>
 
@@ -123,7 +120,9 @@ const LoginPage = () => {
             <input type="checkbox" id="remember" />
             <label htmlFor="remember">Remember me</label>
           </div>
-          {errorMessage && <p className="error-message">{errorMessage}</p>} 
+
+          {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+          
           <ButtonComponent btnName={"Login"} />
           <p className="signup-text">
             Don’t Have an Account? <a href="/signup">Sign up</a>

@@ -245,22 +245,24 @@ const resolvers = {
     // User login
     login: async (_, { email, password, role }) => {
       try {
+        // Find the user by email
         const user = await User.findOne({ email });
         if (!user) {
-          throw new Error(`No user found with email: ${email}`);
+          throw new Error("No user found with that email.");
         }
-
+    
+        // Compare the provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
           throw new Error("Incorrect password. Please try again.");
         }
-
+    
+        // Check if the user role matches the requested role
         if (user.role !== role) {
-          throw new Error(
-            `User role '${user.role}' does not match the requested role '${role}'.`
-          );
+          throw new Error(`User role '${user.role}' does not match the requested role '${role}'.`);
         }
-
+    
+        // Return the user details if everything is correct
         return {
           id: user.id,
           firstName: user.firstName,
@@ -270,9 +272,11 @@ const resolvers = {
         };
       } catch (error) {
         console.error("Error in login resolver:", error);
-        throw new Error("Login failed.");
+        throw new Error(error.message || "Login failed. Please try again.");
       }
     },
+    
+    
 
      updateUser : async (_, { id, firstName, lastName, email }) => {
       try {
