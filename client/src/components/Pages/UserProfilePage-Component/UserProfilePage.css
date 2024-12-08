@@ -9,10 +9,8 @@ body {
 }
  
 .profile-container {
-  width: 100%;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
  
 .profile-section {

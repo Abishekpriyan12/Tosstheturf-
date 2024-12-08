@@ -88,7 +88,9 @@ const BookingHistoryComponent = () => {
 
   return (
     <div className="bookingHistory-page">
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
 
       <div className="content-section">
         <div className="filter-section">

@@ -79,7 +79,9 @@ const BookingConfirmation = () => {
  
   return (
     <>
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
       <div className="custom-booking-confirmation-container">
         <section className="custom-booking-success-section">
           <div className="custom-booking-header-image">

@@ -130,9 +130,6 @@ input[type="file"] {
 }
 
 
-/* Responsive Design */
-
-/* Medium Screens (Tablets) */
 @media (max-width: 768px) {
   .add-form-container {
     max-width: 90%;

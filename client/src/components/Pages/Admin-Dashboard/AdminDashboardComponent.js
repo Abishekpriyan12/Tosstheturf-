@@ -7,7 +7,7 @@ const AdminDashboardComponent = () => {
   const [pendingTurfs, setPendingTurfs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isApproving, setIsApproving] = useState(false); // State for approving spinner
+  const [isApproving, setIsApproving] = useState(false); 
   const [isRejecting, setIsRejecting] = useState(false); // State for rejecting spinner
 
   const navBarData = [
@@ -75,12 +75,12 @@ const AdminDashboardComponent = () => {
       console.error("Error approving turf:", error);
       alert("Failed to approve turf.");
     } finally {
-      setIsApproving(false); // Stop loading after approval
+      setIsApproving(false);
     }
   };
 
   const rejectTurf = async (turfId) => {
-    setIsRejecting(true); // Start loading for reject
+    setIsRejecting(true); 
     const mutation = `
       mutation ($turfId: ID!) {
         rejectTurf(turfId: $turfId) {
@@ -99,7 +99,7 @@ const AdminDashboardComponent = () => {
       console.error("Error rejecting turf:", error);
       alert("Failed to reject turf.");
     } finally {
-      setIsRejecting(false); // Stop loading after rejection
+      setIsRejecting(false); 
     }
   };
 

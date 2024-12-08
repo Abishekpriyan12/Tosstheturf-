@@ -93,7 +93,8 @@ const AboutUsComponent = () => {
 
     return (
         <div className="aboutuspage-page">
-           <NavBarComponent navBarData={navBarData} />{" "}
+           <NavBarComponent 
+ />{" "}
             <HeroSection></HeroSection>
             <MissionSection></MissionSection>
             <TeamSection></TeamSection>

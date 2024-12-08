@@ -1,3 +1,4 @@
+/* Card container styling */
 .card-container {
   background-color: #000;
   padding: 5px;
@@ -17,38 +18,16 @@
   margin-right: 25px;
 }
 
-#location-input {
-  display: none; /* Removed for all screens */
-}
-
-.location-textbox {
-  padding: 7px 10px;
-  padding-left: 30px;
-  border-radius: 5px;
-  height: 30px;
-  background: #000;
-  border: 2px solid #6ec207;
-  color: #fff;
-}
-
-.location-icon {
-  position: absolute;
-  left: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: white;
-  pointer-events: none;
-}
-
+/* Navigation Links */
 .nav-links {
   display: flex;
   margin-left: auto;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
+/* Navigation list styling */
 .nav-links ul {
   display: flex;
   list-style-type: none;
@@ -62,111 +41,101 @@
   color: #fff;
   font-size: 20px;
   cursor: pointer;
-}
-
-a {
-  text-decoration: none;
-  color: #fff;
-}
-
-#button-comp {
-  margin-left: 15px;
   position: relative;
 }
 
-.dropdown-button {
-  background-color: #6ec207;
+/* Adding hover effects */
+.nav-links ul li a {
+  text-decoration: none;
   color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  position: relative;
+}
+
+.nav-links ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #6ec207;
+  transition: width 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.nav-links ul li a:hover::after {
   width: 100%;
 }
 
-.dropdown-button:hover {
-  background-color: #5db006;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  padding: 0;
-  margin: 0;
-  width: auto;
-  max-width: 150px;
-  overflow: hidden;
-}
-
-.dropdown-item {
-  padding: 10px;
-  color: #fff;
+/* Mobile menu icon */
+.menu-icon {
+  display: none;
   cursor: pointer;
-  transition: background-color 0.3s;
+  z-index: 100;
 }
 
-.dropdown-item:hover {
-  background-color: #444;
+.menu-icon .bar {
+  width: 30px;
+  height: 3px;
+  margin: 6px auto;
+  background-color: #fff;
+  transition: 0.4s;
 }
 
+/* Mobile-specific CSS */
 @media (max-width: 768px) {
-  .card-container {
-    flex-direction: column; 
-    align-items: flex-start;
-    padding: 15px;
-  }
-
-  .Logo {
-    margin-bottom: 10px; 
-  }
-
-  .nav-links {
-    width: 100%;
-    margin-top: 10px;
-    flex-direction: column; 
-  }
-
   .nav-links ul {
-    flex-direction: column; 
-    align-items: flex-start;
+    display: none;
+    flex-direction: column;
     width: 100%;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    background-color: #000;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: calc(100vh - 50px); /* Adjust to avoid overflow */
+    overflow-y: auto; /* Allow vertical scrolling if needed */
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .nav-links.active ul {
+    display: flex;
+    transform: translateY(0);
   }
 
   .nav-links ul li {
-    font-size: 18px; 
+    font-size: 18px;
     padding: 8px 0;
     margin: 5px 0;
   }
 
-  #button-comp {
-    margin-top: 10px;
-    width: 100%; 
+  /* Toggle menu icon when active */
+  .menu-icon.active .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+
+  .menu-icon.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-icon.active .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+  }
+
+  .menu-icon {
+    display: block;
   }
 }
 
 @media (max-width: 480px) {
   .dropdown-menu {
-    width: auto; 
-    max-width: 90%; 
+    width: auto;
+    max-width: 90%;
   }
 
   .dropdown-button {
-    width: 100%; 
-  }
-
-  .menu-icon {
-    display: block; 
-    cursor: pointer;
-    color: white; 
-  }
-
-  .nav-links {
-    display: none; 
+    width: 100%;
   }
 }

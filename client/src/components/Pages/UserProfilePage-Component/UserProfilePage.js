@@ -118,7 +118,9 @@ const UserProfilePage = () => {
  
   return (
     <div className="profile-container">
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
       <section className="profile-section">
         <div className="profile-card">
           <div className="profile-header">

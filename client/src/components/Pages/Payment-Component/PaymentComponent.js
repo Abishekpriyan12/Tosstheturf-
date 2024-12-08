@@ -205,7 +205,9 @@ const PaymentComponent = () => {
 
   return (
     <div>
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
 
       <div className="payment-body">
         <h2 className="payment-header">PAYMENT CONFIRMATION</h2>
