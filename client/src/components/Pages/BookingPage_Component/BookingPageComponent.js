@@ -228,7 +228,7 @@ const BookingPageComponent = () => {
 
   return (
     <div>
-      <NavBarComponent navBarData={navBarData} className="nav-bar" />
+      <NavBarComponent/>
       <div className="back-arrow" onClick={() => navigate(-1)}>
         <span>&#8249;</span>
         <span className="back-text">Back</span>

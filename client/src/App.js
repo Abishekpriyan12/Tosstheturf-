@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import HomePageComponent from "./components/Pages/Home-Component/HomePageComponent";
 import ContactUsComponent from "./components/Pages/ContactUs-Component/ContactUsComponent";
@@ -26,12 +25,27 @@ import { loadStripe } from "@stripe/stripe-js";
 const stripePromise = loadStripe("pk_test_51QMj2AFVBeJqSxXdduljyneDhiZCJfl1k5uljbb5khNDmuDWvp1sofI2WZJUy0ZafgZIn1gZVDmdaLmGa71gLSEA00AtA8HDeP");
 
 function App() {
-  const [role, setRole] = useState(null);  // Role stored in state
+  const [role, setRole] = useState(null); // Role stored in state
+  const [loading, setLoading] = useState(true); // Loading state to check if role is loaded
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const userRole = sessionStorage.getItem("role");  // Check user role in sessionStorage
-    setRole(userRole);
-  }, []);
+    // Fetch role from sessionStorage on component mount
+    const userRole = sessionStorage.getItem("role");  
+    if (userRole) {
+      setRole(userRole);  // Set the role if available
+    } else {
+      navigate("/login");  // Redirect to login if no role is found
+    }
+
+    // Set loading to false after role is set
+    setLoading(false);
+  }, [navigate]);
+
+  if (loading) {
+    // Show a loading screen while the role is being determined
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="App">
@@ -42,14 +56,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/contact" element={<ContactUsComponent />} />
         <Route path="/faq" element={<FaqComponent />} />
-        <Route
-          path="/payment"
-          element={
-            <Elements stripe={stripePromise}>
-              <PaymentComponent />
-            </Elements>
-          }
-        />
+        <Route path="/payment" element={<Elements stripe={stripePromise}><PaymentComponent /></Elements>} />
         <Route path="/about" element={<AboutUsComponent />} />
         <Route path="/turfSearch" element={<TurfSearchPageComponent />} />
         <Route path="/turf/:id" element={<TurfDetailComponent />} />
@@ -59,7 +66,6 @@ function App() {
         {/* Routes for Users */}
         {role === "User" && (
           <>
-           
             <Route path="/bookingPage/:id" element={<BookingPageComponent />} />
             <Route path="/displayturf" element={<DisplayTurfComponent />} />
             <Route path="/bookingConfirmation" element={<BookingConfirmation />} />
@@ -74,7 +80,6 @@ function App() {
             <Route path="/bookinghistory" element={<BookingHistoryComponent />} />
             <Route path="/displayturf" element={<DisplayTurfComponent />} />
             <Route path="/edit-turf" element={<EditTurfDetailComponent />} />
-            <Route path="/edit-turf" element={<EditTurfDetailComponent />} />
             <Route path="/user" element={<UserProfilePage />} />
           </>
         )}
@@ -86,12 +91,10 @@ function App() {
             <Route path="/addTurf" element={<AddTurfForm />} />
             <Route path="/user" element={<UserProfilePage />} />
             <Route path="/bookinghistory/:turfId" element={<OwnerTurfBookingHistory />} />
-            
           </>
         )}
 
-        {/* Additional Routes */}
-       
+      
       </Routes>
     </div>
   );
