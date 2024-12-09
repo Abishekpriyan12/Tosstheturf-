@@ -6,13 +6,85 @@
 }
 
 /* First Section */
-.home-first-section {
+/* .home-first-section {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
   align-items: center;
+} */
+
+.text-section h1{
+  color: #f1f1f1;
 }
+
+.host-the-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #000; /* Black background as in the second image */
+  padding: 50px 20px; /* Add padding for spacing */
+  color: #fff; /* Text color white */
+}
+
+
+.home-first-section {
+  background-image: url("../../../assests/images/Component\ 56\ –\ 1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.home-second-section {
+  background-image: url("../../../assests/images/bg\ 2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.home-third-section {
+  background-image: url("../../../assests/images/Third.png");
+  background-size: cover;
+  background-position: left center;
+  background-repeat: no-repeat;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+
+
+.overlay {
+  position: absolute;
+  top: 15;
+  margin-top: 6px;
+  left: 0;
+  width: 100%;
+  height: 90vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Black overlay */
+  z-index: 1;
+  pointer-events: none; /* Ensure it doesn't interfere with navbar or other elements */
+}
+
+.text-section{
+  z-index: 1;
+  margin-left: 50px;
+  margin-bottom: 20px;
+}
+
 
 .text-section,
 .image-section {
@@ -20,19 +92,24 @@
   text-align: center;
 }
 
-.first-banner-text,
-.second-banner-text {
+.first-banner-text {
   font-size: 4vw;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .first-banner-text {
-  font-size: 5vw;
+  font-size: 2vw !important;
+}
+
+.highlight-green {
+  color: #6EC207;
 }
 
 .second-banner-text {
-  font-size: 3.5vw;
+  font-size: 1.0vw !important;
+  font-weight: 300 !important;
+  color: #B2B2B2;
 }
 
 img {
@@ -61,9 +138,21 @@ img {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 10px;
   text-align: center;
+  /* font-weight: 600; */
 }
 
+.Home-third-header{
+  padding: 10px;
+   font-size: 2vw; 
+   font-weight: bold;
+}
+
+.Home-third-sub{
+  font-size: 1vw;
+  color: #B2B2B2;
+}
 .host-image,
 .perfect-images .round-image {
   display: flex;
@@ -72,15 +161,29 @@ img {
 
 .host-image img,
 .perfect-images .round-image img {
-  border-radius: 50%;
-  max-width: 100px;
-  height: 100px;
+  padding: 20px;
+    /* border-radius: 50%; */
+    max-width: 300px;
+    height: auto;
+}
+
+.perfect-text1{
+  font-size: 2vw;
+  font-weight: bold;
+}
+
+.perfect-text2{
+  padding: 10px;
+  color: #B2B2B2;
+  font-size: 1vw;
 }
 
 /* Fifth Section */
 .fifth_right-section {
   flex: 1 1 100%;
   text-align: center;
+  z-index: 1;
+  margin-left: 300px;
 }
 
 .fifth-banner-text {
@@ -184,7 +287,7 @@ img {
   }
 
   .second-banner-text {
-    font-size: 2.5vw;
+    font-size: 2.5vw ;
   }
 
   .fifth_right-section {
@@ -221,4 +324,21 @@ img {
   .second-banner-text {
     font-size: 1.8vw;
   }
+}
+
+@media (max-width: 720px) {
+
+  .second-banner-text{
+    font-size: 14px !important;
+  
+  }
+
+  
+    button {
+      font-size: 0.5rem;
+      padding: 8px 12px;
+      margin-left: 100px;
+  }
+  
+  
 }

@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
 import "./LoginPageComponent.css";
 import loginBackground from "../../../assests/images/loginbg.jpg";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import logo from "../../../assests/images/logov1.png";
-import { graphQLCommand } from "../../../util"; // Assuming graphQLCommand is a utility function for sending GraphQL queries
+import { graphQLCommand } from "../../../util";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Clear previous error message
+    setErrorMessage("");
 
     try {
       const response = await graphQLCommand(
@@ -34,19 +36,18 @@ const LoginPage = () => {
       );
 
       if (response && response.login) {
-        // Storing session data after successful login
-        sessionStorage.setItem("username", `${response.login.firstName} ${response.login.lastName}`);
+        sessionStorage.setItem(
+          "username",
+          `${response.login.firstName} ${response.login.lastName}`
+        );
         sessionStorage.setItem("userId", `${response.login.id}`);
         sessionStorage.setItem("role", `${response.login.role}`);
-
-        navigate("/"); // Redirect to home page
+        navigate("/");
       } else {
         setErrorMessage("Login failed. Please check your credentials and role.");
       }
     } catch (error) {
       console.log(error);
-
-      // Handle specific error cases based on the message from the backend
       if (error.message.includes("No user found")) {
         setErrorMessage("No user found with that email. Please try again.");
       } else if (error.message.includes("Incorrect password")) {
@@ -54,7 +55,9 @@ const LoginPage = () => {
       } else if (error.message.includes("does not match the requested role")) {
         setErrorMessage(`Your role does not match the requested role: ${role}.`);
       } else {
-        setErrorMessage("Login failed. Please check your credentials and try again.");
+        setErrorMessage(
+          "Login failed. Please check your credentials and try again."
+        );
       }
     }
   };
@@ -88,14 +91,20 @@ const LoginPage = () => {
             <label htmlFor="password" className="labelLogin">Password</label>
             <div className="input-wrapper">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <img src="../../../assests/icons/hide.png" alt="Password Icon" className="icon" />
+              <img
+                src={`../../../assests/icons/${showPassword ? "eye.png" : "hide.png"}`}
+                alt="Toggle Password Visibility"
+                className="icon"
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                style={{ cursor: "pointer" }}
+              />
             </div>
           </div>
 
@@ -116,12 +125,17 @@ const LoginPage = () => {
             </div>
           </div>
 
+          
           <div className="form-group remember-me">
-            <input type="checkbox" id="remember" />
+            <input
+              type="checkbox"
+              id="remember"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)} 
+            />
             <label htmlFor="remember">Remember me</label>
           </div>
-
-          {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           
           <ButtonComponent btnName={"Login"} />
           <p className="signup-text">

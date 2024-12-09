@@ -52,7 +52,8 @@ p {
   position: relative;
 }
 
-input[type="email"], input[type="password"] {
+input[type="email"],
+input[type="password"] {
   width: 100%;
   padding: 15px;
   font-size: 16px;
@@ -62,7 +63,14 @@ input[type="email"], input[type="password"] {
   color: #fff;
 }
 
-input[type="email"]::placeholder, input[type="password"]::placeholder {
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #6EC207;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
   color: #AEA7A7;
 }
 
@@ -71,13 +79,31 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6EC207;
+  width: 20px;
+  height: 20px;
 }
 
-.remember-me {
+/* .remember-me {
   display: flex;
   align-items: center;
+  gap: 8px;
   color: #6EC207;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.remember-me input[type="checkbox"] {
+  margin-right: 5px;
+  accent-color: #6EC207;
+} */
+
+.remember-me {
+  display: inline-block;
+  align-items: center;
+  /* gap: 8px; */
+  color: #6EC207;
+  margin-top: 10px;
+  font-size: 14px;
 }
 
 .login-button {
@@ -111,7 +137,39 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
   background-position: center;
 }
 
-/* MEDIA QUERY FOR TABLETS (WIDTH < 1024px) */
+.form-group select {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: 2px solid #6EC207;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #fff;
+  appearance: none;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #6EC207;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper .icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6EC207;
+  pointer-events: none;
+}
+
+.select-wrapper option {
+  color: #000;
+}
+
 @media (max-width: 1024px) {
   .login-container {
     flex-direction: column;
@@ -145,7 +203,6 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
   }
 }
 
-/* MEDIA QUERY FOR PHONES (WIDTH < 768px) */
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;
@@ -177,7 +234,8 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
     text-align: center;
   }
 
-  input[type="email"], input[type="password"] {
+  input[type="email"],
+  input[type="password"] {
     font-size: 14px;
     padding: 12px;
   }
@@ -192,7 +250,6 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
   }
 }
 
-/* MEDIA QUERY FOR SMALL PHONES (WIDTH < 480px) */
 @media (max-width: 480px) {
   .login-container {
     flex-direction: column;
@@ -216,7 +273,8 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
     text-align: center;
   }
 
-  input[type="email"], input[type="password"] {
+  input[type="email"],
+  input[type="password"] {
     padding: 10px;
     font-size: 14px;
   }
@@ -231,63 +289,3 @@ input[type="email"]::placeholder, input[type="password"]::placeholder {
     text-align: center;
   }
 }
-
-
-/* Dropdown styling */
-.form-group select {
-  width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  border: 2px solid #6EC207;
-  border-radius: 8px;
-  background-color: transparent;
-  color: #fff;
-  appearance: none; /* Remove default dropdown arrow */
-  position: relative;
-}
-
-.form-group select:focus {
-  outline: none;
-  border-color: #4CAF50; /* Change border color on focus */
-}
-
-.select-wrapper {
-  position: relative;
-}
-
-.select-wrapper .icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6EC207;
-  pointer-events: none;
-}
-
-.select-wrapper img.icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px; /* Adjust size as needed */
-  height: 20px;
-  pointer-events: none;
-}
-
-.select-wrapper option{
-  color: #000;
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-.icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px; 
-  height: 20px;
-}
-

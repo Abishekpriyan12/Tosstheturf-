@@ -20,17 +20,46 @@
 }
 
 .dropdown-checkbox {
-  background-color: #000;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: #fff;
+  /* border: 1px solid #ccc; */
+  border-radius: 10px;
   position: absolute;
-  width: 10%;
-  max-height: 150px;
-  margin-top: 2%;
+  width: 200px;
+  max-height: 200px;
+  margin-top: 5px;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-left: 13%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  padding: 10px;
 }
+
+.dropdown-checkbox label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.dropdown-checkbox input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.close-icon,
+.submit-icon {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  margin: 5px;
+  background-color: #6ec207;
+  color: #fff;
+}
+
+.close-icon:hover,
+.submit-icon:hover {
+  background-color: #5aa206;
+}
+
 .back-arrow {
   display: flex;
   align-items: center;
@@ -56,7 +85,7 @@
 }
 
 .dropdown-checkbox label:hover {
-  background-color: #000;
+  background-color: rgb(184, 182, 182);
 }
 
 .proceed-button {
@@ -94,7 +123,7 @@
 .submit-icon {
   cursor: pointer;
   font-size: 20px; 
-  color: #4caf50;
+  /* color: #4caf50; */
   padding: 4px;
   margin: 2px; 
 }
@@ -109,12 +138,12 @@
   font-size: 13px;
   padding: 4px;
   margin: 2px;
-  color: red;
+  /* color: #6ec207; */
   border-radius: 7px;
 }
 
 .close-icon:hover {
-  color: #d00000;
+  /* color: #6ec207; */
 }
 
 .Booking-card {

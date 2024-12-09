@@ -71,6 +71,7 @@ const BookingPageComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
+  
   const userId = sessionStorage.getItem("userId");
   const [fullyBookedDates, setFullyBookedDates] = useState([]);
   const navigate = useNavigate();

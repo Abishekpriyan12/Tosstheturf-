@@ -82,6 +82,7 @@ const SignupPage = () => {
             <label htmlFor="userId" className="labelSignup">User ID</label>
             <div className="input-wrapper">
               <input
+               className="signup-input"
                 type="text"
                 id="userId"
                 placeholder="Enter a unique User ID"
@@ -96,6 +97,7 @@ const SignupPage = () => {
             <div className="input-wrapper">
               <label htmlFor="firstName" className="labelSignup">First Name</label>
               <input
+               className="signup-input"
                 type="text"
                 id="firstName"
                 placeholder="Enter Your First Name"
@@ -107,6 +109,7 @@ const SignupPage = () => {
             <div className="input-wrapper">
               <label htmlFor="lastName" className="labelSignup">Last Name</label>
               <input
+               className="signup-input2"
                 type="text"
                 id="lastName"
                 placeholder="Enter Your Last Name"
@@ -157,7 +160,7 @@ const SignupPage = () => {
 
           <div className="form-group">
             <label htmlFor="role" className="labelSignup">Role</label>
-            <select
+            <select className="select-wrapper"
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
