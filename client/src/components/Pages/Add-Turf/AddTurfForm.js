@@ -28,8 +28,67 @@ const AddTurfForm = () => {
   const [price, setPrice] = useState("");
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
   const [userId, setUserId] = useState(null);
+  const [recordingField, setRecordingField] = useState(null);
   const navigate = useNavigate();
 
+  const startVoiceInput = (field) => {
+    // Check for browser compatibility
+    if (!("webkitSpeechRecognition" in window)) {
+      alert("Your browser does not support voice input. Please use Google Chrome.");
+      return;
+    }
+  
+    // Initialize the Speech Recognition API
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = "en-US"; // Set language to English
+    recognition.interimResults = false; // Only get final results
+    recognition.maxAlternatives = 1; // Return only the most likely result
+  
+    // Event: When voice input starts
+    recognition.onstart = () => {
+      console.log(`Voice input started for the field: ${field}`);
+      setRecordingField(field); // Show recording status
+    };
+  
+    // Event: When voice input successfully detects speech
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript; // Get the spoken text
+      console.log(`Voice input result for ${field}:`, transcript);
+  
+      // Update the corresponding state based on the field
+      switch (field) {
+        case "turfName":
+          setTurfName(transcript);
+          break;
+        case "address":
+          setAddress(transcript);
+          break;
+        case "phone":
+          setPhone(transcript);
+          break;
+        case "price":
+          setPrice(transcript);
+          break;
+        default:
+          console.warn(`Unhandled field: ${field}`);
+      }
+    };
+  
+    // Event: Handle any errors during voice recognition
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      alert(`An error occurred during voice input: ${event.error}`);
+    };
+  
+    // Event: When voice recognition ends (regardless of success or failure)
+    recognition.onend = () => {
+      console.log(`Voice input ended for the field: ${field}`);
+      setRecordingField(null); // Reset recording status
+    };
+  
+    // Start the voice recognition
+    recognition.start();
+  };
   // Set owner name automatically from session
   useEffect(() => {
     const role = sessionStorage.getItem("role");
@@ -146,12 +205,23 @@ const AddTurfForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="add-form-group">
           <label>Turf Name:</label>
-          <input
-            type="text"
-            value={turfName}
-            onChange={(e) => setTurfName(e.target.value)}
-            required
-          />
+          <div className="voice-input-group">
+            <input
+              type="text"
+              value={turfName}
+              onChange={(e) => setTurfName(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => startVoiceInput("turfName")}
+              className={`voice-input-button ${
+                recordingField === "turfName" ? "recording" : ""
+              }`}
+            >
+              🎤
+            </button>
+          </div>
         </div>
         <div className="add-form-group">
           <label>Owner Name:</label>
@@ -165,12 +235,23 @@ const AddTurfForm = () => {
         </div>
         <div className="add-form-group">
           <label>Address:</label>
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
+          <div className="voice-input-group">
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => startVoiceInput("address")}
+              className={`voice-input-button ${
+                recordingField === "address" ? "recording" : ""
+              }`}
+            >
+              🎤
+            </button>
+          </div>
         </div>
         <div className="add-form-group">
           <label>Location:</label>
@@ -187,12 +268,23 @@ const AddTurfForm = () => {
         </div>
         <div className="add-form-group">
           <label>Phone:</label>
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
+          <div className="voice-input-group">
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => startVoiceInput("phone")}
+              className={`voice-input-button ${
+                recordingField === "phone" ? "recording" : ""
+              }`}
+            >
+              🎤
+            </button>
+          </div>
         </div>
         <div className="add-form-group">
           <label>Sport Type:</label>
@@ -210,12 +302,23 @@ const AddTurfForm = () => {
         </div>
         <div className="add-form-group">
           <label>Price:</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
+          <div className="voice-input-group">
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => startVoiceInput("price")}
+              className={`voice-input-button ${
+                recordingField === "price" ? "recording" : ""
+              }`}
+            >
+              🎤
+            </button>
+          </div>
         </div>
         <div className="add-form-group">
           <label>Amenities:</label>
