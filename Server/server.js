@@ -7,7 +7,6 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 const resolvers = require("./graphql/resolver");
-const { bucket } = require('./firebase'); 
 
 dotenv.config();
 
@@ -38,9 +37,6 @@ const startServer = async () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
-      context: ({ req }) => {
-        return { bucket };
-      },
     });
 
     // Connect to MongoDB

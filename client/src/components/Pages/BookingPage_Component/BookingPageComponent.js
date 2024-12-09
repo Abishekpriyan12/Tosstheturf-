@@ -71,6 +71,7 @@ const BookingPageComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
+  
   const userId = sessionStorage.getItem("userId");
   const [fullyBookedDates, setFullyBookedDates] = useState([]);
   const navigate = useNavigate();
@@ -192,8 +193,8 @@ const BookingPageComponent = () => {
     };
  
     try {
-      const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
-      console.log("Booking created successfully:", data.createBooking);
+      // const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
+      // console.log("Booking created successfully:", data.createBooking);
       fetchBookedSlots(selectedDate);
       setShowDropdown(false);
       setShowBookingDetails(true);
@@ -228,7 +229,7 @@ const BookingPageComponent = () => {
 
   return (
     <div>
-      <NavBarComponent navBarData={navBarData} className="nav-bar" />
+      <NavBarComponent/>
       <div className="back-arrow" onClick={() => navigate(-1)}>
         <span>&#8249;</span>
         <span className="back-text">Back</span>

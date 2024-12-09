@@ -1,20 +1,17 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-// Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBJYq8Q5X_J2zulLgTqrFGvPgwBOFGClJI",
-  authDomain: "turf-management-system-23732.firebaseapp.com",
-  projectId: "turf-management-system-23732",
-  storageBucket: "turf-management-system-23732.appspot.com",
-  messagingSenderId: "479674955224",
-  appId: "1:479674955224:web:83090c51a3a711523b2ead",
-  measurementId: "G-MVCZB8WX9N"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET, 
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-// Export Firebase storage and functions
 export { storage, ref, uploadBytes, getDownloadURL };

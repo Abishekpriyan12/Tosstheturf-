@@ -1,0 +1,12 @@
+{
+    "greetings": "Hello! How can I assist you today?",
+    "help": "I can help you find and book turfs, check pricing, view your booking history, and more!",
+    "priceQuery": "The price for the turf booking varies. Please check the turf details for pricing.",
+    "availableTurfs": "Here are the available turfs:\n- Soccer Turf\n- Cricket Turf\n- Basketball Turf",
+    "bookingHistory": "Here are your past bookings:\n- Turf: Soccer Turf, Date: 2024-12-10, Time: 3 PM\n- Turf: Basketball Turf, Date: 2024-12-12, Time: 5 PM",
+    "ratingQuery": "The average rating for this turf is 4.5 out of 5, based on 100 reviews.",
+    "amenitiesQuery": "This turf offers the following amenities: Parking, Drinking Water, Spare Kits, Non-AC.",
+    "mostRatedTurf": "The most rated turf is Soccer Turf, with an average rating of 4.8 out of 5.",
+    "mostBookedTurf": "The most booked turf is Soccer Turf, with over 200 bookings this month."
+  }
+  

@@ -6,9 +6,12 @@ const Turf = require('../models/Turf');
 const Booking = require('../models/Booking');
 const Review = require('../models/Review');
 const Stripe= require("stripe")
+const queriesConfig = require('../config/queriesConfig.json'); // Import the config for queries
+const queryResponses = require('../config/queryResponses.json'); 
 const sendEmail = require("../config/emailService");
 const stripe = new Stripe("sk_test_51QMj2AFVBeJqSxXd0U2pvOTdrVtnwJIYjRmH7VcZZSWukqemGyN2GX2v1l4hol8314gG6seeqn9lrsZ26HgXpjyV00Fmninryb");
 console.log("Stripe Secret Key:", process.env.STRIPE_SECRET_KEY);
+const Chat = require('../models/Chat');
 
 const resolvers = {
   Query: {
@@ -245,22 +248,24 @@ const resolvers = {
     // User login
     login: async (_, { email, password, role }) => {
       try {
+        // Find the user by email
         const user = await User.findOne({ email });
         if (!user) {
-          throw new Error(`No user found with email: ${email}`);
+          throw new Error("No user found with that email.");
         }
-
+    
+        // Compare the provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
           throw new Error("Incorrect password. Please try again.");
         }
-
+    
+        // Check if the user role matches the requested role
         if (user.role !== role) {
-          throw new Error(
-            `User role '${user.role}' does not match the requested role '${role}'.`
-          );
+          throw new Error(`User role '${user.role}' does not match the requested role '${role}'.`);
         }
-
+    
+        // Return the user details if everything is correct
         return {
           id: user.id,
           firstName: user.firstName,
@@ -270,9 +275,11 @@ const resolvers = {
         };
       } catch (error) {
         console.error("Error in login resolver:", error);
-        throw new Error("Login failed.");
+        throw new Error(error.message || "Login failed. Please try again.");
       }
     },
+    
+    
 
      updateUser : async (_, { id, firstName, lastName, email }) => {
       try {
@@ -294,6 +301,97 @@ const resolvers = {
       }
     },
     
+    sendMessage: async (_, { userId, message }) => {
+      let botResponse = "Sorry, I didn't understand that.";
+
+      // Loop through query types and check for match
+      for (const [queryType, queries] of Object.entries(queriesConfig)) {
+        if (queries.some(query => message.toLowerCase().includes(query))) {
+          // Dynamically handle responses based on the query type
+          switch (queryType) {
+            case 'greetings':
+              botResponse = queryResponses.greetings;
+              break;
+            case 'help':
+              botResponse = queryResponses.help;
+              break;
+            case 'priceQuery':
+              botResponse = queryResponses.priceQuery;
+              break;
+            case 'availableTurfs':
+              const availableTurfs = await Turf.find({ status: "Approved" });
+              botResponse = availableTurfs.length > 0
+                ? "Here are the available turfs:\n" + availableTurfs.map(turf => turf.turfName).join('\n')
+                : "There are no available turfs at the moment.";
+              break;
+            case 'bookingHistory':
+              const bookings = await Booking.find({ userId });
+              botResponse = bookings.length > 0
+                ? "Here are your past bookings:\n" + bookings.map(booking => `Turf: ${booking.turfName}, Date: ${booking.date}, Time: ${booking.time}`).join('\n')
+                : "You don't have any past bookings.";
+              break;
+              case 'ratingQuery':
+                // Extract the turf name after "turf rating"
+                const turfName = message.split("turf rating")[1]?.trim();
+              
+                if (turfName) {
+                  // Use regex for a case-insensitive search
+                  const turf = await Turf.findOne({
+                    turfName: { $regex: new RegExp(turfName, "i") } // case-insensitive regex search
+                  });
+              
+                  if (turf) {
+                    const reviews = await Review.find({ turfId: turf._id }); // Use the turf's ObjectId
+                    const averageRating =
+                      reviews.length > 0
+                        ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+                        : "No reviews available";
+                    botResponse = `The average rating for ${turfName} is ${averageRating} out of 5.`;
+                  } else {
+                    botResponse = `I couldn't find a turf named ${turfName}. Please check the name again.`;
+                  }
+                } else {
+                  botResponse = "Please specify the turf name to get the rating.";
+                }
+                break;
+              
+              
+            case 'amenitiesQuery':
+              const turf = await Turf.findOne({ userId }); // Assuming we fetch turf info for this user
+              botResponse = turf ? `This turf offers the following amenities: ${JSON.stringify(turf.amenities)}` : "Turf not found.";
+              break;
+            case 'mostRatedTurf':
+              const mostRatedTurf = await Turf.findOne({ rating: { $gte: 4.5 } }).sort({ rating: -1 }).limit(1);
+              botResponse = mostRatedTurf ? `The most rated turf is ${mostRatedTurf.turfName} with an average rating of ${mostRatedTurf.rating}.` : "No rated turfs available.";
+              break;
+            case 'mostBookedTurf':
+              const mostBookedTurf = await Booking.aggregate([
+                { $group: { _id: "$turfName", count: { $sum: 1 } } },
+                { $sort: { count: -1 } },
+                { $limit: 1 }
+              ]);
+              botResponse = mostBookedTurf.length > 0
+                ? `The most booked turf is ${mostBookedTurf[0]._id} with ${mostBookedTurf[0].count} bookings.`
+                : "No turfs have been booked yet.";
+              break;
+            default:
+              botResponse = "Sorry, I didn't understand that.";
+          }
+          break; // Stop once a query is matched
+        }
+      }
+
+      // Store the chat history with user and bot messages
+      const newChat = new Chat({
+        userId,
+        message,
+        botResponse,
+      });
+
+      await newChat.save();
+
+      return { message, botResponse };
+    },
 
     // Add a new turf
     addTurf: async (
@@ -571,16 +669,15 @@ const resolvers = {
       }
     },
 
-    confirmBooking: async (_, { paymentIntentId, userId, turfId,turfName, date, time, duration, price }) => {
+    confirmBooking: async (_, { paymentIntentId, userId, turfId, turfName, date, time, duration, price }) => {
       try {
         if (!mongoose.Types.ObjectId.isValid(turfId)) {
           throw new Error("Invalid turf ID.");
         }
     
         if (paymentIntentId) {
-          const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId, {
-            payment_method: 'pm_card_visa', // Test card 
-          });
+          // Retrieve the PaymentIntent instead of confirming it again
+          const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     
           if (paymentIntent.status !== "succeeded") {
             console.log("Payment Status:", paymentIntent.status);
@@ -588,6 +685,7 @@ const resolvers = {
           }
         }
     
+        // Create a new booking after payment is verified
         const newBooking = new Booking({
           userId,
           turfId,
@@ -606,6 +704,7 @@ const resolvers = {
         throw new Error("Failed to confirm booking.");
       }
     },
+    
     
     
 

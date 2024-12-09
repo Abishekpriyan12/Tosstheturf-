@@ -9,10 +9,8 @@ body {
 }
  
 .profile-container {
-  width: 100%;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
  
 .profile-section {
@@ -179,7 +177,7 @@ body {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background: #2c2c2c;
+  background: #2c2c2c00;
   color: #fff;
 }
  

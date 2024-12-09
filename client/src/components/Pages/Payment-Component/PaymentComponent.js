@@ -1,11 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  useStripe,
-  useElements,
-  PaymentElement,
-  Elements,
-} from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
@@ -58,10 +52,12 @@ const CONFIRM_BOOKING = `
 `;
 
 const PaymentComponent = () => {
-  const stripe = useStripe();
-  const elements = useElements();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Refs to store stripe and elements
+  const elementsRef = useRef(null);
+  const paymentElementRef = useRef(null);
 
   // State variables
   const [paymentError, setPaymentError] = useState(null);
@@ -71,7 +67,6 @@ const PaymentComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const bookingDetails = location.state?.bookingDetails;
 
-  // Fetch clientSecret and navbar data
   useEffect(() => {
     const fetchPaymentIntent = async () => {
       if (!bookingDetails) {
@@ -81,21 +76,17 @@ const PaymentComponent = () => {
 
       try {
         const { price } = bookingDetails;
-        console.log("Creating Payment Intent for price:", price);
-
         const response = await graphQLCommand(CREATE_PAYMENT_INTENT, {
-          amount: Math.round(price * 100), // Amount in cents
+          amount: Math.round(price * 100),
           currency: "cad",
         });
 
         if (response.createPaymentIntent?.clientSecret) {
           setClientSecret(response.createPaymentIntent.clientSecret);
-          console.log("Fetched clientSecret:", response.createPaymentIntent.clientSecret);
         } else {
           throw new Error("Client secret not found in the response.");
         }
       } catch (error) {
-        console.error("Error creating payment intent:", error);
         setPaymentError("Failed to initialize payment. Please try again.");
       }
     };
@@ -112,49 +103,52 @@ const PaymentComponent = () => {
       `;
       const data = await graphQLCommand(query);
       setNavBarData(data.getNavItems || []);
-      console.log("NavBar Data:", data.getNavItems);
     };
 
     fetchPaymentIntent();
     fetchNavBarData();
   }, [bookingDetails]);
 
-  // Function to wait for Payment Element
-  const waitForPaymentElement = async (maxRetries = 10, delay = 500) => {
-    console.log("Waiting for PaymentElement to be ready...");
-    for (let i = 0; i < maxRetries; i++) {
-      const paymentElement = elements?.getElement(PaymentElement);
-      if (paymentElement) {
-        console.log("PaymentElement is ready:", paymentElement); // Logging the actual PaymentElement
-        return paymentElement;
-      }
-      await new Promise((resolve) => setTimeout(resolve, delay));
-      console.log(`Retry ${i + 1}/${maxRetries}`);
-    }
-    throw new Error("PaymentElement is not ready.");
-  };
+  useEffect(() => {
+    const mountPaymentElement = async () => {
+      if (!clientSecret || !paymentElementRef.current) return;
 
-  // Handle payment submission
+      try {
+        const stripe = await stripePromise;
+        const elements = stripe.elements({ clientSecret });
+        elementsRef.current = elements;
+
+        const paymentElement = elements.create("payment");
+        paymentElement.mount(paymentElementRef.current);
+      } catch (error) {
+        setPaymentError("Failed to mount the payment element.");
+      }
+    };
+
+    mountPaymentElement();
+  }, [clientSecret]);
+
   const handlePayment = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
-      setPaymentError("Stripe is not properly loaded. Please try again.");
+    if (!elementsRef.current || !clientSecret) {
+      setPaymentError("Payment element is not ready. Please refresh and try again.");
       return;
     }
 
     try {
       setIsLoading(true);
-      await waitForPaymentElement();
 
-      console.log("Calling stripe.confirmPayment...");
+      const stripe = await stripePromise;
       const paymentResult = await stripe.confirmPayment({
-        elements,
+        elements: elementsRef.current,
         confirmParams: {
           return_url: window.location.origin + "/bookingConfirmation",
         },
         redirect: "if_required",
       });
+
+      console.log('paymentresult',paymentResult)
 
       if (paymentResult.error) {
         setPaymentError(paymentResult.error.message);
@@ -174,56 +168,34 @@ const PaymentComponent = () => {
         setPaymentError("Payment failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error processing payment:", error);
+      console.log(error)
       setPaymentError("An error occurred while processing the payment.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Appearance settings for Payment Element
-  const appearance = useMemo(
-    () => ({
-      theme: "stripe",
-      variables: {
-        colorPrimary: "#37e534",
-        colorBackground: "#000000",
-        colorText: "#FFFF",
-        colorDanger: "#DF1B41",
-      },
-      rules: {
-        ".Input": { borderRadius: "8px" },
-        ".Label": { color: "#ffffff" },
-      },
-    }),
-    []
-  );
-
-  const options = useMemo(() => ({ clientSecret, appearance }), [clientSecret, appearance]);
-
-  console.log("Options passed to Elements:", options);
-
   return (
     <div>
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
 
       <div className="payment-body">
         <h2 className="payment-header">PAYMENT CONFIRMATION</h2>
         {clientSecret ? (
-          <Elements stripe={stripePromise} options={options}>
-            <form className="payment-container" onSubmit={handlePayment}>
-              <PaymentElement id="payment-element" />
-              <button
-                className="pay-button"
-                type="submit"
-                disabled={isLoading || !stripe || !elements}
-              >
-                {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-              </button>
-              {paymentError && <div className="error-message">{paymentError}</div>}
-              {paymentSuccess && <div className="success-message">{paymentSuccess}</div>}
-            </form>
-          </Elements>
+          <form className="payment-container" onSubmit={handlePayment}>
+            <div id="payment-element" ref={paymentElementRef}></div>
+            <button
+              className="pay-button"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+            </button>
+            {paymentError && <div className="error-message">{paymentError}</div>}
+            {paymentSuccess && <div className="success-message">{paymentSuccess}</div>}
+          </form>
         ) : (
           <div>Loading payment details...</div>
         )}

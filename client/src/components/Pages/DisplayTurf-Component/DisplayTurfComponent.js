@@ -82,7 +82,9 @@ const DisplayTurfComponent = () => {
  
   return (
     <div className="displayturf-page">
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
  
       <div className="displayturfdata-page">
         <div className="booking-button-container">

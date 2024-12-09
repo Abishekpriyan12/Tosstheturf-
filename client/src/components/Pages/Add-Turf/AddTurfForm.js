@@ -29,6 +29,7 @@ const AddTurfForm = () => {
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
   const [userId, setUserId] = useState(null);
   const [recordingField, setRecordingField] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
   const startVoiceInput = (field) => {
@@ -113,26 +114,37 @@ const AddTurfForm = () => {
   const handleImageUpload = async (file) => {
     const imageRef = ref(storage, `turfImages/${file.name}`);
     try {
+      // Check if file already exists
       const existingUrl = await getDownloadURL(imageRef);
+      console.log("Existing URL:", existingUrl); // Check URL
       return existingUrl;
     } catch (error) {
       if (error.code === "storage/object-not-found") {
+        console.log(`Uploading file: ${file.name}`);
         await uploadBytes(imageRef, file);
-        return await getDownloadURL(imageRef);
+        const downloadURL = await getDownloadURL(imageRef);
+        console.log("Uploaded URL:", downloadURL); // Check URL
+        return downloadURL;
       }
       throw error;
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start loading
 
     try {
+      // Upload the main image and get its URL
       const mainImageURL = await handleImageUpload(mainImage);
+
+      // Upload all slider images and get their URLs
       const sliderImageURLs = await Promise.all(
         Array.from(sliderImages).map((file) => handleImageUpload(file))
       );
 
+      // Construct the data payload
       const turfData = {
         turfName,
         ownerName,
@@ -149,12 +161,15 @@ const AddTurfForm = () => {
         firstTimeDiscount,
         status: sessionStorage.getItem("role") === "Admin" ? "Approved" : "Pending", 
       };
+
       console.log("Payload being sent:", turfData);
+
+      // Send GraphQL mutation request to the backend
       const response = await graphQLCommand(
         `mutation addTurf(
            $turfName: String!,
            $ownerName: String!,
-            $userId: String!,
+           $userId: String!,
            $address: String!,
            $location: String!,
            $phone: String!,
@@ -170,7 +185,7 @@ const AddTurfForm = () => {
            addTurf(
              turfName: $turfName,
              ownerName: $ownerName,
-              userId: $userId,
+             userId: $userId,
              address: $address,
              location: $location,
              phone: $phone,
@@ -196,6 +211,9 @@ const AddTurfForm = () => {
       navigate(sessionStorage.getItem("role") === "Admin" ? "/displayturf" : "/ownerDashboard");
     } catch (error) {
       console.error("Error adding turf:", error);
+      alert("There was an error adding the turf. Please try again.");
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -402,10 +420,16 @@ const AddTurfForm = () => {
             required
           />
         </div>
-        <button type="submit" className="add-form-submit-button">
-          Submit
+        <button type="submit" className="add-form-submit-button" disabled={isLoading}>
+          {isLoading ? "Submitting..." : "Submit"}
         </button>
       </form>
+
+      {isLoading && (
+        <div className="spinner-container">
+          <div className="spinner"></div> {/* Spinner component */}
+        </div>
+      )}
     </div>
   );
 };

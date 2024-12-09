@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
 import "./LoginPageComponent.css";
 import loginBackground from "../../../assests/images/loginbg.jpg";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import logo from "../../../assests/images/logov1.png";
-import { graphQLCommand } from "../../../util" 
-
-
+import { graphQLCommand } from "../../../util";
 
 const LoginPage = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(""); 
+  const [role, setRole] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-  
+
     try {
       const response = await graphQLCommand(
         `
@@ -32,28 +32,35 @@ const LoginPage = () => {
             }
         }
         `,
-        {
-          email,
-          password,
-          role,
-        }
+        { email, password, role }
       );
-  
+
       if (response && response.login) {
-        sessionStorage.setItem("username", `${response.login.firstName} ${response.login.lastName}`);
+        sessionStorage.setItem(
+          "username",
+          `${response.login.firstName} ${response.login.lastName}`
+        );
         sessionStorage.setItem("userId", `${response.login.id}`);
         sessionStorage.setItem("role", `${response.login.role}`);
-          navigate("/");
-        
+        navigate("/");
       } else {
         setErrorMessage("Login failed. Please check your credentials and role.");
       }
     } catch (error) {
       console.log(error);
+      if (error.message.includes("No user found")) {
+        setErrorMessage("No user found with that email. Please try again.");
+      } else if (error.message.includes("Incorrect password")) {
+        setErrorMessage("Incorrect password. Please try again.");
+      } else if (error.message.includes("does not match the requested role")) {
+        setErrorMessage(`Your role does not match the requested role: ${role}.`);
+      } else {
+        setErrorMessage(
+          "Login failed. Please check your credentials and try again."
+        );
+      }
     }
   };
-  
-  
 
   return (
     <div className="login-container">
@@ -62,16 +69,11 @@ const LoginPage = () => {
           <img src={logo} alt="TOSS Logo" className="logo-image" />
         </div>
         <h2>Welcome Back!</h2>
-        <p>
-          Streamline turf care with efficient scheduling, monitoring, and
-          resource management.
-        </p>
+        <p>Streamline turf care with efficient scheduling, monitoring, and resource management.</p>
 
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label htmlFor="email" className="labelLogin">
-              Email
-            </label>
+            <label htmlFor="email" className="labelLogin">Email</label>
             <div className="input-wrapper">
               <input
                 type="email"
@@ -79,31 +81,35 @@ const LoginPage = () => {
                 placeholder="Enter Your Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required 
+                required
               />
               <img src="../../../assests/icons/mail.png" alt="Email Icon" className="icon" />
             </div>
           </div>
+
           <div className="form-group">
-            <label htmlFor="password" className="labelLogin">
-              Password
-            </label>
+            <label htmlFor="password" className="labelLogin">Password</label>
             <div className="input-wrapper">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
               />
-              <img src="../../../assests/icons/hide.png" alt="Password Icon" className="icon" />
+              <img
+                src={`../../../assests/icons/${showPassword ? "eye.png" : "hide.png"}`}
+                alt="Toggle Password Visibility"
+                className="icon"
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                style={{ cursor: "pointer" }}
+              />
             </div>
           </div>
+
           <div className="form-group">
-            <label htmlFor="role" className="labelLogin">
-              Role
-            </label>
+            <label htmlFor="role" className="labelLogin">Role</label>
             <div className="select-wrapper">
               <select
                 value={role}
@@ -115,15 +121,22 @@ const LoginPage = () => {
                 <option value="Admin">Admin</option>
                 <option value="Owner">Owner</option>
               </select>
-              <img src="../../../assests/icons/arrow-down.png" alt="Role Icon" className="icon" /> 
+              <img src="../../../assests/icons/arrow-down.png" alt="Role Icon" className="icon" />
             </div>
           </div>
 
+          
           <div className="form-group remember-me">
-            <input type="checkbox" id="remember" />
+            <input
+              type="checkbox"
+              id="remember"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)} 
+            />
             <label htmlFor="remember">Remember me</label>
           </div>
-          {errorMessage && <p className="error-message">{errorMessage}</p>} 
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          
           <ButtonComponent btnName={"Login"} />
           <p className="signup-text">
             Don’t Have an Account? <a href="/signup">Sign up</a>

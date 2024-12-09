@@ -98,6 +98,36 @@ input[type="file"] {
   background: #5ea506;
   box-shadow: 0 4px 10px rgba(110, 194, 7, 0.5);
 }
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 9999; /* Make sure the spinner is on top of other elements */
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 .voice-input-group {
   display: flex;
@@ -133,7 +163,6 @@ input[type="file"] {
 
 /* Responsive Design */
 
-/* Medium Screens (Tablets) */
 @media (max-width: 768px) {
   .add-form-container {
     max-width: 90%;
