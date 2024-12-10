@@ -7,6 +7,7 @@ import {
   getDownloadURL,
 } from "../../../firebaseClient";
 import { graphQLCommand } from "../../../util";
+import browserImageCompression from "browser-image-compression";
 import "./AddTurfForm.css";
 
 const AddTurfForm = () => {
@@ -29,34 +30,27 @@ const AddTurfForm = () => {
   const [firstTimeDiscount, setFirstTimeDiscount] = useState("");
   const [userId, setUserId] = useState(null);
   const [recordingField, setRecordingField] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Initialize speech recognition
   const startVoiceInput = (field) => {
-    // Check for browser compatibility
     if (!("webkitSpeechRecognition" in window)) {
       alert("Your browser does not support voice input. Please use Google Chrome.");
       return;
     }
-  
-    // Initialize the Speech Recognition API
+
     const recognition = new window.webkitSpeechRecognition();
-    recognition.lang = "en-US"; // Set language to English
-    recognition.interimResults = false; // Only get final results
-    recognition.maxAlternatives = 1; // Return only the most likely result
-  
-    // Event: When voice input starts
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
     recognition.onstart = () => {
-      console.log(`Voice input started for the field: ${field}`);
-      setRecordingField(field); // Show recording status
+      setRecordingField(field);
     };
-  
-    // Event: When voice input successfully detects speech
+
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript; // Get the spoken text
-      console.log(`Voice input result for ${field}:`, transcript);
-  
-      // Update the corresponding state based on the field
+      const transcript = event.results[0][0].transcript;
       switch (field) {
         case "turfName":
           setTurfName(transcript);
@@ -71,25 +65,21 @@ const AddTurfForm = () => {
           setPrice(transcript);
           break;
         default:
-          console.warn(`Unhandled field: ${field}`);
+          break;
       }
     };
-  
-    // Event: Handle any errors during voice recognition
+
     recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
       alert(`An error occurred during voice input: ${event.error}`);
     };
-  
-    // Event: When voice recognition ends (regardless of success or failure)
+
     recognition.onend = () => {
-      console.log(`Voice input ended for the field: ${field}`);
-      setRecordingField(null); // Reset recording status
+      setRecordingField(null);
     };
-  
-    // Start the voice recognition
+
     recognition.start();
   };
+
   // Set owner name automatically from session
   useEffect(() => {
     const role = sessionStorage.getItem("role");
@@ -111,40 +101,53 @@ const AddTurfForm = () => {
     setAmenities({ ...amenities, [e.target.name]: e.target.checked });
   };
 
-  const handleImageUpload = async (file) => {
-    const imageRef = ref(storage, `turfImages/${file.name}`);
+  const compressImage = async (file) => {
+    const options = {
+      maxWidthOrHeight: 800, // Adjust as necessary
+      useWebWorker: true,
+    };
     try {
-      // Check if file already exists
+      const compressedFile = await browserImageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error("Image compression failed:", error);
+      return file; // Return original if compression fails
+    }
+  };
+
+  const handleImageUpload = async (file) => {
+    const compressedFile = await compressImage(file);
+    const imageRef = ref(storage, `turfImages/${compressedFile.name}`);
+    try {
       const existingUrl = await getDownloadURL(imageRef);
-      console.log("Existing URL:", existingUrl); // Check URL
       return existingUrl;
     } catch (error) {
       if (error.code === "storage/object-not-found") {
-        console.log(`Uploading file: ${file.name}`);
-        await uploadBytes(imageRef, file);
+        await uploadBytes(imageRef, compressedFile);
         const downloadURL = await getDownloadURL(imageRef);
-        console.log("Uploaded URL:", downloadURL); // Check URL
         return downloadURL;
       }
       throw error;
     }
   };
-  
+
+  const uploadImages = async () => {
+    const mainImageURL = await handleImageUpload(mainImage);
+
+    const sliderImageURLs = await Promise.all(
+      Array.from(sliderImages).map((file) => handleImageUpload(file))
+    );
+
+    return { mainImageURL, sliderImageURLs };
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     try {
-      // Upload the main image and get its URL
-      const mainImageURL = await handleImageUpload(mainImage);
+      const { mainImageURL, sliderImageURLs } = await uploadImages();
 
-      // Upload all slider images and get their URLs
-      const sliderImageURLs = await Promise.all(
-        Array.from(sliderImages).map((file) => handleImageUpload(file))
-      );
-
-      // Construct the data payload
       const turfData = {
         turfName,
         ownerName,
@@ -159,61 +162,57 @@ const AddTurfForm = () => {
         sportType,
         price,
         firstTimeDiscount,
-        status: sessionStorage.getItem("role") === "Admin" ? "Approved" : "Pending", 
+        status: sessionStorage.getItem("role") === "Admin" ? "Approved" : "Pending",
       };
 
-      console.log("Payload being sent:", turfData);
-
-      // Send GraphQL mutation request to the backend
       const response = await graphQLCommand(
         `mutation addTurf(
-           $turfName: String!,
-           $ownerName: String!,
-           $userId: String!,
-           $address: String!,
-           $location: String!,
-           $phone: String!,
-           $amenities: AmenitiesInput!,
-           $timing: String!,
-           $mainImage: String!,
-           $sliderImages: [String!]!,
-           $sportType: String!,
-           $price: String!,
-           $firstTimeDiscount: String,
-           $status: String!
-         ) {
-           addTurf(
-             turfName: $turfName,
-             ownerName: $ownerName,
-             userId: $userId,
-             address: $address,
-             location: $location,
-             phone: $phone,
-             amenities: $amenities,
-             timing: $timing,
-             mainImage: $mainImage,
-             sliderImages: $sliderImages,
-             sportType: $sportType,
-             price: $price,
-             firstTimeDiscount: $firstTimeDiscount,
-             status: $status
-           ) {
-             id
-             turfName
-             status
-           }
-         }`,
+          $turfName: String!,
+          $ownerName: String!,
+          $userId: String!,
+          $address: String!,
+          $location: String!,
+          $phone: String!,
+          $amenities: AmenitiesInput!,
+          $timing: String!,
+          $mainImage: String!,
+          $sliderImages: [String!]!,
+          $sportType: String!,
+          $price: String!,
+          $firstTimeDiscount: String,
+          $status: String!
+        ) {
+          addTurf(
+            turfName: $turfName,
+            ownerName: $ownerName,
+            userId: $userId,
+            address: $address,
+            location: $location,
+            phone: $phone,
+            amenities: $amenities,
+            timing: $timing,
+            mainImage: $mainImage,
+            sliderImages: $sliderImages,
+            sportType: $sportType,
+            price: $price,
+            firstTimeDiscount: $firstTimeDiscount,
+            status: $status
+          ) {
+            id
+            turfName
+            status
+          }
+        }`,
         turfData
       );
 
-      console.log("Turf added:", response);
       alert("Your Turf Added successfully!");
       navigate(sessionStorage.getItem("role") === "Admin" ? "/displayturf" : "/ownerDashboard");
     } catch (error) {
       console.error("Error adding turf:", error);
       alert("There was an error adding the turf. Please try again.");
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -233,14 +232,13 @@ const AddTurfForm = () => {
             <button
               type="button"
               onClick={() => startVoiceInput("turfName")}
-              className={`voice-input-button ${
-                recordingField === "turfName" ? "recording" : ""
-              }`}
+              className={`voice-input-button ${recordingField === "turfName" ? "recording" : ""}`}
             >
               🎤
             </button>
           </div>
         </div>
+
         <div className="add-form-group">
           <label>Owner Name:</label>
           <input
@@ -251,6 +249,7 @@ const AddTurfForm = () => {
             required
           />
         </div>
+
         <div className="add-form-group">
           <label>Address:</label>
           <div className="voice-input-group">
@@ -263,14 +262,13 @@ const AddTurfForm = () => {
             <button
               type="button"
               onClick={() => startVoiceInput("address")}
-              className={`voice-input-button ${
-                recordingField === "address" ? "recording" : ""
-              }`}
+              className={`voice-input-button ${recordingField === "address" ? "recording" : ""}`}
             >
               🎤
             </button>
           </div>
         </div>
+
         <div className="add-form-group">
           <label>Location:</label>
           <select
@@ -284,6 +282,7 @@ const AddTurfForm = () => {
             <option value="Kitchner">Kitchner</option>
           </select>
         </div>
+
         <div className="add-form-group">
           <label>Phone:</label>
           <div className="voice-input-group">
@@ -296,14 +295,13 @@ const AddTurfForm = () => {
             <button
               type="button"
               onClick={() => startVoiceInput("phone")}
-              className={`voice-input-button ${
-                recordingField === "phone" ? "recording" : ""
-              }`}
+              className={`voice-input-button ${recordingField === "phone" ? "recording" : ""}`}
             >
               🎤
             </button>
           </div>
         </div>
+
         <div className="add-form-group">
           <label>Sport Type:</label>
           <select
@@ -318,6 +316,7 @@ const AddTurfForm = () => {
             <option value="Tennis">Tennis</option>
           </select>
         </div>
+
         <div className="add-form-group">
           <label>Price:</label>
           <div className="voice-input-group">
@@ -330,14 +329,13 @@ const AddTurfForm = () => {
             <button
               type="button"
               onClick={() => startVoiceInput("price")}
-              className={`voice-input-button ${
-                recordingField === "price" ? "recording" : ""
-              }`}
+              className={`voice-input-button ${recordingField === "price" ? "recording" : ""}`}
             >
               🎤
             </button>
           </div>
         </div>
+
         <div className="add-form-group">
           <label>Amenities:</label>
           <div className="add-form-checkbox-group">
@@ -379,6 +377,7 @@ const AddTurfForm = () => {
             </label>
           </div>
         </div>
+
         <div className="add-form-group">
           <label>First-Time Discount:</label>
           <input
@@ -387,6 +386,7 @@ const AddTurfForm = () => {
             onChange={(e) => setFirstTimeDiscount(e.target.value)}
           />
         </div>
+
         <div className="add-form-group">
           <label>Timing:</label>
           <select
@@ -401,6 +401,7 @@ const AddTurfForm = () => {
             <option value="5 PM to 9 PM">Evening (5 PM to 9 PM)</option>
           </select>
         </div>
+
         <div className="add-form-group">
           <label>Upload Main Image:</label>
           <input
@@ -410,6 +411,7 @@ const AddTurfForm = () => {
             required
           />
         </div>
+
         <div className="add-form-group">
           <label>Upload Slider Images (at least 3):</label>
           <input
@@ -420,6 +422,7 @@ const AddTurfForm = () => {
             required
           />
         </div>
+
         <button type="submit" className="add-form-submit-button" disabled={isLoading}>
           {isLoading ? "Submitting..." : "Submit"}
         </button>
@@ -427,7 +430,7 @@ const AddTurfForm = () => {
 
       {isLoading && (
         <div className="spinner-container">
-          <div className="spinner"></div> {/* Spinner component */}
+          <div className="spinner"></div>
         </div>
       )}
     </div>
