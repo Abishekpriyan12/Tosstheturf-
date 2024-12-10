@@ -1,46 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useLocation } from "react-router-dom";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import ButtonComponent from "../../Reusable-Components/Button-Component/ButtonComponent";
 import CardComponent from "../../Reusable-Components/Card-Component/CardComponent";
 import ScrollerComponent from "../../Reusable-Components/Scroller-Component/ScrollerComponent";
 import "./BookingConfirmation.css";
-import { graphQLCommand } from "../../../util"; 
-import user from '../../../assests/icons/user.png';
 
 const BookingConfirmation = () => {
+  // Access the booking details passed from PaymentComponent
+  const location = useLocation();
+  const bookingDetails = location.state;
 
-  const [navBarData, setNavBarData] = useState([]);
-
- 
-  useEffect(() => {
-    const fetchNavBarData = async () => {
-      const query = `
-        query {
-          getNavItems {
-            id
-            name
-            url
-          }
-        }
-      `;
-      const data = await graphQLCommand(query);
-      setNavBarData(data.getNavItems || []);
-    };
-
-    fetchNavBarData();
-  }, []);
-
-
-  const bookingDetails = {
-    userName: "Aksha Parvadiya",
-    location: "Waterloo Athletic, 308 Queen St N, Waterloo ON",
-    turf: "5 a side Turf 2",
-    dateTime: "September 5, 2024 11:00 AM to 1:00 PM",
-    cost: "$50",
-  };
-
- 
+  // Placeholder for recommended turfs
   const items = [
     {
       title: "Tri-City Sports Dome",
@@ -76,12 +48,21 @@ const BookingConfirmation = () => {
     },
   ];
 
- 
+  if (!bookingDetails) {
+    return (
+      <div>
+        <NavBarComponent />
+        <div className="custom-booking-confirmation-container">
+          <h2>Booking details not found. Please try again.</h2>
+        </div>
+        <FooterComponent />
+      </div>
+    );
+  }
+
   return (
     <>
-     
-
- <NavBarComponent/>
+      <NavBarComponent />
       <div className="custom-booking-confirmation-container">
         <section className="custom-booking-success-section">
           <div className="custom-booking-header-image">
@@ -90,31 +71,34 @@ const BookingConfirmation = () => {
           </div>
         </section>
 
-        
+        {/* Booking Details */}
         <section className="custom-booking-details-wrapper">
           <CardComponent className="custom-booking-card">
             <h3>Booking Details</h3>
             <div className="custom-booking-info">
-        
               <div className="custom-booking-item">
                 <img src="./assests/icons/user.png" alt="User Icon" />
                 <p className="custom-user-name">{bookingDetails.userName}</p>
               </div>
               <div className="custom-booking-item">
                 <img src="./assests/icons/location.png" alt="Location Icon" />
-                <p className="custom-location-details">{bookingDetails.location}</p>
+                <p className="custom-location-details">
+                  {bookingDetails.location}
+                </p>
               </div>
               <div className="custom-booking-item">
                 <img src="./assests/icons/soccer.png" alt="Turf Icon" />
-                <p className="custom-turf-details">{bookingDetails.turf}</p>
+                <p className="custom-turf-details">{bookingDetails.turfName}</p>
               </div>
               <div className="custom-booking-item">
                 <img src="./assests/icons/calendar.png" alt="Calendar Icon" />
-                <p className="custom-date-time">{bookingDetails.dateTime}</p>
+                <p className="custom-date-time">
+                  {bookingDetails.date}, {bookingDetails.time.join(", ")}
+                </p>
               </div>
               <div className="custom-booking-item">
                 <img src="./assests/icons/money.png" alt="Cost Icon" />
-                <p className="custom-cost-details">{bookingDetails.cost}</p>
+                <p className="custom-cost-details">${bookingDetails.price}</p>
               </div>
             </div>
             <div className="custom-button-container">
