@@ -14,16 +14,15 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: function (origin, callback) {
-    const allowedOrigins = ['http://localhost:3000', 'https://tosstheturf.vercel.app' , 'http://localhost:3001', 'https://studio.apollographql.com'];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: [
+    'http://localhost:3000', // Local frontend
+    'http://localhost:3001', // Local backend testing
+    'https://tosstheturf.vercel.app', // Deployed frontend
+    'https://studio.apollographql.com' // Apollo Studio (optional)
+  ],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers the client is allowed to send
+  credentials: true // Allow cookies if required
 }));
 
 // GraphQL Type Definitions and Resolvers
