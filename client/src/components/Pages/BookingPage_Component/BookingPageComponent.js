@@ -36,20 +36,22 @@ const CREATE_BOOKING_MUTATION = `
   mutation CreateBooking(
     $userId: ID!
     $turfId: ID!
-    $turfName:String!
+    $turfName: String!
     $date: String!
     $time: [String!]!
     $duration: Int!
     $price: Float!
+    $ownerEarnings: Float!
   ) {
     createBooking(
       userId: $userId
       turfId: $turfId
-      turfName:$turfName
+      turfName: $turfName
       date: $date
       time: $time
       duration: $duration
       price: $price
+      ownerEarnings: $ownerEarnings
     ) {
       id
       turfName
@@ -57,6 +59,7 @@ const CREATE_BOOKING_MUTATION = `
       time
       duration
       price
+      ownerEarnings
     }
   }
 `;
@@ -71,7 +74,7 @@ const BookingPageComponent = () => {
   const [navBarData, setNavBarData] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [showBookingDetails, setShowBookingDetails] = useState(false);
-  
+
   const userId = sessionStorage.getItem("userId");
   const [fullyBookedDates, setFullyBookedDates] = useState([]);
   const navigate = useNavigate();
@@ -89,7 +92,6 @@ const BookingPageComponent = () => {
     const data = await graphQLCommand(query);
     setNavBarData(data.getNavItems || []);
   };
-
   const fetchFullyBookedDates = async () => {
     const query = `
       query ($turfId: ID!) {
@@ -97,15 +99,18 @@ const BookingPageComponent = () => {
       }
     `;
     const variables = { turfId: id };
-
+  
     try {
       const data = await graphQLCommand(query, variables);
-      setFullyBookedDates(data.getFullyBookedDates || []);
+      const fullyBooked = (data.getFullyBookedDates || []).map((date) =>
+        new Date(date).toISOString().split("T")[0]
+      );
+      setFullyBookedDates(fullyBooked);
     } catch (error) {
       console.error("Error fetching fully booked dates:", error);
     }
   };
-
+  
   useEffect(() => {
     fetchFullyBookedDates();
   }, []);
@@ -180,18 +185,25 @@ const BookingPageComponent = () => {
       alert("Please select at least one time slot.");
       return;
     }
- 
+
     const duration = selectedSlots.length;
+    const basePrice = parseFloat(turfData.price) * duration;
+    const userServiceFee = (basePrice * 3) / 100; // 3% fee for user
+    const adminServiceFee = (basePrice * 7) / 100; // 7% fee for owner
+    const totalPrice = basePrice + userServiceFee;
+    const ownerEarnings = basePrice - adminServiceFee;
+
     const variables = {
       userId,
       turfId: turfData.id,
-      turfName:turfData.turfName,
+      turfName: turfData.turfName,
       date: selectedDate,
       time: selectedSlots,
       duration,
-      price: parseFloat(turfData.price) * duration,
+      price: totalPrice, // Total cost for the user
+      ownerEarnings, // Owner earnings after admin service fee
     };
- 
+
     try {
       // const data = await graphQLCommand(CREATE_BOOKING_MUTATION, variables);
       // console.log("Booking created successfully:", data.createBooking);
@@ -203,7 +215,6 @@ const BookingPageComponent = () => {
     }
   };
 
-  
   const handleProceedToPayment = () => {
     navigate("/payment", {
       state: {
@@ -229,7 +240,7 @@ const BookingPageComponent = () => {
 
   return (
     <div>
-      <NavBarComponent/>
+      <NavBarComponent />
       <div className="back-arrow" onClick={() => navigate(-1)}>
         <span>&#8249;</span>
         <span className="back-text">Back</span>
@@ -318,7 +329,15 @@ const BookingPageComponent = () => {
             <p>Date: {selectedDate}</p>
             <p>Time: {selectedSlots.join(", ")}</p>
             <p>Duration: {selectedSlots.length} hrs</p>
-            <p>Cost: ${parseFloat(turfData.price) * selectedSlots.length}</p>
+            <p>Base Cost: ${parseFloat(turfData.price) * selectedSlots.length}</p>
+            <p>User Service Fee (3%): $
+              {((parseFloat(turfData.price) * selectedSlots.length * 3) / 100).toFixed(2)}
+            </p>
+            <p>
+              Total Cost (Including Service Fee): $
+              {(parseFloat(turfData.price) * selectedSlots.length +
+                (parseFloat(turfData.price) * selectedSlots.length * 3) / 100).toFixed(2)}
+            </p>
             <button className="proceed-button" onClick={handleProceedToPayment}>
               Proceed to Payment
             </button>

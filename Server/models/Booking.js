@@ -27,6 +27,9 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  userServiceFee: { type: Number, required: true }, 
+  adminServiceFee: { type: Number, required: true }, 
+  ownerEarnings: { type: Number, required: true },
   createdAt: {
     type: Date,
     default: Date.now,

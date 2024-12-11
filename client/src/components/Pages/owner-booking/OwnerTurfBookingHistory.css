@@ -1,12 +1,14 @@
 .booking-history-container {
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #000000; /* Match the black background */
+  color: #ffffff; /* White text for contrast */
   min-height: 100vh;
 }
 
 .booking-history-container h1 {
   text-align: center;
-  color: #333;
+  font-size: 2rem;
+  color: #4caf50; /* Match green header color */
   margin-bottom: 20px;
 }
 
@@ -15,7 +17,7 @@
   display: flex;
   align-items: center;
   font-size: 1.2rem;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
@@ -27,9 +29,8 @@
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  background-color: #333333; /* Dark gray for table background */
+  border-radius: 10px;
   overflow: hidden;
 }
 
@@ -42,33 +43,34 @@
 }
 
 .booking-table th {
-  background-color: #4caf50;
-  color: white;
+  background-color: #4caf50; /* Match green header background */
+  color: #ffffff; /* White text for headers */
   text-transform: uppercase;
   letter-spacing: 0.1rem;
   font-weight: bold;
 }
 
 .booking-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #1a1a1a; /* Lighter black for alternate rows */
 }
 
 .booking-table tr:nth-child(odd) {
-  background-color: #e7f7e9;
+  background-color: #2b2b2b; /* Slightly darker gray for alternate rows */
 }
 
 .booking-table tr:hover {
-  background-color: #c8f0d2;
+  background-color: #4caf50; /* Highlight row with green on hover */
+  color: #ffffff; /* Ensure text is visible on hover */
 }
 
 .booking-table td {
-  border-bottom: 1px solid #ddd;
-  color: #555;
+  border-bottom: 1px solid #555555; /* Subtle separator */
+  color: #cccccc; /* Light gray for table text */
 }
 
 .booking-table td:last-child {
   font-weight: bold;
-  color: #2a9d8f;
+  color: #4caf50; /* Green for pricing or key details */
 }
 
 .booking-table th:first-child,

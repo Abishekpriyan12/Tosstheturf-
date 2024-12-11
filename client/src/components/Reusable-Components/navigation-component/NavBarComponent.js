@@ -74,7 +74,7 @@ const NavBarComponent = () => {
     <div className="Nav-bar">
       <div className="card-container">
         <div className="Logo">
-          <img src="ttt_logo.png" alt="logo" />
+          <img src="/ttt_logo.png" alt="logo" />
         </div>
 
         <div className="nav-links">

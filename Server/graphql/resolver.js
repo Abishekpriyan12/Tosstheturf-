@@ -6,7 +6,7 @@ const Turf = require('../models/Turf');
 const Booking = require('../models/Booking');
 const Review = require('../models/Review');
 const Stripe= require("stripe")
-const queriesConfig = require('../config/queriesConfig.json'); // Import the config for queries
+const queriesConfig = require('../config/queriesConfig.json'); 
 const queryResponses = require('../config/queryResponses.json'); 
 const sendEmail = require("../config/emailService");
 const stripe = new Stripe("sk_test_51QMj2AFVBeJqSxXd0U2pvOTdrVtnwJIYjRmH7VcZZSWukqemGyN2GX2v1l4hol8314gG6seeqn9lrsZ26HgXpjyV00Fmninryb");
@@ -143,39 +143,49 @@ const resolvers = {
       }
     },
 
-    // Fetch fully booked dates
     getFullyBookedDates: async (_, { turfId }) => {
       try {
+        // Fetch the turf details
         const turf = await Turf.findById(turfId);
         if (!turf) {
           throw new Error("Turf not found.");
         }
-
-        // Generate time slots based on turf's timing
+    
+        // Parse the opening and closing times and generate time slots
         const [openingTime, closingTime] = turf.timing.split(" to ");
-        const totalSlots =
-          parseInt(closingTime.split(" ")[0]) -
-          parseInt(openingTime.split(" ")[0]);
-
+        const parseTime = (time) => {
+          const [hour, period] = time.split(" ");
+          let militaryHour = parseInt(hour, 10);
+          if (period === "PM" && militaryHour !== 12) militaryHour += 12;
+          if (period === "AM" && militaryHour === 12) militaryHour = 0;
+          return militaryHour;
+        };
+        const start = parseTime(openingTime);
+        const end = parseTime(closingTime);
+        const totalSlots = end - start; // Calculate total slots in a day
+    
+        // Fetch all bookings for the given turf
         const bookings = await Booking.find({ turfId });
-
-        // Count bookings by date
+    
+        // Count the total slots booked per date
         const bookingCountByDate = bookings.reduce((acc, booking) => {
-          acc[booking.date] = (acc[booking.date] || 0) + booking.time.length;
+          acc[booking.date] = (acc[booking.date] || 0) + booking.time.length; // Sum the number of slots for each date
           return acc;
         }, {});
-
-        // Fully booked dates
+    
+        // Identify fully booked dates where the booked slots are equal to or exceed total slots
         const fullyBookedDates = Object.keys(bookingCountByDate).filter(
           (date) => bookingCountByDate[date] >= totalSlots
         );
-
-        return fullyBookedDates;
+    
+        // Format dates as YYYY-MM-DD
+        return fullyBookedDates.map((date) => new Date(date).toISOString().split("T")[0]);
       } catch (error) {
         console.error("Error fetching fully booked dates:", error);
         throw new Error("Failed to fetch fully booked dates.");
       }
     },
+    
 
     // Fetch pending turfs for admin approval
     getPendingTurfs: async () => {
@@ -579,45 +589,50 @@ const resolvers = {
         throw new Error("Failed to delete turf: " + error.message);
       }
     },    
-    // Create a new booking
-    createBooking: async (
-      _,
-      { userId, turfId, turfName, date, time, duration, price }
-    ) => {
+    createBooking: async (_, { userId, turfId, turfName, date, time, duration, price }) => {
       try {
-        if (!mongoose.Types.ObjectId.isValid(turfId)) {
-          throw new Error("Invalid turf ID.");
-        }
-
-        const existingBookings = await Booking.find({
-          turfId,
-          date,
-          time: { $in: time },
-        });
-
-        if (existingBookings.length > 0) {
-          throw new Error(
-            "One or more selected time slots are already booked."
-          );
-        }
-
-        const newBooking = new Booking({
-          userId,
-          turfName,
-          turfId,
-          date,
-          time,
-          duration,
-          price,
-        });
-
-        await newBooking.save();
-        return newBooking;
+          if (!mongoose.Types.ObjectId.isValid(turfId)) {
+              throw new Error("Invalid turf ID.");
+          }
+  
+          // Calculate service fees
+          const userServiceFee = (price * 3) / 100; // 3% fee for the user
+          const adminServiceFee = (price * 7) / 100; // 7% fee for the owner
+          const ownerEarnings = price - adminServiceFee;
+  
+          // Check for conflicts with existing bookings
+          const existingBookings = await Booking.find({
+              turfId,
+              date,
+              time: { $in: time },
+          });
+  
+          if (existingBookings.length > 0) {
+              throw new Error("One or more selected time slots are already booked.");
+          }
+  
+          // Create a new booking with calculated fees
+          const newBooking = new Booking({
+              userId,
+              turfName,
+              turfId,
+              date,
+              time,
+              duration,
+              price: price + userServiceFee, // Total cost for the user
+              userServiceFee,
+              adminServiceFee,
+              ownerEarnings,
+          });
+  
+          await newBooking.save();
+          return newBooking;
       } catch (error) {
-        console.error("Error creating booking:", error);
-        throw new Error("Failed to create booking.");
+          console.error("Error creating booking:", error);
+          throw new Error("Failed to create booking.");
       }
-    },
+  },
+  
 
     // Cancel a booking
     cancelBooking: async (_, { bookingId }) => {
@@ -655,10 +670,11 @@ const resolvers = {
     createPaymentIntent: async (_, { amount, currency }) => {
       try {
         const paymentIntent = await stripe.paymentIntents.create({
-          amount,
+          amount, // Amount is already in cents
           currency,
-          payment_method_types: ['card'],
+          payment_method_types: ["card"],
         });
+    
         return {
           id: paymentIntent.id,
           clientSecret: paymentIntent.client_secret,
@@ -668,42 +684,51 @@ const resolvers = {
         throw new Error("Failed to create payment intent.");
       }
     },
-
+    
+  
     confirmBooking: async (_, { paymentIntentId, userId, turfId, turfName, date, time, duration, price }) => {
       try {
-        if (!mongoose.Types.ObjectId.isValid(turfId)) {
-          throw new Error("Invalid turf ID.");
-        }
-    
-        if (paymentIntentId) {
-          // Retrieve the PaymentIntent instead of confirming it again
-          const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    
-          if (paymentIntent.status !== "succeeded") {
-            console.log("Payment Status:", paymentIntent.status);
-            throw new Error("Payment not successful. Booking cannot be completed.");
+          if (!mongoose.Types.ObjectId.isValid(turfId)) {
+              throw new Error("Invalid turf ID.");
           }
-        }
-    
-        // Create a new booking after payment is verified
-        const newBooking = new Booking({
-          userId,
-          turfId,
-          turfName,
-          date,
-          time,
-          duration,
-          price,
-        });
-    
-        await newBooking.save();
-    
-        return newBooking;
+  
+          // Retrieve and verify payment
+          if (paymentIntentId) {
+              const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  
+              if (paymentIntent.status !== "succeeded") {
+                  console.log("Payment Status:", paymentIntent.status);
+                  throw new Error("Payment not successful. Booking cannot be completed.");
+              }
+          }
+  
+          // Calculate service fees
+          const userServiceFee = (price * 3) / 100;
+          const adminServiceFee = (price * 7) / 100;
+          const ownerEarnings = price - adminServiceFee;
+  
+          // Create booking after successful payment
+          const newBooking = new Booking({
+              userId,
+              turfId,
+              turfName,
+              date,
+              time,
+              duration,
+              price: price + userServiceFee,
+              userServiceFee,
+              adminServiceFee,
+              ownerEarnings,
+          });
+  
+          await newBooking.save();
+          return newBooking;
       } catch (error) {
-        console.error("Error confirming booking:", error);
-        throw new Error("Failed to confirm booking.");
+          console.error("Error confirming booking:", error);
+          throw new Error("Failed to confirm booking.");
       }
-    },
+  },
+  
     
     
     

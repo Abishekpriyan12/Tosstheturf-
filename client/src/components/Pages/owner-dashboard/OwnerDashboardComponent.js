@@ -80,10 +80,13 @@ const OwnerDashboardComponent = () => {
       );
 
       const bookingCount = turfBookings.length;
-      const totalRevenue = turfBookings.reduce(
-        (sum, booking) => sum + booking.price * booking.duration,
-        0
-      );
+
+      // Updated total revenue to calculate only owner earnings
+      const totalRevenue = turfBookings.reduce((sum, booking) => {
+        const adminServiceFee = (booking.price * 7) / 100; // Calculate admin fee (7%)
+        const ownerEarnings = booking.price - adminServiceFee; // Calculate owner earnings
+        return sum + ownerEarnings * booking.duration; // Multiply by duration
+      }, 0);
 
       return { ...turf, bookingCount, totalRevenue };
     });
@@ -215,7 +218,7 @@ const OwnerDashboardComponent = () => {
         <p id="owner-page-p">No approved turfs added yet.</p>
       ) : (
         <div>
-           <div className="charts-revenue">
+          <div className="charts-revenue">
             <div>
               <CardComponent>
                 <ReactECharts
@@ -232,51 +235,51 @@ const OwnerDashboardComponent = () => {
                 />
               </CardComponent>
             </div>
-          </div> 
-          <div className="owner-page-turf-grid">
-            {ownerTurfs.map((turf) => (
-              <div className="owner-page-card" key={turf.id}>
-                <div
-                  className="owner-page-card-image"
-                  style={{
-                    backgroundImage: `url(${turf.mainImage})`,
-                  }}
-                ></div>
-                <div className="owner-page-card-info">
-                  <div className="owner-page-card-header">
-                    <h3 className="owner-page-card-title">
-                      {turf.turfName},
-                      <span className="owner-page-city">{turf.location}</span>
-                    </h3>
-
-                    <button
-                      className={`owner-page-status-button ${
-                        turf.status.toLowerCase() === "approved"
-                          ? "approved"
-                          : turf.status.toLowerCase() === "rejected"
-                          ? "rejected"
-                          : "pending"
-                      }`}
-                    >
-                      {turf.status}
-                    </button>
-                  </div>
-                  <div className="owner-page-card-footer">
-                    <span className="owner-page-price">
-                      <strong>${turf.price}</strong>/Hr
-                    </span>
-                    <span className="owner-page-timing">{turf.timing}</span>
-                    <button
-                      className="owner-page-view-bookings-button"
-                      onClick={() => navigate(`/bookinghistory/${turf.id}`)}
-                    >
-                      View Bookings
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
+          <div className="owner-page-turf-grid">
+  {ownerTurfs.map((turf) => (
+    <div className="owner-page-card" key={turf.id}>
+      {/* Use img tag to display turf image */}
+      <img
+        src={turf.mainImage || "/default-placeholder.jpg"} // Use placeholder if mainImage is missing
+        alt={turf.turfName}
+        className="owner-page-card-image"
+      />
+      <div className="owner-page-card-info">
+        <div className="owner-page-card-header">
+          <h3 className="owner-page-card-title">
+            {turf.turfName},
+            <span className="owner-page-city">{turf.location}</span>
+          </h3>
+          <button
+            className={`owner-page-status-button ${
+              turf.status.toLowerCase() === "approved"
+                ? "approved"
+                : turf.status.toLowerCase() === "rejected"
+                ? "rejected"
+                : "pending"
+            }`}
+          >
+            {turf.status}
+          </button>
+        </div>
+        <div className="owner-page-card-footer">
+          <span className="owner-page-price">
+            <strong>${turf.price}</strong>/Hr
+          </span>
+          <span className="owner-page-timing">{turf.timing}</span>
+          <button
+            className="owner-page-view-bookings-button"
+            onClick={() => navigate(`/bookinghistory/${turf.id}`)}
+          >
+            View Bookings
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
         </div>
       )}
       <FooterComponent />

@@ -118,58 +118,73 @@ a {
   display:none;
 }
 
+/* Desktop styles remain unchanged */
+
+/* Mobile and Tablet (Hamburger Menu) */
 @media (max-width: 768px) {
-  .card-container {
-    flex-direction: column; 
-    align-items: flex-start;
-    padding: 15px;
+  .menu-icon {
+    display: block; /* Show hamburger menu icon on smaller screens */
+    cursor: pointer;
+    color: white;
   }
 
-  .Logo {
-    margin-bottom: 10px; 
+  .menu-icon .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: all 0.3s ease;
   }
 
   .nav-links {
+    display: none; /* Initially hide navigation links */
+    flex-direction: column;
     width: 100%;
-    margin-top: 10px;
-    flex-direction: column; 
+    background-color: #000; /* Match the card-container background */
+    position: absolute;
+    top: 100%; /* Position below the card-container */
+    left: 0;
+    z-index: 100;
+  }
+
+  .nav-links.show-menu {
+    display: flex; /* Show menu when toggled */
   }
 
   .nav-links ul {
-    flex-direction: column; 
+    flex-direction: column; /* Stack items vertically */
     align-items: flex-start;
     width: 100%;
+    padding: 0;
   }
 
   .nav-links ul li {
-    font-size: 18px; 
-    padding: 8px 0;
-    margin: 5px 0;
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+    padding: 10px 15px;
+    margin: 0;
+    border-bottom: 1px solid #444; /* Add a divider between items */
+  }
+
+  .nav-links ul li:last-child {
+    border-bottom: none; /* Remove divider for the last item */
   }
 
   #button-comp {
     margin-top: 10px;
-    width: 100%; 
+    width: 100%; /* Full width for buttons */
   }
 }
 
 @media (max-width: 480px) {
   .dropdown-menu {
-    width: auto; 
-    max-width: 90%; 
+    width: 100%; /* Full width on small screens */
+    max-width: none;
   }
 
   .dropdown-button {
-    width: 100%; 
-  }
-
-  .menu-icon {
-    display: block; 
-    cursor: pointer;
-    color: white; 
-  }
-
-  .nav-links {
-    display: none; 
+    width: 100%;
   }
 }

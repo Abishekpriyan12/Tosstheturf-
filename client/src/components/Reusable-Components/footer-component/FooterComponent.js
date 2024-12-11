@@ -6,10 +6,10 @@ const FooterComponent = () => {
     <div className="footer-component">
       <div className="first-part-icons">
         <div className="image1_footer">
-          <img src="ttt_logo.png" alt="ttt_logo"></img>
+          <img src="/ttt_logo.png" alt="ttt_logo"></img>
         </div>
         <div className="footer_Image2">
-          <img src="footer_image2.png" alt="ttt_logo"></img>
+          <img src="/footer_image2.png" alt="ttt_logo"></img>
         </div>
       </div>
       <div className="second-part-icons">

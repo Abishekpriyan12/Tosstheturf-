@@ -101,15 +101,18 @@ type ReviewsResponse {
 
 # Booking details
 type Booking {
-  id: ID!
-  userId: String!
-  turfName: String!
-  turfId: Turf!
-  date: String!
-  time: [String!]!
-  duration: Int!
-  price: Float!
-  createdAt: String!
+    id: ID!
+    userId: String!
+    turfName: String!
+    turfId: Turf!
+    date: String!
+    time: [String!]!
+    duration: Int!
+    price: Float! # Total price for the user
+    userServiceFee: Float! # 3% fee for the user
+    adminServiceFee: Float! # 7% fee for the owner
+    ownerEarnings: Float! # Owner earnings after admin fee
+    createdAt: String!
 }
 
 # Root Query type
@@ -179,15 +182,18 @@ type Mutation {
   ): Turf!
 
   # Create a new booking
-  createBooking(
-    userId: ID!
-    turfName: String!
-    turfId: ID!
-    date: String!
-    time: [String!]!
-    duration: Int!
-    price: Float!
-  ): Booking!
+ createBooking(
+        userId: ID!
+        turfName: String!
+        turfId: ID!
+        date: String!
+        time: [String!]!
+        duration: Int!
+        price: Float!
+        userServiceFee: Float!
+        adminServiceFee: Float!
+        ownerEarnings: Float!
+    ): Booking!
 
   # Cancel an existing booking
   cancelBooking(bookingId: ID!): String!
