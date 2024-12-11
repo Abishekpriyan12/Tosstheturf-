@@ -131,3 +131,6 @@ dist
 node_modules/
 client/node_modules/
 Server/node_modules/
+client/.env/
+Server/.env/
+/build

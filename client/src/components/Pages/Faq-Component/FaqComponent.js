@@ -66,7 +66,9 @@ const FaqComponent = () => {
 
   return (
     <>
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
       <h1>Frequently Asked Questions</h1>
       <div className="faq-wrapper">
       <CardComponent width="60%">

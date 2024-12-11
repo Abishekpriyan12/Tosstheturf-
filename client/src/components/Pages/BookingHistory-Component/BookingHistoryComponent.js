@@ -6,35 +6,30 @@ import "./BookingHistoryComponent.css";
 import { graphQLCommand } from "../../../util";
 
 const BookingHistoryComponent = () => {
-  const [navBarData, setNavBarData] = useState([]);
   const [bookingHistory, setBookingHistory] = useState([]);
-  const [visibleBookings, setVisibleBookings] = useState(2); // Initially show 2 bookings
+  const [filteredBookings, setFilteredBookings] = useState([]);
+  const [visibleBookings, setVisibleBookings] = useState(2);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [showSortOptions, setShowSortOptions] = useState(false); // Toggle dropdown
+  const [sortOrder, setSortOrder] = useState("asc"); // Track sorting order
 
-  const fetchNavBarData = async () => {
-    const query = `
-      query {
-        getNavItems {
-          id
-          name
-          url
-        }
-      }
-    `;
-    try {
-      const data = await graphQLCommand(query);
-      setNavBarData(data.getNavItems || []);
-    } catch (error) {
-      console.error("Error fetching navigation items:", error);
-    }
-  };
+  const navBarData = [
+    { id: 1, name: "Turves", url: "/displayturf" },
+    { id: 2, name: "Dashboard", url: "/adminDashboard" },
+    { id: 3, name: "Add Turf", url: "/addTurf" },
+    { id: 4, name: "User Profile", url: "/user" },
+    { id: 5, name: "Booking History", url: "/bookingHistory" },
+  ];
 
   const fetchBookingHistory = async () => {
     const query = `
       query {
         getAllBookings {
-          turfName
+          turfId {
+            id
+          }
           userId
           duration
           time
@@ -46,6 +41,7 @@ const BookingHistoryComponent = () => {
     try {
       const data = await graphQLCommand(query);
       setBookingHistory(data.getAllBookings || []);
+      setFilteredBookings(data.getAllBookings || []); // Initialize filtered bookings
     } catch (error) {
       console.error("Error fetching booking history:", error);
       setError("Failed to fetch booking history.");
@@ -54,12 +50,36 @@ const BookingHistoryComponent = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchInput(value);
+
+    // Filter bookings based on user ID
+    const filtered = bookingHistory.filter((booking) =>
+      booking.userId.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredBookings(filtered);
+  };
+
+  const handleSortByDate = (order) => {
+    setSortOrder(order);
+
+    // Sort bookings by date in ascending or descending order
+    const sorted = [...filteredBookings].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      return order === "asc" ? dateA - dateB : dateB - dateA;
+    });
+    setFilteredBookings(sorted);
+    setShowSortOptions(false); // Close dropdown after selection
+  };
+
   const handleViewMore = () => {
     setVisibleBookings((prev) => prev + 2); // Show 2 more bookings
   };
 
   useEffect(() => {
-    fetchNavBarData();
     fetchBookingHistory();
   }, []);
 
@@ -68,7 +88,9 @@ const BookingHistoryComponent = () => {
 
   return (
     <div className="bookingHistory-page">
-      <NavBarComponent navBarData={navBarData} />
+     
+
+ <NavBarComponent/>
 
       <div className="content-section">
         <div className="filter-section">
@@ -81,32 +103,66 @@ const BookingHistoryComponent = () => {
               type="text"
               placeholder="Search by user ID"
               className="search-input"
+              value={searchInput}
+              onChange={handleSearch}
             />
           </div>
-          <button className="filter-button">Filter By Duration</button>
+          <div className="sort-section">
+            <button
+              className="filter-button"
+              onClick={() => setShowSortOptions((prev) => !prev)}
+            >
+              Filter By Date <i className="fa fa-sort"></i>
+            </button>
+            {showSortOptions && (
+              <div className="sort-dropdown">
+                <div
+                  className="sort-option"
+                  onClick={() => handleSortByDate("asc")}
+                >
+                  <i className="fa fa-arrow-up"></i> Ascending
+                </div>
+                <div
+                  className="sort-option"
+                  onClick={() => handleSortByDate("desc")}
+                >
+                  <i className="fa fa-arrow-down"></i> Descending
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="booking-cards">
-          {bookingHistory.length === 0 ? (
-            <p>No bookings available.</p>
+          {filteredBookings.length === 0 ? (
+            <p>No bookings found.</p>
           ) : (
-            bookingHistory.slice(0, visibleBookings).map((booking, index) => (
+            filteredBookings.slice(0, visibleBookings).map((booking, index) => (
               <div key={index} className="booking-card">
                 <div className="booking-info">
-                  <p><strong>User ID:</strong> {booking.userId}</p>
-                  <p><strong>Turf Name:</strong> {booking.turfName}</p>
-                  <p><strong>Duration:</strong> {booking.duration} hours</p>
+                  <p>
+                    <strong>User ID:</strong> {booking.userId}
+                  </p>
+                  <p>
+                    <strong>Duration:</strong> {booking.duration} hours
+                  </p>
                 </div>
                 <div className="booking-details">
-                  <p><strong>Time Slots:</strong> {booking.time.join(", ")}</p>
-                  <p><strong>Price:</strong> ${booking.price}</p>
-                  <p><strong>Date:</strong> {booking.date}</p>
+                  <p>
+                    <strong>Time Slots:</strong> {booking.time.join(", ")}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> ${booking.price}
+                  </p>
+                  <p>
+                    <strong>Date:</strong> {booking.date}
+                  </p>
                 </div>
               </div>
             ))
           )}
         </div>
-        {visibleBookings < bookingHistory.length && (
+        {visibleBookings < filteredBookings.length && (
           <div className="viewmorehistory-button">
             <ButtonComponent btnName="View More" onClick={handleViewMore} />
           </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { graphQLCommand } from "../../../util";
-import { Link } from "react-router-dom";
 import "./AdminDashboardComponent.css";
 import NavBarComponent from "../../Reusable-Components/navigation-component/NavBarComponent";
 
@@ -8,6 +7,8 @@ const AdminDashboardComponent = () => {
   const [pendingTurfs, setPendingTurfs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isApproving, setIsApproving] = useState(false); 
+  const [isRejecting, setIsRejecting] = useState(false); // State for rejecting spinner
 
   const navBarData = [
     { id: 1, name: "Turves", url: "/displayturf" },
@@ -24,6 +25,7 @@ const AdminDashboardComponent = () => {
           id
           turfName
           ownerName
+          userId
           address
           location
           phone
@@ -54,6 +56,7 @@ const AdminDashboardComponent = () => {
   };
 
   const approveTurf = async (turfId) => {
+    setIsApproving(true); // Start loading for approve
     const mutation = `
       mutation ($turfId: ID!) {
         approveTurf(turfId: $turfId) {
@@ -71,10 +74,13 @@ const AdminDashboardComponent = () => {
     } catch (error) {
       console.error("Error approving turf:", error);
       alert("Failed to approve turf.");
+    } finally {
+      setIsApproving(false);
     }
   };
 
   const rejectTurf = async (turfId) => {
+    setIsRejecting(true); 
     const mutation = `
       mutation ($turfId: ID!) {
         rejectTurf(turfId: $turfId) {
@@ -92,6 +98,8 @@ const AdminDashboardComponent = () => {
     } catch (error) {
       console.error("Error rejecting turf:", error);
       alert("Failed to reject turf.");
+    } finally {
+      setIsRejecting(false); 
     }
   };
 
@@ -131,14 +139,18 @@ const AdminDashboardComponent = () => {
                   <button
                     className="approve-button"
                     onClick={() => approveTurf(turf.id)}
+                    disabled={isApproving}
                   >
-                    Approve
+                    {isApproving ? "Approving..." : "Approve"}
+                    {isApproving && <div className="spinner"></div>}
                   </button>
                   <button
                     className="reject-button"
                     onClick={() => rejectTurf(turf.id)}
+                    disabled={isRejecting}
                   >
-                    Reject
+                    {isRejecting ? "Rejecting..." : "Reject"}
+                    {isRejecting && <div className="spinner"></div>}
                   </button>
                 </td>
               </tr>

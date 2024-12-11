@@ -67,8 +67,37 @@ input[type="password"] {
   color: #fff;
 }
 
+.signup-input{
+  width: 100% !important;
+  padding: 12px !important;
+  font-size: 14px !important;
+  border: 2px solid #6ec207 !important;
+  border-radius: 8px !important;
+  background-color: transparent !important;
+  color: #fff !important;
+}
+
+.signup-input2{
+  width: 100% !important;
+  padding: 12px !important;
+  font-size: 14px !important;
+  border: 2px solid #6ec207 !important;
+  border-radius: 8px !important;
+  background-color: transparent !important;
+  color: #fff !important;
+  margin-left: 20px;
+}
+
 input::placeholder {
   color: #aea7a7;
+}
+
+.labelSignup{
+  color: #6ec207;
+}
+
+.select-wrapper option {
+  color: #000;
 }
 
 .signup-button {
@@ -117,7 +146,13 @@ input::placeholder {
   }
 
   .two-column {
-    flex-direction: column;
+    display: flex;
+    gap: 20px; /* Adjust the gap between the two fields */
+    justify-content: space-between; /* Optional: Align the fields evenly */
+  }
+  
+  .input-wrapper {
+    flex: 1; /* Ensure both inputs take up equal space */
   }
 
   .input-wrapper {

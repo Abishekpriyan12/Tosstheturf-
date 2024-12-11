@@ -1,0 +1,51 @@
+{
+    "greetings": [
+      "hi",
+      "hello",
+      "hey",
+      "how are you",
+      "good morning",
+      "good evening",
+      "good afternoon"
+    ],
+    "help": [
+      "how can i help you",
+      "what can you do",
+      "what can I ask",
+      "tell me what you do"
+    ],
+    "priceQuery": [
+      "price",
+      "turf price",
+      "how much"
+    ],
+    "availableTurfs": [
+      "available turfs",
+      "available turfs",
+      "are there any available turfs",
+      "can I book a turf"
+    ],
+    "bookingHistory": [
+      "booking history",
+      "my bookings",
+      "past bookings"
+    ],
+    "ratingQuery": [
+      "rating",
+      "reviews"
+    ],
+    "amenitiesQuery": [
+      "amenities",
+      "what are the amenities",
+      "facilities",
+      "features"
+    ],
+    "mostRatedTurf": [
+      "most rated turf",
+      "highest rated turf"
+    ],
+    "mostBookedTurf": [
+      "most booked turf"
+    ]
+  }
+  

@@ -16,12 +16,30 @@ const SignupPage = () => {
   const [role, setRole] = useState("User"); // State for selected role
   const navigate = useNavigate(); // Change to useNavigate
 
+  // Regex for email validation
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+  // Regex for password validation
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
     // Check if password and confirm password match
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
+      return;
+    }
+
+    // Validate email using regex
+    if (!emailRegex.test(email)) {
+      alert("Invalid email format. Please enter a valid email.");
+      return;
+    }
+
+    // Validate password using regex
+    if (!passwordRegex.test(password)) {
+      alert("Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.");
       return;
     }
 
@@ -64,6 +82,7 @@ const SignupPage = () => {
             <label htmlFor="userId" className="labelSignup">User ID</label>
             <div className="input-wrapper">
               <input
+               className="signup-input"
                 type="text"
                 id="userId"
                 placeholder="Enter a unique User ID"
@@ -78,6 +97,7 @@ const SignupPage = () => {
             <div className="input-wrapper">
               <label htmlFor="firstName" className="labelSignup">First Name</label>
               <input
+               className="signup-input"
                 type="text"
                 id="firstName"
                 placeholder="Enter Your First Name"
@@ -89,6 +109,7 @@ const SignupPage = () => {
             <div className="input-wrapper">
               <label htmlFor="lastName" className="labelSignup">Last Name</label>
               <input
+               className="signup-input2"
                 type="text"
                 id="lastName"
                 placeholder="Enter Your Last Name"
@@ -139,7 +160,7 @@ const SignupPage = () => {
 
           <div className="form-group">
             <label htmlFor="role" className="labelSignup">Role</label>
-            <select
+            <select className="select-wrapper"
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}

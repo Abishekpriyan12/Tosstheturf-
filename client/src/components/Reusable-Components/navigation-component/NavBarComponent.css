@@ -114,6 +114,9 @@ a {
 .dropdown-item:hover {
   background-color: #444;
 }
+.signButton{
+  display:none;
+}
 
 @media (max-width: 768px) {
   .card-container {
