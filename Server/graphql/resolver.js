@@ -10,7 +10,7 @@ const queriesConfig = require('../config/queriesConfig.json'); // Import the con
 const queryResponses = require('../config/queryResponses.json'); 
 const sendEmail = require("../config/emailService");
 const stripe = new Stripe("sk_test_51QMj2AFVBeJqSxXd0U2pvOTdrVtnwJIYjRmH7VcZZSWukqemGyN2GX2v1l4hol8314gG6seeqn9lrsZ26HgXpjyV00Fmninryb");
-console.log("Stripe Secret Key:", process.env.STRIPE_SECRET_KEY);
+
 const Chat = require('../models/Chat');
 
 const resolvers = {
