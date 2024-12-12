@@ -42,8 +42,8 @@ const MissionSection = () => {
 
 const TeamSection = () => {
     const teamMembers = [
-      { name: 'Parvaditya, Aksha Vinubhai', image: 'aboutus_img1.jpg' },
-      { name: 'Kalbian, Abhishek Priyan', image: 'abi.jpeg' },
+      { name: 'Parvadiya, Aksha Vinubhai', image: 'aboutus_img1.jpg' },
+      { name: 'Kalbian, Abishek Priyan', image: 'abi.jpeg' },
       { name: 'Varatharajan, Viswanathan', image: 'vis.png' },
       { name: 'Mehta, Suraj Hemantkumar', image: 'suraj.jpg' },
     ];
