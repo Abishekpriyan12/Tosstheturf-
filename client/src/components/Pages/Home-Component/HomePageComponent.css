@@ -68,7 +68,6 @@ html, body {
 
 /* SECOND SECTION */
 .home-second-section {
-  /* Rename the file if needed to avoid spaces, e.g. "bg2.png" */
   background-image: url("../../../assests/images/bg 2.png");
   background-size: cover;
   background-position: center;
