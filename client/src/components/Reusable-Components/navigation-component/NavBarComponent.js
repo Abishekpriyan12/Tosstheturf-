@@ -78,6 +78,10 @@ const NavBarComponent = () => {
         </div>
 
         <div className="nav-links">
+          {/* 
+            We attach "active" className to <ul>.
+            The CSS will show/hide <ul> based on .active in @media queries.
+          */}
           <ul className={isMobileMenuOpen ? "active" : ""}>
             {getNavItems().map((item) => (
               <li key={item.id}>
@@ -89,6 +93,7 @@ const NavBarComponent = () => {
                 </NavLink>
               </li>
             ))}
+
             <div id="button-comp" className="dropdown">
               <ButtonComponent
                 btnName={isLoggedIn ? "Logout" : "Login"}
@@ -96,16 +101,18 @@ const NavBarComponent = () => {
                 onClick={handleAuthClick}
               />
             </div>
+
             <div id="button-comp" className="dropdown">
               <ButtonComponent
                 btnName={"Sign In"}
                 iconPath={isLoggedIn ? "user.png" : "user.png"}
-                className={isLoggedIn ? "signButton" :"button"}
+                className={isLoggedIn ? "signButton" : "button"}
                 onClick={handleAuthClick}
               />
             </div>
           </ul>
-          {/* Mobile menu icon */}
+
+          {/* Mobile menu (Hamburger) icon */}
           <div className="menu-icon" onClick={toggleMobileMenu}>
             <span className="bar"></span>
             <span className="bar"></span>

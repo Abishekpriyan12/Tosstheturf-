@@ -1,105 +1,58 @@
+/* 1) Global reset to prevent horizontal scrolling */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Container for the entire page */
 .home-page {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* First Section */
-/* .home-first-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: center;
-} */
-
-.text-section h1{
-  color: #f1f1f1;
-}
-
-.host-the-match {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: #000; /* Black background as in the second image */
-  padding: 50px 20px; /* Add padding for spacing */
-  color: #fff; /* Text color white */
-}
-
-
+/* FIRST SECTION */
 .home-first-section {
+  /* Make sure your background image filename/path doesn't have spaces or unusual characters */
   background-image: url("../../../assests/images/Component\ 56\ –\ 1.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 90vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  position: relative;
 }
-
-.home-second-section {
-  background-image: url("../../../assests/images/bg\ 2.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-}
-
-.home-third-section {
-  background-image: url("../../../assests/images/Third.png");
-  background-size: cover;
-  background-position: left center;
-  background-repeat: no-repeat;
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-}
-
-
 
 .overlay {
   position: absolute;
-  top: 15;
-  margin-top: 6px;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 90vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Black overlay */
-  z-index: 1;
-  pointer-events: none; /* Ensure it doesn't interfere with navbar or other elements */
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+  pointer-events: none;
 }
 
-.text-section{
+.text-section {
   z-index: 1;
-  margin-left: 50px;
-  margin-bottom: 20px;
-}
-
-
-.text-section,
-.image-section {
-  flex: 1 1 100%;
+  margin: 0 20px;
   text-align: center;
 }
 
 .first-banner-text {
-  font-size: 4vw;
+  font-size: clamp(24px, 4vw, 48px);
   font-weight: bold;
   margin-bottom: 10px;
-}
-
-.first-banner-text {
-  font-size: 2vw !important;
+  color: #fff;
+  line-height: 1.2;
 }
 
 .highlight-green {
@@ -107,231 +60,174 @@
 }
 
 .second-banner-text {
-  font-size: 1.0vw !important;
-  font-weight: 300 !important;
+  font-size: clamp(14px, 2vw, 20px);
+  font-weight: 300;
+  color: #B2B2B2;
+  margin-bottom: 20px;
+}
+
+/* SECOND SECTION */
+.home-second-section {
+  /* Rename the file if needed to avoid spaces, e.g. "bg2.png" */
+  background-image: url("../../../assests/images/bg 2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.image-section {
+  z-index: 1;
+  text-align: center;
+}
+
+/* HOST THE MATCH */
+.host-the-match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #000;
+  padding: 50px 20px;
+  color: #fff;
+}
+
+.host-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+  text-align: center;
+}
+
+.Home-third-header {
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: bold;
+}
+
+.Home-third-sub {
+  font-size: clamp(14px, 2vw, 18px);
   color: #B2B2B2;
 }
 
-img {
-  max-width: 100%;
+.host-image {
+  display: flex;
+  justify-content: center;
+}
+
+.host-image img {
+  padding: 20px;
+  max-width: 300px;
   height: auto;
 }
 
-/* Centering Buttons */
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-/* Host the Match Card */
-.host-the-match,
+/* PERFECT TURF CARD */
 .perfect-turf-card {
   display: flex;
   justify-content: center;
   padding: 20px;
 }
 
-.host-card,
 .perfect-card-data {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 10px;
   text-align: center;
-  /* font-weight: 600; */
 }
 
-.Home-third-header{
-  padding: 10px;
-   font-size: 2vw; 
-   font-weight: bold;
-}
-
-.Home-third-sub{
-  font-size: 1vw;
-  color: #B2B2B2;
-}
-.host-image,
-.perfect-images .round-image {
-  display: flex;
-  justify-content: center;
-}
-
-.host-image img,
-.perfect-images .round-image img {
-  padding: 20px;
-    /* border-radius: 50%; */
-    max-width: 300px;
-    height: auto;
-}
-
-.perfect-text1{
-  font-size: 2vw;
+.perfect-text1 {
+  font-size: clamp(18px, 2.5vw, 28px);
   font-weight: bold;
 }
 
-.perfect-text2{
-  padding: 10px;
+.perfect-text2 {
   color: #B2B2B2;
-  font-size: 1vw;
+  font-size: clamp(14px, 2vw, 18px);
 }
 
-/* Fifth Section */
-.fifth_right-section {
-  flex: 1 1 100%;
+/* ROUNDED IMAGE */
+.round-image img {
+  max-width: 300px;
+  height: auto;
+}
+
+/* THIRD SECTION */
+.home-third-section {
+  background-image: url("../../../assests/images/Third.png");
+  background-size: cover;
+  background-position: left center;
+  background-repeat: no-repeat;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   text-align: center;
+}
+
+.fifth_right-section {
   z-index: 1;
-  margin-left: 300px;
+  margin: 0 20px;
 }
 
 .fifth-banner-text {
-  font-size: 4vw;
+  font-size: clamp(24px, 4vw, 36px);
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  color: #fff;
 }
 
-.second-banner-text {
-  font-size: 3vw;
-  margin-bottom: 15px;
-}
-/* Add styles for the chatbot icon */
-/* ChatBot Icon */
+/* CHATBOT ICON */
 .chatbot-icon {
   position: fixed;
   bottom: 30px;
   right: 30px;
   width: 60px;
   height: 60px;
-  background-color: transparent; /* Remove background circle */
+  background-color: transparent;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Ensure the icon stays on top of other elements */
+  z-index: 1000;
 }
 
 .chatbot-icon-image {
   width: 30px;
   height: 30px;
-  object-fit: contain; /* Ensure the icon fits properly */
-}
-
-/* Chatbot popup */
-.chatbot-container {
-  position: fixed;
-  bottom: 90px; /* Adjust based on chatbot icon */
-  right: 20px;
-  width: 350px;
-  height: 350px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  z-index: 999; /* Ensure the chat window stays on top */
-}
-
-/* Chat history and chat input box */
-.chat-history {
-  padding: 10px;
-  height: 180;
-  overflow-y: auto;
-  background-color: #f9f9f9;
-}
-
-.chat-input {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  background-color: #f1f1f1;
-}
-
-.chat-input input {
-  flex-grow: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.chat-input button {
-  padding: 8px 12px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.chat-input button:hover {
-  background-color: #45a049;
-}
-/* Responsive Adjustments */
-@media (min-width: 768px) {
-  .home-first-section {
-    flex-wrap: nowrap;
-  }
-
-  .text-section,
-  .image-section {
-    flex: 1 1 45%;
-    text-align: left;
-  }
-
-  .first-banner-text {
-    font-size: 3vw;
-  }
-
-  .second-banner-text {
-    font-size: 2.5vw ;
-  }
-
-  .fifth_right-section {
-    text-align: left;
-  }
-
-  .fifth-banner-text {
-    font-size: 2.8vw;
-  }
-
-  .second-banner-text {
-    font-size: 2vw;
-  }
-
-  .button-container {
-    margin-top: 15px;
-    justify-content: center;
-  }
-}
-
-@media (min-width: 1200px) {
-  .first-banner-text {
-    font-size: 2.5vw;
-  }
-
-  .second-banner-text {
-    font-size: 2vw;
-  }
-
-  .fifth-banner-text {
-    font-size: 2.2vw;
-  }
-
-  .second-banner-text {
-    font-size: 1.8vw;
-  }
+  object-fit: contain;
 }
 
 @media (max-width: 720px) {
-
-  .second-banner-text{
+  .second-banner-text {
     font-size: 14px !important;
-  
   }
-  
-  
+}
+
+@media (max-width: 768px) {
+  .home-first-section {
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+    min-height: 60vh;
+  }
+  .home-second-section,
+  .home-third-section {
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+    min-height: 60vh;
+  }
+}
+
+/* Make sure standard <img> tags never overflow their container */
+img {
+  max-width: 100%;
+  height: auto;
 }

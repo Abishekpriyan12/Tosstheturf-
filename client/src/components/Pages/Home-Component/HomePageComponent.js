@@ -6,8 +6,10 @@ import CardComponent from "../../Reusable-Components/Card-Component/CardComponen
 import FooterComponent from "../../Reusable-Components/footer-component/FooterComponent";
 import { useNavigate } from "react-router-dom";
 import ChatBot from "../../Pages/ChatBot/ChatBot"; 
-import network from "../../../assests/images/NETWORK.png"
-import image3 from "../../../assests/images/Image3.png"
+
+// Images you are actually using
+import network from "../../../assests/images/NETWORK.png";
+import image3 from "../../../assests/images/Image3.png";
 
 const HomePageComponent = () => {
   const navigate = useNavigate();
@@ -18,38 +20,31 @@ const HomePageComponent = () => {
   };
 
   const toggleChatBot = () => {
-    setShowChatBot(!showChatBot); // Toggle ChatBot visibility
+    setShowChatBot(!showChatBot); 
   };
 
   return (
     <div className="home-page">
       <NavBarComponent />
 
+      {/* First Section */}
       <div className="home-first-section">
         <div className="overlay"></div>
         <div className="text-section">
-        <div className="first-banner-text">
-           FIND THE PERFECT TURF FOR <br />
-          EVERY <span className="highlight-green">GAME</span>
-        </div>
-        <div className="second-banner-text">
-           Explore and book turfs near You
-        </div>
+          <div className="first-banner-text">
+            FIND THE PERFECT TURF FOR <br />
+            EVERY <span className="highlight-green">GAME</span>
+          </div>
+          <div className="second-banner-text">
+            Explore and book turfs near You
+          </div>
           <ButtonComponent btnName={"Find Your turf"} />
         </div>
-        {/* <div className="image-section">
-          <div className="home-first-banner">
-            <img src="home_image.png" alt="homeimage" />
-          </div>
-        </div> */}
       </div>
 
+      {/* Second Section */}
       <div className="home-second-section">
-        <div className="text-section">
-          {/* <div className="home-first-banner">
-            <img src="home_image2.png" alt="homeimage" />
-          </div> */}
-        </div>
+        <div className="overlay"></div>
         <div className="image-section">
           <div className="first-banner-text">
             Book Your Turf And Host The Match
@@ -61,10 +56,13 @@ const HomePageComponent = () => {
         </div>
       </div>
 
+      {/* Host the Match */}
       <div className="host-the-match">
-      <div className="text-section">
-            <h1>Be Your Own <span className="highlight-green">Host</span></h1>
-          </div>
+        <div className="text-section">
+          <h1>
+            Be Your Own <span className="highlight-green">Host</span>
+          </h1>
+        </div>
         <CardComponent>   
           <div className="host-card">
             <div className="Home-third-header">Never Play the Short Hand Again</div>
@@ -79,54 +77,40 @@ const HomePageComponent = () => {
         </CardComponent>
       </div>
 
+      {/* Perfect Turf Card */}
       <div className="perfect-turf-card">
         <CardComponent>
           <div className="perfect-card-data">
             <div className="perfect-text-card">
               <div className="perfect-text1">
-                 Find your perfect turf.
+                Find your perfect turf.
               </div>
               <div className="perfect-text2">
-              Explore the top venues in your area, check out photos,<br /> 
-              read reviews, and start hosting your game with just a tap
+                Explore the top venues in your area, check out photos,<br /> 
+                read reviews, and start hosting your game with just a tap
               </div>
             </div>
             <div className="perfect-images">
               <div className="round-image">
                 <img src={image3} alt="host_image" />
-                {/* <img src="home_image.png" alt="home_image" /> */}
-                {/* <img src="ttt_logo.png" alt="ttt_logo" /> */}
               </div>
             </div>
           </div>
         </CardComponent>
       </div>
 
+      {/* Third Section */}
       <div className="home-third-section">
-      <div className="overlay"></div>
-        <div className="text-section">
-          <div className="home-first-banner">
-            {/* <img src="section5_image.png" alt="homeimage" /> */}
-          </div>
-        </div>
+        <div className="overlay"></div>
         <div className="fifth_right-section">
           <div className="fifth-banner-text">
-            Unlock Premium subscription <br></br>
+            Unlock Premium subscription <br/>
             with <span className="highlight-green">Toss Turf Subscription.</span>
           </div>
           <div className="second-banner-text">
-          Get exclusive access to monthly bookings and 
-          earn reward points every time you play
+            Get exclusive access to monthly bookings and <br/>
+            earn reward points every time you play
           </div>
-          {/* <div>
-          Monthly Subscription Benefits: Priority booking, discounted rates, exclusive turfs, and more.
-          </div>
-          <div>
-            Never miss your preferred time slot! With Toss Turf Subscription.
-          </div> */}
-          {/* <div>
-            Never miss your preferred time slot! With Toss Turf Subscription.
-          </div> */}
         </div>
       </div>
 

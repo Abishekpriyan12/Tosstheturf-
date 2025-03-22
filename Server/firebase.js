@@ -5,7 +5,7 @@ const serviceAccount = require('./config/serviceAccountKey.json');// Add the cor
 // Initialize Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket:"turf-management-system-23732.appspot.com" , // You can use environment variables for sensitive data
+  storageBucket:"turf-management-system-23732.appspot.com" , 
 });
 
 // Export Firebase services you need (like Storage)

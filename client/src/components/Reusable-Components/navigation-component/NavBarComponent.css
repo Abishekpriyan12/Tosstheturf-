@@ -1,9 +1,18 @@
+/* Nav-bar at the top and above other elements */
+.Nav-bar {
+  position: sticky;  /* Stays visible when scrolling */
+  top: 0;
+  z-index: 9999;     /* Above overlays */
+  margin: 0;
+  padding: 0;        /* Remove extra spacing if desired */
+}
+
 .card-container {
   background-color: #000;
   padding: 5px;
-  margin: 10px;
-  border-radius: 10px;
-  border-color: bisque;
+  margin: 0;                 /* Removed original 10px margin */
+  border-radius: 0;          /* Removed rounding so it sits flush */
+  border: none;              /* Removed border-color: bisque if not needed */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: row;
@@ -56,6 +65,7 @@
   padding: 0;
 }
 
+/* .active is toggled on <ul> by isMobileMenuOpen */
 .nav-links ul li {
   padding: 10px;
   margin: 0 5px;
@@ -114,13 +124,12 @@ a {
 .dropdown-item:hover {
   background-color: #444;
 }
-.signButton{
-  display:none;
+
+.signButton {
+  display: none;
 }
 
-/* Desktop styles remain unchanged */
-
-/* Mobile and Tablet (Hamburger Menu) */
+/* ====== Mobile & Tablet (Hamburger Menu) ====== */
 @media (max-width: 768px) {
   .menu-icon {
     display: block; /* Show hamburger menu icon on smaller screens */
@@ -137,26 +146,21 @@ a {
     transition: all 0.3s ease;
   }
 
-  .nav-links {
-    display: none; /* Initially hide navigation links */
+  /* Hide the UL by default on mobile */
+  .nav-links ul {
+    display: none;
     flex-direction: column;
     width: 100%;
-    background-color: #000; /* Match the card-container background */
+    background-color: #000;
     position: absolute;
     top: 100%; /* Position below the card-container */
     left: 0;
     z-index: 100;
   }
 
-  .nav-links.show-menu {
-    display: flex; /* Show menu when toggled */
-  }
-
-  .nav-links ul {
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-start;
-    width: 100%;
-    padding: 0;
+  /* Show UL when "active" is present */
+  .nav-links ul.active {
+    display: flex;
   }
 
   .nav-links ul li {
@@ -165,22 +169,22 @@ a {
     font-size: 18px;
     padding: 10px 15px;
     margin: 0;
-    border-bottom: 1px solid #444; /* Add a divider between items */
+    border-bottom: 1px solid #444;
   }
 
   .nav-links ul li:last-child {
-    border-bottom: none; /* Remove divider for the last item */
+    border-bottom: none;
   }
 
   #button-comp {
     margin-top: 10px;
-    width: 100%; /* Full width for buttons */
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .dropdown-menu {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
     max-width: none;
   }
 
