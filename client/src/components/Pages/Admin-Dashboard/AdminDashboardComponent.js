@@ -7,8 +7,8 @@ const AdminDashboardComponent = () => {
   const [pendingTurfs, setPendingTurfs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isApproving, setIsApproving] = useState(false); 
-  const [isRejecting, setIsRejecting] = useState(false); // State for rejecting spinner
+  const [approvingTurfs, setApprovingTurfs] = useState({}); // State for approving loaders
+  const [rejectingTurfs, setRejectingTurfs] = useState({}); // State for rejecting loaders
 
   const navBarData = [
     { id: 1, name: "Turves", url: "/displayturf" },
@@ -56,7 +56,7 @@ const AdminDashboardComponent = () => {
   };
 
   const approveTurf = async (turfId) => {
-    setIsApproving(true); // Start loading for approve
+    setApprovingTurfs((prev) => ({ ...prev, [turfId]: true })); // Start loader for specific turf
     const mutation = `
       mutation ($turfId: ID!) {
         approveTurf(turfId: $turfId) {
@@ -75,12 +75,12 @@ const AdminDashboardComponent = () => {
       console.error("Error approving turf:", error);
       alert("Failed to approve turf.");
     } finally {
-      setIsApproving(false);
+      setApprovingTurfs((prev) => ({ ...prev, [turfId]: false })); // Stop loader for specific turf
     }
   };
 
   const rejectTurf = async (turfId) => {
-    setIsRejecting(true); 
+    setRejectingTurfs((prev) => ({ ...prev, [turfId]: true })); // Start loader for specific turf
     const mutation = `
       mutation ($turfId: ID!) {
         rejectTurf(turfId: $turfId) {
@@ -99,7 +99,7 @@ const AdminDashboardComponent = () => {
       console.error("Error rejecting turf:", error);
       alert("Failed to reject turf.");
     } finally {
-      setIsRejecting(false); 
+      setRejectingTurfs((prev) => ({ ...prev, [turfId]: false })); // Stop loader for specific turf
     }
   };
 
@@ -139,18 +139,18 @@ const AdminDashboardComponent = () => {
                   <button
                     className="approve-button"
                     onClick={() => approveTurf(turf.id)}
-                    disabled={isApproving}
+                    disabled={approvingTurfs[turf.id]}
                   >
-                    {isApproving ? "Approving..." : "Approve"}
-                    {isApproving && <div className="spinner"></div>}
+                    {approvingTurfs[turf.id] ? "Approving..." : "Approve"}
+                    {approvingTurfs[turf.id] && <div className="spinner"></div>}
                   </button>
                   <button
                     className="reject-button"
                     onClick={() => rejectTurf(turf.id)}
-                    disabled={isRejecting}
+                    disabled={rejectingTurfs[turf.id]}
                   >
-                    {isRejecting ? "Rejecting..." : "Reject"}
-                    {isRejecting && <div className="spinner"></div>}
+                    {rejectingTurfs[turf.id] ? "Rejecting..." : "Reject"}
+                    {rejectingTurfs[turf.id] && <div className="spinner"></div>}
                   </button>
                 </td>
               </tr>
